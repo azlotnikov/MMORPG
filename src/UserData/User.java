@@ -15,6 +15,21 @@ import java.io.PrintWriter;
 
 
 public class User {
+    //protocol consts
+    public static String _action_login = "login";
+    public static String _action_registration = "registr";
+    public static String _param_action = "action";
+    public static String _param_login = "login";
+    public static String _param_password = "password";
+    public static String _param_sid = "sid";
+    public static String _param_result = "result";
+    public static String _message_ok = "ok";
+    public static String _message_wrong_pass = "wrong password";
+    public static String _message_bad_pass = "bad password";
+    public static String _message_bad_login = "bad login";
+    public static String _message_login_exists = "login exists";
+    public static String _message_error = "error";
+
     public static boolean validateLogin(String login) {
         if (login.length() < 3) return false;
         return true;
@@ -32,47 +47,47 @@ public class User {
     public static void doAction(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json; charset=UTF-8");
 
-        String login = request.getParameter("login");
-        String password = request.getParameter("password");
-        String action = request.getParameter("action");
-
-        PrintWriter printout = response.getWriter();
+        String login = request.getParameter(_param_login);
+        String password = request.getParameter(_param_password);
+        String action = request.getParameter(_param_action);
 
         JSONObject JObject = new JSONObject();
 
-        JObject.put("action", action);
+        JObject.put(_param_action, action);
 
-        if (action.equals("registr")) {
-            String message = "ok";
+        if (action.equals(_action_registration)) {
+            String message = _message_ok;
 
             if (!validateLogin(login)) {
-                message = "bad login";
+                message = _message_bad_login;
             }
 
             if (!validatePassword(password)) {
-                message = "bad password";
+                message = _message_bad_pass;
             }
 
             if (loginExists(login)) {
-                message = "login exists";
+                message = _message_login_exists;
             }
 
-            if (message.equals("ok")) {
-                JObject.put("sid", DBConnect.insertNewUser(login, password));
+            if (message.equals(_message_ok)) {
+                JObject.put(_param_sid, DBConnect.insertNewUser(login, password));
             }
 
-            JObject.put("result", message);
-        } else if (action.equals("login")) {
+            JObject.put(_param_result, message);
+        } else if (action.equals(_action_login)) {
             String sid = DBConnect.doLogin(login, password);
             if (sid.equals("0")) {
-                JObject.put("result", "wrong password");
+                JObject.put(_param_result, _message_wrong_pass);
             } else {
-                JObject.put("result", "ok");
-                JObject.put("sid", sid);
+                JObject.put(_param_result, _message_ok);
+                JObject.put(_param_sid, sid);
             }
         } else {
-            JObject.put("result", "error");
+            JObject.put(_param_result, _message_error);
         }
+
+        PrintWriter printout = response.getWriter();
 
         printout.print(JObject);
         printout.flush();

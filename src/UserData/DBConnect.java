@@ -56,8 +56,8 @@ public class DBConnect {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-            PreparedStatement stmt = con.prepareStatement("SELECT * FROM users WHERE login = ?");
-            stmt.setString(1, login);
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM users WHERE LOWER(login) = ?");
+            stmt.setString(1, login.toLowerCase());
             ResultSet rs  = stmt.executeQuery();
             int rowNum = 0;
             while (rs.next()) {
@@ -83,8 +83,8 @@ public class DBConnect {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-            PreparedStatement stmt = con.prepareStatement("SELECT * FROM users WHERE login = ? AND password = ?");
-            stmt.setString(1, login);
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM users WHERE LOWER(login) = ? AND password = ?");
+            stmt.setString(1, login.toLowerCase());
             stmt.setString(2, getMD5(password));
             ResultSet rs  = stmt.executeQuery();
             int rowNum = 0;
@@ -95,10 +95,10 @@ public class DBConnect {
                 result = true;
             }
             if (result) {
-                stmt = con.prepareStatement("UPDATE users SET sid = ? WHERE login = ?");
+                stmt = con.prepareStatement("UPDATE users SET sid = ? WHERE LOWER(login) = ?");
                 sid = UUID.randomUUID().toString();
                 stmt.setString(1, sid);
-                stmt.setString(2, login);
+                stmt.setString(2, login.toLowerCase());
             }
         } catch (SQLException e) {
             throw new ServletException("Servlet Could not display records.", e);
