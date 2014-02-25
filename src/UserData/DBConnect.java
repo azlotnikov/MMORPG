@@ -30,7 +30,7 @@ public class DBConnect {
 
     public static String insertNewUser(String login, String password) throws ServletException {
         Connection con = null;
-        String sid = "";
+        String sid = "-1";
         try {
             Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
@@ -79,7 +79,7 @@ public class DBConnect {
     public static String doLogin(String login, String password) throws ServletException {
         Connection con = null;
         boolean result = false;
-        String sid = "0";
+        String sid = "-1";
         try {
             Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);

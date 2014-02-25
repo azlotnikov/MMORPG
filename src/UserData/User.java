@@ -31,7 +31,7 @@ public class User {
     public static String _message_error = "error";
 
     public static boolean validateLogin(String login) {
-        if (login.length() < 3) return false;
+        if (login.length() < 3 || !login.matches("\\w+")) return false;
         return true;
     }
 
@@ -77,7 +77,7 @@ public class User {
             JObject.put(_param_result, message);
         } else if (action.equals(_action_login)) {
             String sid = DBConnect.doLogin(login, password);
-            if (sid.equals("0")) {
+            if (sid.equals("-1")) {
                 JObject.put(_param_result, _message_wrong_pass);
             } else {
                 JObject.put(_param_result, _message_ok);
