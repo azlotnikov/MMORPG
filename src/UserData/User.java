@@ -16,7 +16,7 @@ import java.io.PrintWriter;
 
 public class User {
     public static boolean validateLogin(String login) {
-        if (login.length() < 6) return false;
+        if (login.length() < 3) return false;
         return true;
     }
 
@@ -40,7 +40,9 @@ public class User {
 
         JSONObject JObject = new JSONObject();
 
-        if (action.equals("doRegistration")) {
+        JObject.put("action", action);
+
+        if (action.equals("registr")) {
             String message = "ok";
 
             if (!validateLogin(login)) {
@@ -56,12 +58,18 @@ public class User {
             }
 
             if (message.equals("ok")) {
-                DBConnect.insertNewUser(login, password);
+                JObject.put("sid", DBConnect.insertNewUser(login, password));
             }
 
             JObject.put("result", message);
-        } else if (action.equals("doLogin")) {
-
+        } else if (action.equals("login")) {
+            String sid = DBConnect.doLogin(login, password);
+            if (sid.equals("0")) {
+                JObject.put("result", "wrong password");
+            } else {
+                JObject.put("result", "ok");
+                JObject.put("sid", sid);
+            }
         } else {
             JObject.put("result", "error");
         }
