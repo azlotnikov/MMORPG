@@ -17,7 +17,7 @@ import org.json.simple.parser.ParseException;
 import java.io.PrintWriter;
 
 
-public class User {
+public class Auth {
 
    // https://github.com/rotanov/fefu-mmorpg-protocol
 

@@ -1,7 +1,7 @@
-<%@ page import="UserData.User" %>
+<%@ page import="UserData.Auth" %>
 <%--
   Created by IntelliJ IDEA.
-  User: razoriii
+  Auth: razoriii
   Date: 26.02.14
   Time: 2:00
   To change this template use File | Settings | File Templates.
@@ -19,9 +19,9 @@
         xhr.open('POST', '/doaction.jsp', true);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.send(
-                "<%=User._param_login%>=" + encodeURIComponent(login) +
-                        "&<%=User._param_password%>=" + encodeURIComponent(pass) +
-                        "&<%=User._param_action%>=" + encodeURIComponent(action)
+                "<%=Auth._param_login%>=" + encodeURIComponent(login) +
+                        "&<%=Auth._param_password%>=" + encodeURIComponent(pass) +
+                        "&<%=Auth._param_action%>=" + encodeURIComponent(action)
         );
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4) {
@@ -46,21 +46,21 @@
 
     function buttonClicked() {
         document.title = "Runing";
-        var actionLogin = "<%=User._action_login%>";
-        var actionRegistr = "<%=User._action_registration%>";
-        sendRequest('test', '123', actionRegistr, "<%=User._message_bad_pass%>");
-        sendRequest('test', '123123', actionLogin, "<%=User._message_wrong_pass%>");
-        sendRequest('', '123123', actionRegistr, "<%=User._message_bad_login%>");
-        sendRequest('', '', actionRegistr, "<%=User._message_bad_login%>");
-        sendRequest('test', '', actionRegistr, "<%=User._message_bad_pass%>");
-        sendRequest('test$%', '123123', actionRegistr, "<%=User._message_bad_login%>");
-        sendRequest('test_acc', '123123', actionLogin, "<%=User._message_wrong_pass%>");
+        var actionLogin = "<%=Auth._action_login%>";
+        var actionRegistr = "<%=Auth._action_registration%>";
+        sendRequest('test', '123', actionRegistr, "<%=Auth._message_bad_pass%>");
+        sendRequest('test', '123123', actionLogin, "<%=Auth._message_wrong_pass%>");
+        sendRequest('', '123123', actionRegistr, "<%=Auth._message_bad_login%>");
+        sendRequest('', '', actionRegistr, "<%=Auth._message_bad_login%>");
+        sendRequest('test', '', actionRegistr, "<%=Auth._message_bad_pass%>");
+        sendRequest('test$%', '123123', actionRegistr, "<%=Auth._message_bad_login%>");
+        sendRequest('test_acc', '123123', actionLogin, "<%=Auth._message_wrong_pass%>");
 
-        sendRequest('test_acc', '123123', actionRegistr, "<%=User._message_ok%>");
-        sendRequest('test_acc', '123123', actionRegistr, "<%=User._message_login_exists%>");
+        sendRequest('test_acc', '123123', actionRegistr, "<%=Auth._message_ok%>");
+        sendRequest('test_acc', '123123', actionRegistr, "<%=Auth._message_login_exists%>");
 
-        sendRequest('test_acc', '0000000', actionLogin, "<%=User._message_wrong_pass%>");
-        sendRequest('test_acc', '123123', actionLogin, "<%=User._message_ok%>");
+        sendRequest('test_acc', '0000000', actionLogin, "<%=Auth._message_wrong_pass%>");
+        sendRequest('test_acc', '123123', actionLogin, "<%=Auth._message_ok%>");
 
         document.title = "Done";
     }

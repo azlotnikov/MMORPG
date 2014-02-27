@@ -1,7 +1,7 @@
-<%@ page import="UserData.User" %>
+<%@ page import="UserData.Auth" %>
 <%--
   Created by IntelliJ IDEA.
-  User: razoriii
+  Auth: razoriii
   Date: 25.02.14
   Time: 16:31
   To change this template use File | Settings | File Templates.
@@ -20,9 +20,9 @@
         var login = $('#login').val();
         var password = $('#password').val();
         var jsonObj = JSON.stringify({
-            "<%=User._param_action%>": action,
-            "<%=User._param_login%>": login,
-            "<%=User._param_password%>": password
+            "<%=Auth._param_action%>": action,
+            "<%=Auth._param_login%>": login,
+            "<%=Auth._param_password%>": password
         });
         $.ajax({
             type: 'POST',
@@ -31,7 +31,7 @@
             success: function (data) {
                 var ans_field = $('#ans_field');
                 var act_field = $('#act_field');
-                if (data.result == "<%=User._message_ok%>") {
+                if (data.result == "<%=Auth._message_ok%>") {
                     ans_field.attr('class', 'green');
                     act_field.attr('class', 'green');
                 } else {
@@ -48,11 +48,11 @@
     }
 
     function registerButtonClick() {
-        sendRequest("<%=User._action_registration%>");
+        sendRequest("<%=Auth._action_registration%>");
     }
 
     function loginButtonClick() {
-        sendRequest("<%=User._action_login%>");
+        sendRequest("<%=Auth._action_login%>");
     }
 </script>
 <body>
