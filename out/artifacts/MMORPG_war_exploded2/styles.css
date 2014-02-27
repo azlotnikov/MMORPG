@@ -1,0 +1,126 @@
+#center_block {
+    position: relative;
+    text-align: left;
+    clear: both;
+    width: 170px;
+    margin: 0 auto;
+}
+#floater {
+    float: left;
+    height: 50%;
+    margin-top: -30px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, img, ins, kbd, q, s, samp, small, strike, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-weight: inherit;
+    font-style: inherit;
+    font-size: 100%;
+    font-family: inherit;
+    vertical-align: baseline;
+}
+:focus {
+    outline: 0;
+}
+a:active {
+    outline: none;
+}
+body {
+    line-height: 1;
+    color: black;
+    background: white;
+}
+ol, ul {
+    list-style: none;
+}
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+caption, th, td {
+    text-align: left;
+    font-weight: normal;
+}
+blockquote:before, blockquote:after, q:before, q:after {
+    content: "";
+}
+blockquote, q {
+    quotes: "" "";
+}
+a {
+    color: #56aed4;
+    text-decoration: underline;
+}
+
+/*-----*/
+
+body {
+    font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+    color: #3a3a3a;
+    font-size: 90%;
+    height: 98%;
+}
+input {
+    border: 1px #ccc solid;
+    height: 22px;
+    padding: 0 5px;
+}
+
+label {
+    display: block;
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+textarea {
+    border: 1px #ccc solid;
+    padding: 5px;
+}
+.button {
+    color: #56AED4;
+    background: #ffffff;
+    display: block;
+    border: 1px solid #56aed4;
+    margin-top: 6px;
+    padding: 2px 9px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.button:hover, .button.active {
+    color: #fff;
+    background-color: #56AED4;
+}
+.button.red {
+    border: 1px solid #ff3a31;
+}
+.button.red:hover {
+    color: #fff;
+    background-color: #ff3a31;
+}
+.button.green {
+    border: 1px solid #7ebb00;
+}
+.button.green:hover {
+    color: #fff;
+    background-color: #7ebb00;
+}
+.select {
+    border: 1px #a4a4a4 solid;
+    padding: 2px;
+}
+.red {
+    color: #ff3a31;
+}
+.green {
+    color: #7eaa00;
+}

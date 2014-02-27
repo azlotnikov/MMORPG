@@ -18,6 +18,7 @@ public class User {
     //protocol consts
     public static String _action_login = "login";
     public static String _action_registration = "registr";
+    public static String _action_logout = "logout";
     public static String _param_action = "action";
     public static String _param_login = "login";
     public static String _param_password = "password";
@@ -83,6 +84,9 @@ public class User {
                 JObject.put(_param_result, _message_ok);
                 JObject.put(_param_sid, sid);
             }
+
+        } else if (action.equals(_action_logout)) {
+            //
         } else {
             JObject.put(_param_result, _message_error);
         }

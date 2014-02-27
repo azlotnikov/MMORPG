@@ -15,25 +15,22 @@
     <title>MMORPG</title>
 </head>
 <body>
-<label>Registration</label>
-<form method="post" action="doaction.jsp">
-    <label for="r_login">Login:</label>
-    <input name="<%=User._param_login%>" id="r_login"/><br/>
-    <label for="r_password">Password:</label>
-    <input name="<%=User._param_password%>" id="r_password" type="password"/><br/>
-    <input hidden="hidden" name="<%=User._param_action%>" value="<%=User._action_registration%>">
-    <button type="submit">Registr</button>
-</form>
+<div id="floater">&nbsp;</div>
+<div id="center_block">
+    <%--<p>Registration</p>--%>
 
-<label>Login</label>
-<form method="post" action="doaction.jsp">
-    <label for="l_login">Login:</label>
-    <input name="<%=User._param_login%>" id="l_login"/><br/>
-    <label for="l_password">Password:</label>
-    <input name="<%=User._param_password%>" id="l_password" type="password"/><br/>
-    <input hidden="hidden" name="<%=User._param_action%>" value="<%=User._action_login%>">
-    <button type="submit">Login</button>
-</form>
-
+    <form method="post" action="doaction.jsp">
+        <label for="login">Логин:</label>
+        <input name="<%=User._param_login%>" id="login"/><br/>
+        <label for="password">Пароль:</label>
+        <input name="<%=User._param_password%>" id="password" type="password"/><br/>
+        <label for="action">Действие:</label>
+        <select class="select" name="<%=User._param_action%>" id="action">
+            <option value="<%=User._action_registration%>">Регистрация</option>
+            <option value="<%=User._action_login%>">Вход</option>
+        </select>
+        <button class="button green" type="submit">Выполнить действие</button>
+    </form>
+</div>
 </body>
 </html>

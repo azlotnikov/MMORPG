@@ -12,7 +12,7 @@
     <title>TEST</title>
 </head>
 <script type="text/javascript">
-    function sendRequest(login, pass, action) {
+    function sendRequest(login, pass, action, expected_result) {
         var xhr = new XMLHttpRequest();
 
 //        xhr.timeout = 2000;
@@ -26,9 +26,16 @@
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4) {
                 if (xhr.status == 200) {
+                    var obj = JSON.parse(xhr.responseText);
+                    var ans = 'FAIL!';
+                    if (obj.result == expected_result) {
+                        ans = 'OK!';
+                    }
                     document.getElementById("test_ans").innerHTML =
                             document.getElementById("test_ans").innerHTML +
-                                    "-------------------<br>[Action=" + action + "][Login=" + login + "][Password=" + pass + "]" +
+                                    "-------------------<br>[" +
+                                    ans +
+                                    "][Action=" + action + "][Login=" + login + "][Password=" + pass + "]" +
                                     xhr.responseText +
                                     "<br>";
 
@@ -41,14 +48,20 @@
         document.title = "Runing";
         var actionLogin = "<%=User._action_login%>";
         var actionRegistr = "<%=User._action_registration%>";
-        sendRequest('razor', 'pkjnybrjd', actionLogin);
-        sendRequest('razor', 'pkjnybrjd', actionLogin);
-        sendRequest('razor', '123456', actionLogin);
-        sendRequest('raZoR', 'pkjnybrjd', actionLogin);
-        sendRequest('razor', '123', actionLogin);
-        sendRequest('ra', '123', actionLogin);
-        sendRequest('razor_', '1232123', actionLogin);
-        sendRequest('razor_%$', '1232123', actionLogin);
+        sendRequest('test', '123', actionRegistr, "<%=User._message_bad_pass%>");
+        sendRequest('test', '123123', actionLogin, "<%=User._message_wrong_pass%>");
+        sendRequest('', '123123', actionRegistr, "<%=User._message_bad_login%>");
+        sendRequest('', '', actionRegistr, "<%=User._message_bad_login%>");
+        sendRequest('test', '', actionRegistr, "<%=User._message_bad_pass%>");
+        sendRequest('test$%', '123123', actionRegistr, "<%=User._message_bad_login%>");
+        sendRequest('test_acc', '123123', actionLogin, "<%=User._message_wrong_pass%>");
+
+        sendRequest('test_acc', '123123', actionRegistr, "<%=User._message_ok%>");
+        sendRequest('test_acc', '123123', actionRegistr, "<%=User._message_login_exists%>");
+
+        sendRequest('test_acc', '0000000', actionLogin, "<%=User._message_wrong_pass%>");
+        sendRequest('test_acc', '123123', actionLogin, "<%=User._message_ok%>");
+
         document.title = "Done";
     }
 </script>
