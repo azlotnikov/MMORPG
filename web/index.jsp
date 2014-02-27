@@ -9,28 +9,63 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <link rel="stylesheet" type="text/css" href="styles.css"/>
+<script src="js/jquery.js"></script>
 
 <html>
 <head>
     <title>MMORPG</title>
 </head>
+<script type="text/javascript">
+    function sendRequest(action) {
+        var login = $('#login').val();
+        var password = $('#password').val();
+        var jsonObj = JSON.stringify({
+            "<%=User._param_action%>": action,
+            "<%=User._param_login%>": login,
+            "<%=User._param_password%>": password
+        });
+        $.ajax({
+            type: 'POST',
+            url: '/doaction.jsp',
+            data: jsonObj,
+            success: function (data) {
+                var ans_field = $('#ans_field');
+                var act_field = $('#act_field');
+                if (data.result == "<%=User._message_ok%>") {
+                    ans_field.attr('class', 'green');
+                    act_field.attr('class', 'green');
+                } else {
+                    ans_field.attr('class', 'red');
+                    act_field.attr('class', 'red');
+                }
+                ans_field.text('Результат: ' + data.result);
+                act_field.text('Действие: ' + data.action)
+            },
+            contentType: "application/json",
+            mimeType: 'application/json',
+            dataType: 'json'
+        });
+    }
+
+    function registerButtonClick() {
+        sendRequest("<%=User._action_registration%>");
+    }
+
+    function loginButtonClick() {
+        sendRequest("<%=User._action_login%>");
+    }
+</script>
 <body>
 <div id="floater">&nbsp;</div>
 <div id="center_block">
-    <%--<p>Registration</p>--%>
-
-    <form method="post" action="doaction.jsp">
-        <label for="login">Логин:</label>
-        <input name="<%=User._param_login%>" id="login"/><br/>
-        <label for="password">Пароль:</label>
-        <input name="<%=User._param_password%>" id="password" type="password"/><br/>
-        <label for="action">Действие:</label>
-        <select class="select" name="<%=User._param_action%>" id="action">
-            <option value="<%=User._action_registration%>">Регистрация</option>
-            <option value="<%=User._action_login%>">Вход</option>
-        </select>
-        <button class="button green" type="submit">Выполнить действие</button>
-    </form>
+    <div><p id="act_field"></p></div>
+    <div><p id="ans_field"></p></div>
+    <label for="login">Логин:</label>
+    <input id="login"/><br/>
+    <label for="password">Пароль:</label>
+    <input id="password" type="password"/><br/>
+    <button class="button red" onclick="registerButtonClick();">Регистрация</button>
+    <button class="button green" onclick="loginButtonClick();">Вход</button>
 </div>
 </body>
 </html>

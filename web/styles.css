@@ -2,7 +2,7 @@
     position: relative;
     text-align: left;
     clear: both;
-    width: 170px;
+    width: 250px;
     margin: 0 auto;
 }
 #floater {
@@ -89,7 +89,7 @@ textarea {
 .button {
     color: #56AED4;
     background: #ffffff;
-    display: block;
+    display: inline-block;
     border: 1px solid #56aed4;
     margin-top: 6px;
     padding: 2px 9px;
@@ -123,4 +123,9 @@ textarea {
 }
 .green {
     color: #7eaa00;
+}
+
+p {
+    padding-top: 5px;
+    font-weight: bold;
 }

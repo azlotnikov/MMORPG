@@ -6,4 +6,6 @@
   Time: 16:56
   To change this template use File | Settings | File Templates.
 --%>
-<%UserData.User.doAction(request, response);%>
+<%
+    UserData.User.doAction(request, response);
+%>
