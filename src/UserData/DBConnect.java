@@ -72,6 +72,37 @@ public class DBConnect {
       return result;
    }
 
+   public static boolean doLogout(String sid) throws ServletException {
+      Connection con = null;
+      boolean result = false;
+      try {
+         Class.forName("com.mysql.jdbc.Driver");
+         con = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+         PreparedStatement stmt = con.prepareStatement("SELECT * FROM users WHERE sid = ?");
+         stmt.setString(1, sid);
+         ResultSet rs = stmt.executeQuery();
+         int rowNum = 0;
+         while (rs.next()) {
+            rowNum++;
+         }
+         if (rowNum > 0) {
+            result = true;
+         }
+         if (result) {
+            stmt = con.prepareStatement("UPDATE users SET sid = ? WHERE sid = ?");
+            sid = UUID.randomUUID().toString();
+            stmt.setString(1, "");
+            stmt.setString(2, sid);
+         }
+      } catch (SQLException e) {
+         throw new ServletException("Servlet Could not display records.", e);
+      } catch (ClassNotFoundException e) {
+         throw new ServletException("JDBC Driver not found.", e);
+      }
+
+      return result;
+   }
+
    public static String doLogin(String login, String password) throws ServletException {
       Connection con = null;
       boolean result = false;

@@ -75,6 +75,7 @@ public class User {
       String login = (String) jsonRequest.get(_param_login);
       String password = (String) jsonRequest.get(_param_password);
       String action = (String) jsonRequest.get(_param_action);
+      String logout_sid = (String) jsonRequest.get(_param_sid);
 
       JSONObject jsonResponse = new JSONObject();
 
@@ -107,7 +108,10 @@ public class User {
          }
 
       } else if (action.equals(_action_logout)) {
-         //
+         jsonResponse.put(_param_result, _message_bad_sid);
+         if (DBConnect.doLogout(logout_sid)) {
+            jsonResponse.put(_param_result, _message_ok);
+         }
       } else {
          jsonResponse.put(_param_result, _message_error);
       }
