@@ -1,4 +1,4 @@
-<%@ page import="UserData.*" %>
+<%@ page import="UserData.Auth" %>
 <%--
   Created by IntelliJ IDEA.
   Auth: razoriii

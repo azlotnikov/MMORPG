@@ -11,65 +11,57 @@
 <head>
     <title>TEST</title>
 </head>
+<script src="js/jquery.js"></script>
 <script type="text/javascript">
-    function sendRequest(login, pass, action, expected_result) {
-        var xhr = new XMLHttpRequest();
-
-//        xhr.timeout = 2000;
-        xhr.open('POST', '/doaction.jsp', true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.send(
-                "<%=Auth._param_login%>=" + encodeURIComponent(login) +
-                        "&<%=Auth._param_password%>=" + encodeURIComponent(pass) +
-                        "&<%=Auth._param_action%>=" + encodeURIComponent(action)
-        );
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState == 4) {
-                if (xhr.status == 200) {
-                    var obj = JSON.parse(xhr.responseText);
-                    var ans = 'FAIL!';
-                    if (obj.result == expected_result) {
-                        ans = 'OK!';
-                    }
-                    document.getElementById("test_ans").innerHTML =
-                            document.getElementById("test_ans").innerHTML +
-                                    "-------------------<br>[" +
-                                    ans +
-                                    "][Action=" + action + "][Login=" + login + "][Password=" + pass + "]" +
-                                    xhr.responseText +
-                                    "<br>";
-
+    function sendRequest(login, password, action, expected_result) {
+        var jsonObj = JSON.stringify({
+            action: action,
+            login: login,
+            password: password
+        });
+        $.ajax({
+            type: 'POST',
+            url: 'doaction.jsp',
+            data: jsonObj,
+            success: function (data) {
+                var test_ans = $('#test_ans');
+                var data_text = '|' + data.action + '|' + login + '|' + password;
+                if (data.result == expected_result) {
+                    test_ans.text(test_ans.text() + 'OK!' + data_text + '|' + data.sid + '<br/>');
+                } else {
+                    test_ans.text(test_ans.text() + 'FAIL!' + data_text + '<br/>');
                 }
-            }
-        };
+            },
+            contentType: 'application/json',
+            mimeType: 'application/json',
+            dataType: 'json'
+        });
     }
 
     function buttonClicked() {
-        document.title = "Runing";
-        var actionLogin = "<%=Auth._action_login%>";
-        var actionRegistr = "<%=Auth._action_registration%>";
-        sendRequest('test', '123', actionRegistr, "<%=Auth._message_bad_pass%>");
-        sendRequest('test', '123123', actionLogin, "<%=Auth._message_wrong_pass%>");
-        sendRequest('', '123123', actionRegistr, "<%=Auth._message_bad_login%>");
-        sendRequest('', '', actionRegistr, "<%=Auth._message_bad_login%>");
-        sendRequest('test', '', actionRegistr, "<%=Auth._message_bad_pass%>");
-        sendRequest('test$%', '123123', actionRegistr, "<%=Auth._message_bad_login%>");
-        sendRequest('test_acc', '123123', actionLogin, "<%=Auth._message_wrong_pass%>");
+        document.title = 'Running';
+        sendRequest('test', '123', 'register', 'badPassword');
+        sendRequest('test', '123123', 'login', 'invalidCredentials');
+        sendRequest('', '123123', 'register', 'badLogin');
+        sendRequest('', '', 'register', 'badLogin');
+        sendRequest('test', '', 'register', 'badPassword');
+        sendRequest('test$%', '123123', 'register', 'badLogin');
+        sendRequest('test_acc', '123123', 'login', 'invalidCredentials');
 
-        sendRequest('test_acc', '123123', actionRegistr, "<%=Auth._message_ok%>");
-        sendRequest('test_acc', '123123', actionRegistr, "<%=Auth._message_login_exists%>");
+        sendRequest('test_acc', '123123', 'register', 'ok');
+        sendRequest('test_acc', '123123', 'register', 'loginExists');
 
-        sendRequest('test_acc', '0000000', actionLogin, "<%=Auth._message_wrong_pass%>");
-        sendRequest('test_acc', '123123', actionLogin, "<%=Auth._message_ok%>");
+        sendRequest('test_acc', '0000000', 'login', 'invalidCredentials');
+        sendRequest('test_acc', '123123', 'login', 'ok');
 
-        document.title = "Done";
+        document.title = 'Done';
     }
 </script>
 <body>
 <input type="button" value="Start Tests" id="btn3" onclick="buttonClicked();"/>
 
-<div id="test_ans">
+<p id="test_ans">
 
-</div>
+</p>
 </body>
 </html>
