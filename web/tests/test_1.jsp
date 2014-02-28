@@ -6,6 +6,10 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    response.addHeader("Access-Control-Allow-Origin", "*");
+    response.addHeader("Access-Control-Allow-Methods", "GET, POST");
+%>
 <html>
 <head>
     <title>TEST</title>
@@ -22,7 +26,7 @@
         $.ajax({
             type: 'POST',
             async: false,
-            url: '/doaction.jsp',
+            url: $('#server').val(),
             data: jsonObj,
             success: function (data) {
                 var test_ans = $('#test_ans');
@@ -60,8 +64,10 @@
 </script>
 <body>
 <div class="test_div">
-    <input type="button" class="button green" value="Начать тестирование" id="btn_tests" onclick="buttonClicked();"/>
-    <input type="button" class="button red" value="Очистить" onclick="$('#test_ans').text('');"/>
+    <label for="server">Сервер:</label>
+    <input id="server" value="http://localhost:8080/doaction.jsp" /><br/>
+    <button class="button green" id="btn_tests" onclick="buttonClicked();">Начать тестирование</button>
+    <button class="button red" onclick="$('#test_ans').text('');">Очистить</button>
 </div>
 <div id="test_ans" class="test_div">
 
