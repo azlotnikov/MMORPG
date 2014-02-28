@@ -25,11 +25,11 @@
             data: jsonObj,
             success: function (data) {
                 var test_ans = $('#test_ans');
-                var data_text = '|' + data.action + '|' + login + '|' + password;
+                var data_text = ' | ' + data.action + ' | ' + login + ' | ' + password + ' | ' + data.result + ' | ' + data.sid + '<br/>';
                 if (data.result == expected_result) {
-                    test_ans.text(test_ans.text() + 'OK!' + data_text + '|' + data.sid + '<br/>');
+                    test_ans.html(test_ans.html() + 'OK!' + data_text);
                 } else {
-                    test_ans.text(test_ans.text() + 'FAIL!' + data_text + '<br/>');
+                    test_ans.html(test_ans.html() + 'FAIL!' + data_text);
                 }
             },
             contentType: 'application/json',
@@ -40,6 +40,7 @@
 
     function buttonClicked() {
         document.title = 'Running';
+        
         sendRequest('test', '123', 'register', 'badPassword');
         sendRequest('test', '123123', 'login', 'invalidCredentials');
         sendRequest('', '123123', 'register', 'badLogin');
@@ -47,10 +48,8 @@
         sendRequest('test', '', 'register', 'badPassword');
         sendRequest('test$%', '123123', 'register', 'badLogin');
         sendRequest('test_acc', '123123', 'login', 'invalidCredentials');
-
         sendRequest('test_acc', '123123', 'register', 'ok');
         sendRequest('test_acc', '123123', 'register', 'loginExists');
-
         sendRequest('test_acc', '0000000', 'login', 'invalidCredentials');
         sendRequest('test_acc', '123123', 'login', 'ok');
 
@@ -60,8 +59,8 @@
 <body>
 <input type="button" value="Start Tests" id="btn3" onclick="buttonClicked();"/>
 
-<p id="test_ans">
+<div id="test_ans">
 
-</p>
+</div>
 </body>
 </html>
