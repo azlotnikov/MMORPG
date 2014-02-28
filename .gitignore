@@ -6,3 +6,5 @@
 *.ear
 .idea/
 out/
+out/*
+out/artifacts/MMORPG_war_exploded2/

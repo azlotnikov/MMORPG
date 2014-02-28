@@ -1,4 +1,3 @@
-<%@ page import="UserData.Auth" %>
 <%--
   Created by IntelliJ IDEA.
   Auth: razoriii
@@ -7,6 +6,10 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    response.addHeader("Access-Control-Allow-Origin", "*");
+    response.addHeader("Access-Control-Allow-Methods", "GET, POST");
+%>
 
 <link rel="stylesheet" type="text/css" href="styles.css"/>
 <script src="js/jquery.js"></script>
@@ -19,19 +22,20 @@
     function sendRequest(action) {
         var login = $('#login').val();
         var password = $('#password').val();
+        var server = $('#server').val();
         var jsonObj = JSON.stringify({
-            "<%=Auth._param_action%>": action,
-            "<%=Auth._param_login%>": login,
-            "<%=Auth._param_password%>": password
+            action: action,
+            login: login,
+            password: password
         });
         $.ajax({
             type: 'POST',
-            url: '/doaction.jsp',
+            url: server,
             data: jsonObj,
             success: function (data) {
                 var ans_field = $('#ans_field');
                 var act_field = $('#act_field');
-                if (data.result == "<%=Auth._message_ok%>") {
+                if (data.result == 'ok') {
                     ans_field.attr('class', 'green');
                     act_field.attr('class', 'green');
                 } else {
@@ -41,18 +45,18 @@
                 ans_field.text('Результат: ' + data.result);
                 act_field.text('Действие: ' + data.action)
             },
-            contentType: "application/json",
+            contentType: 'application/json',
             mimeType: 'application/json',
             dataType: 'json'
         });
     }
 
     function registerButtonClick() {
-        sendRequest("<%=Auth._action_registration%>");
+        sendRequest('register');
     }
 
     function loginButtonClick() {
-        sendRequest("<%=Auth._action_login%>");
+        sendRequest('login');
     }
 </script>
 <body>
@@ -60,6 +64,8 @@
 <div id="center_block">
     <div><p id="act_field"></p></div>
     <div><p id="ans_field"></p></div>
+    <label for="server">Сервер:</label>
+    <input id="server" value="http://localhost:8080/doaction.jsp" /><br/>
     <label for="login">Логин:</label>
     <input id="login"/><br/>
     <label for="password">Пароль:</label>
