@@ -74,6 +74,7 @@ input {
     border: 1px #ccc solid;
     height: 22px;
     padding: 0 5px;
+    width: 215px;
 }
 
 label {
@@ -128,4 +129,8 @@ textarea {
 p {
     padding-top: 5px;
     font-weight: bold;
+}
+
+.test_div {
+    padding: 5px 5px 5px 5px;
 }

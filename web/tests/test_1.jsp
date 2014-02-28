@@ -1,4 +1,3 @@
-<%@ page import="UserData.Auth" %>
 <%--
   Created by IntelliJ IDEA.
   Auth: razoriii
@@ -11,7 +10,8 @@
 <head>
     <title>TEST</title>
 </head>
-<script src="js/jquery.js"></script>
+<link rel="stylesheet" type="text/css" href="/styles.css"/>
+<script src="/js/jquery.js"></script>
 <script type="text/javascript">
     function sendRequest(login, password, action, expected_result) {
         var jsonObj = JSON.stringify({
@@ -21,15 +21,17 @@
         });
         $.ajax({
             type: 'POST',
-            url: 'doaction.jsp',
+            async: false,
+            url: '/doaction.jsp',
             data: jsonObj,
             success: function (data) {
                 var test_ans = $('#test_ans');
-                var data_text = ' | ' + data.action + ' | ' + login + ' | ' + password + ' | ' + data.result + ' | ' + data.sid + '<br/>';
+                var data_text = ' | ' + data.action + ' | ' + login + ' | ' + password + ' | Result: ' + data.result +
+                                ' Expected: ' + expected_result + ' | ' + data.sid + '</div>';
                 if (data.result == expected_result) {
-                    test_ans.html(test_ans.html() + 'OK!' + data_text);
+                    test_ans.html(test_ans.html() + '<div class="test_div">OK!' + data_text);
                 } else {
-                    test_ans.html(test_ans.html() + 'FAIL!' + data_text);
+                    test_ans.html(test_ans.html() + '<div class="test_div">FAIL!' + data_text);
                 }
             },
             contentType: 'application/json',
@@ -40,7 +42,7 @@
 
     function buttonClicked() {
         document.title = 'Running';
-        
+
         sendRequest('test', '123', 'register', 'badPassword');
         sendRequest('test', '123123', 'login', 'invalidCredentials');
         sendRequest('', '123123', 'register', 'badLogin');
@@ -57,9 +59,11 @@
     }
 </script>
 <body>
-<input type="button" value="Start Tests" id="btn3" onclick="buttonClicked();"/>
-
-<div id="test_ans">
+<div class="test_div">
+    <input type="button" class="button green" value="Начать тестирование" id="btn_tests" onclick="buttonClicked();"/>
+    <input type="button" class="button red" value="Очистить" onclick="$('#test_ans').text('');"/>
+</div>
+<div id="test_ans" class="test_div">
 
 </div>
 </body>
