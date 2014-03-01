@@ -1,22 +1,18 @@
 *.class
 
 # Package Files #
+MMORPG.iml
 *.jar
 *.war
 *.ear
+*.DB_Store
 .idea/
 out/
 
 out/artifacts/MMORPG_war_exploded2/doaction.jsp
-
 out/artifacts/MMORPG_war_exploded2/index.jsp
-
 out/artifacts/MMORPG_war_exploded2/index.jsp
-
 out/artifacts/MMORPG_war_exploded2/test.jsp
-
 out/artifacts/MMORPG_war_exploded2/test.jsp
-
 out/artifacts/MMORPG_war_exploded2/styles.css
-
 out/artifacts/MMORPG_war_exploded2/styles.css
