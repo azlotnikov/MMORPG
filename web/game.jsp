@@ -6,59 +6,137 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<!DOCTYPE html>
-<html>
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-    <title>JEE7 WebSocket Example</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel="shortcut icon" href="/websocket/favicon.ico">
-    <style>
-        #container {
-            border: 1px #999999 solid;
-            padding: 10px;
+    <title>Apache Tomcat WebSocket Examples: Chat</title>
+    <style type="text/css">
+        #chat {
+            width: 410px
         }
-        p.client {
-            border-bottom: 1px aquamarine solid;
+
+        #console-container {
+            width: 400px;
         }
-        p.server {
-            border-bottom: 1px crimson solid;
-        }
-        input {
+
+        #console {
+            border: 1px solid #CCCCCC;
+            border-right-color: #999999;
+            border-bottom-color: #999999;
+            height: 170px;
+            overflow-y: scroll;
             padding: 5px;
-            width: 250px;
+            width: 100%;
         }
-        button {
-            padding: 5px;
+
+        #console p {
+            padding: 0;
+            margin: 0;
         }
     </style>
-    <script>
-        var chatClient = new WebSocket("ws://localhost:8080/game");
+    <script type="application/javascript">
+        var Chat = {};
 
-        chatClient.onmessage = function(evt) {
-            var p = document.createElement("p");
-            p.setAttribute("class", "server");
-            p.innerHTML = "Server: " + evt.data;
-            var container = document.getElementById("container");
-            container.appendChild(p);
-        }
-        function send() {
-            var input = document.getElementById("message");
-            var p = document.createElement("p");
-            p.setAttribute("class", "client");
-            p.innerHTML = "Me: " + input.value;
-            var container = document.getElementById("container");
-            container.appendChild(p);
-            chatClient.send(input.value);
-            input.value = "";
-        }
+        Chat.socket = null;
+
+        Chat.connect = (function(host) {
+            if ('WebSocket' in window) {
+                Chat.socket = new WebSocket(host);
+            } else if ('MozWebSocket' in window) {
+                Chat.socket = new MozWebSocket(host);
+            } else {
+                Console.log('Error: WebSocket is not supported by this browser.');
+                return;
+            }
+
+            Chat.socket.onopen = function () {
+                Console.log('Info: WebSocket connection opened.');
+                document.getElementById('chat').onkeydown = function(event) {
+                    if (event.keyCode == 13) {
+                        Chat.sendMessage();
+                    }
+                };
+            };
+
+            Chat.socket.onclose = function () {
+                document.getElementById('chat').onkeydown = null;
+                Console.log('Info: WebSocket closed.');
+            };
+
+            Chat.socket.onmessage = function (message) {
+                Console.log(message.data);
+            };
+        });
+
+        Chat.initialize = function() {
+            if (window.location.protocol == 'http:') {
+                Chat.connect('ws://' + window.location.host + '/chat');
+            } else {
+                Chat.connect('wss://' + window.location.host + '/chat');
+            }
+        };
+
+        Chat.sendMessage = (function() {
+            var message = document.getElementById('chat').value;
+            if (message != '') {
+                Chat.socket.send(message);
+                document.getElementById('chat').value = '';
+            }
+        });
+
+        var Console = {};
+
+        Console.log = (function(message) {
+            var console = document.getElementById('console');
+            var p = document.createElement('p');
+            p.style.wordWrap = 'break-word';
+            p.innerHTML = message;
+            console.appendChild(p);
+            while (console.childNodes.length > 25) {
+                console.removeChild(console.firstChild);
+            }
+            console.scrollTop = console.scrollHeight;
+        });
+
+        Chat.initialize();
+
+
+        document.addEventListener("DOMContentLoaded", function() {
+            // Remove elements with "noscript" class - <noscript> is not allowed in XHTML
+            var noscripts = document.getElementsByClassName("noscript");
+            for (var i = 0; i < noscripts.length; i++) {
+                noscripts[i].parentNode.removeChild(noscripts[i]);
+            }
+        }, false);
+
     </script>
 </head>
 <body>
-<h1>JEE7 WebSocket Example</h1>
-<div id="container">
-
+<div class="noscript"><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websockets rely on Javascript being enabled. Please enable
+    Javascript and reload this page!</h2></div>
+<div>
+    <p>
+        <input type="text" placeholder="type and press enter to chat" id="chat" />
+    </p>
+    <div id="console-container">
+        <div id="console"/>
+    </div>
 </div>
-<input type="text" id="message" name="message" />
-<button type="button" id="send" onclick="send()">Send</button>
 </body>
 </html>
