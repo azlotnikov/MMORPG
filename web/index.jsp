@@ -19,6 +19,11 @@
     <title>MMORPG</title>
 </head>
 <script type="text/javascript">
+    function goToGame(url, sid){
+        var newGame = window.open(url, 'Game', sid);
+        newGame.focus;
+    }
+
     function sendRequest(action) {
         var login = $('#login').val();
         var password = $('#password').val();
@@ -38,6 +43,8 @@
                 if (data.result == 'ok') {
                     ans_field.attr('class', 'green');
                     act_field.attr('class', 'green');
+                    // make normal url
+                    goToGame('localhost:8080/game_.jsp', data.sid);
                 } else {
                     ans_field.attr('class', 'red');
                     act_field.attr('class', 'red');
