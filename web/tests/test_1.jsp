@@ -10,12 +10,12 @@
     response.addHeader("Access-Control-Allow-Origin", "*");
     response.addHeader("Access-Control-Allow-Methods", "GET, POST");
 %>
+<link rel="stylesheet" type="text/css" href="../styles/style.css"/>
 <html>
 <head>
     <title>TEST</title>
 </head>
-<link rel="stylesheet" type="text/css" href="/styles.css"/>
-<script src="/js/jquery.js"></script>
+<script src="../js/jquery.js"></script>
 <script type="text/javascript">
     function sendRequest(login, password, action, expected_result) {
         var jsonObj = JSON.stringify({
@@ -65,7 +65,7 @@
 <body>
 <div class="test_div">
     <label for="server">Сервер:</label>
-    <input id="server" value="http://localhost:8080/doaction.jsp" /><br/>
+    <input id="server" value="http://localhost:8080/MMORPG_war_exploded3/doaction.jsp" /><br/>
     <button class="button green" id="btn_tests" onclick="buttonClicked();">Начать тестирование</button>
     <button class="button red" onclick="$('#test_ans').text('');">Очистить</button>
 </div>

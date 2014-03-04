@@ -40,11 +40,11 @@ public class Auth {
    public static String _message_bad_sid = "badSid";
 
    public static boolean validateLogin(String login) {
-      return !(login.length() < 3 || !login.matches("\\w+"));
+      return !(login.length() < 2 || !login.matches("\\w+") || login.length() > 36);
    }
 
    public static boolean validatePassword(String pass) {
-      return !(pass.length() < 6);
+      return !(pass.length() < 6 || pass.length() > 36);
    }
 
    public static boolean loginExists(String login) throws ServletException {
