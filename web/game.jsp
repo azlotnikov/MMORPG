@@ -29,6 +29,7 @@
 <script type="application/javascript">
 "use strict";
 
+var thisURL = "localhost:8080/MMORPG_war_exploded";
 var Game = {};
 
 Game.socket = null;
@@ -44,14 +45,62 @@ function getUrlVars() {
 };
 
 Game.initialize = function () {
-    alert(window.location.host + window.location.pathname.substr(1));
     if (window.location.protocol == 'http:') {
-        Game.connect('ws://' + window.location.host + window.location.pathname.substr(1) + '/game');
+        Game.connect('ws://' + thisURL + '/game');
     } else {
-        Game.connect('wss://' + window.location.host + window.location.pathname.substr(1) + '/game');
+        Game.connect('wss://' + thisURL + '/game');
     }
 };
 
+Game.connect = (function (host) {
+    if ('WebSocket' in window) {
+        Game.socket = new WebSocket(host);
+    } else if ('MozWebSocket' in window) {
+        Game.socket = new MozWebSocket(host);
+    } else {
+        alert('Error: WebSocket is not supported by this browser.');
+        return;
+    }
+
+    Game.socket.onopen = function () {
+        alert('Info: WebSocket connection opened.');
+        Game.getDictionary();
+    };
+
+    Game.socket.onclose = function () {
+        alert('Info: WebSocket closed.');
+        Game.logOut();
+    };
+
+    Game.socket.onmessage = function (message) {
+        var packet = JSON.parse(message.data);
+        switch (packet.action) {
+            case 'getDictionary':
+                Game.dictionary = packet.dictionary;
+                for (var key in packet.dictionary) {
+                    alert(key +" "+ packet.key);
+                }
+                break;
+        }
+    };
+});
+
+Game.getDictionary = function () {
+    var jsonObj = JSON.stringify({
+        action: "getDictionary"
+    });
+    Game.socket.send(jsonObj);
+};
+
+Game.logOut = function () {
+    var jsonObj = JSON.stringify({
+        action: "logout",
+        sid: sid
+    });
+    Game.socket.send(jsonObj);
+};
+
+Game.initialize();
 
 </script>
 </body>
