@@ -21,24 +21,6 @@ public class Auth {
 
    // https://github.com/rotanov/fefu-mmorpg-protocol
 
-   public static String _action_login = "login";
-   public static String _action_registration = "register";
-   public static String _action_logout = "logout";
-
-   public static String _param_action = "action";
-   public static String _param_login = "login";
-   public static String _param_password = "password";
-   public static String _param_sid = "sid";
-   public static String _param_result = "result";
-
-   public static String _message_ok = "ok";
-   public static String _message_wrong_pass = "invalidCredentials";
-   public static String _message_bad_pass = "badPassword";
-   public static String _message_bad_login = "badLogin";
-   public static String _message_login_exists = "loginExists";
-   public static String _message_error = "error";
-   public static String _message_bad_sid = "badSid";
-
    public static boolean validateLogin(String login) {
       return !(login.length() < 2 || !login.matches("\\w+") || login.length() > 36);
    }
@@ -72,48 +54,54 @@ public class Auth {
          throw new IOException("Error parsing JSON request string");
       }
 
-      String login = (String) jsonRequest.get(_param_login);
-      String password = (String) jsonRequest.get(_param_password);
-      String action = (String) jsonRequest.get(_param_action);
-      String logout_sid = (String) jsonRequest.get(_param_sid);
+      String login = (String) jsonRequest.get("login");
+      String password = (String) jsonRequest.get("password");
+      String action = (String) jsonRequest.get("action");
+      String logout_sid = (String) jsonRequest.get("sid");
 
       JSONObject jsonResponse = new JSONObject();
 
-      jsonResponse.put(_param_action, action);
+      jsonResponse.put("action", action);
 
-      if (action.equals(_action_registration)) {
-         String message = _message_ok;
+      switch (action) {
+         case "register": {
+            String message = "ok";
 
-         if (!validateLogin(login)) {
-            message = _message_bad_login;
-         } else if (!validatePassword(password)) {
-            message = _message_bad_pass;
-         } else if (loginExists(login)) {
-            message = _message_login_exists;
-         } else {
-            jsonResponse.put(_param_sid, DBConnect.insertNewUser(login, password));
+            if (!validateLogin(login)) {
+               message = "badLogin";
+            } else if (!validatePassword(password)) {
+               message = "badPassword";
+            } else if (loginExists(login)) {
+               message = "loginExists";
+            } else {
+               jsonResponse.put("sid", DBConnect.insertNewUser(login, password));
+            }
+
+            jsonResponse.put("result", message);
+         }
+         case "login": {
+            String sid = "-1";
+            if (!login.isEmpty() && !password.isEmpty()) {
+               sid = DBConnect.doLogin(login, password);
+            }
+            if (sid.equals("-1")) {
+               jsonResponse.put("result", "invalidCredentials");
+            } else {
+               jsonResponse.put("result", "ok");
+               jsonResponse.put("sid", sid);
+            }
          }
 
-         jsonResponse.put(_param_result, message);
-      } else if (action.equals(_action_login)) {
-         String sid = "-1";
-         if (!login.isEmpty() && !password.isEmpty()) {
-            sid = DBConnect.doLogin(login, password);
-         }
-         if (sid.equals("-1")) {
-            jsonResponse.put(_param_result, _message_wrong_pass);
-         } else {
-            jsonResponse.put(_param_result, _message_ok);
-            jsonResponse.put(_param_sid, sid);
+         case "logout": {
+            jsonResponse.put("result", "badSid");
+            if (DBConnect.doLogout(logout_sid)) {
+               jsonResponse.put("result", "ok");
+            }
          }
 
-      } else if (action.equals(_action_logout)) {
-         jsonResponse.put(_param_result, _message_bad_sid);
-         if (DBConnect.doLogout(logout_sid)) {
-            jsonResponse.put(_param_result, _message_ok);
+         default: {
+            jsonResponse.put("result", "error");
          }
-      } else {
-         jsonResponse.put(_param_result, _message_error);
       }
 
       PrintWriter printout = response.getWriter();

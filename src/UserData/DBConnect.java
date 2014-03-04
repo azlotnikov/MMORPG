@@ -14,6 +14,9 @@ public class DBConnect {
    private static String DB_USER = "root";
    private static String DB_PASS = "123456";
 
+   public static double defaultPosX = 5;
+   public static double defaultPosY = 5;
+
    public static String getMD5(String md5) {
       try {
          java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
@@ -34,11 +37,16 @@ public class DBConnect {
       try {
          Class.forName("com.mysql.jdbc.Driver");
          con = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-         PreparedStatement stmt = con.prepareStatement("INSERT INTO users (login, password, sid) VALUES (?,?,?)");
+         // need to generate game_id field
+         PreparedStatement stmt = con.prepareStatement("INSERT INTO users (login, password, sid, pos_x, pos_y, game_id) " +
+                 "VALUES (?,?,?,?,?,?)");
          stmt.setString(1, login);
          stmt.setString(2, getMD5(password));
          sid = UUID.randomUUID().toString();
          stmt.setString(3, sid);
+         stmt.setDouble(4, defaultPosX);
+         stmt.setDouble(5, defaultPosY);
+         stmt.setInt(6, 1);
          stmt.executeUpdate();
       } catch (SQLException e) {
          throw new ServletException("Servlet Could not display records.", e);
@@ -132,7 +140,37 @@ public class DBConnect {
       } catch (ClassNotFoundException e) {
          throw new ServletException("JDBC Driver not found.", e);
       }
-
       return sid;
    }
+
+   public static PlayerDB getPlayerDBbySid(String sid) {
+      PlayerDB playerDB = new PlayerDB();
+      playerDB.sid = sid;
+      Connection con = null;
+      try {
+         Class.forName("com.mysql.jdbc.Driver");
+         con = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+         PreparedStatement stmt = con.prepareStatement("SELECT login, game_id, pos_x, pos_y  FROM users WHERE sid = ?");
+         stmt.setString(1, sid);
+         ResultSet rs = stmt.executeQuery();
+         int rowNum = 0;
+         while (rs.next()) {
+            rowNum++;
+            playerDB.login = rs.getString("login");
+            playerDB.id = rs.getInt("game_id");
+            playerDB.posX = rs.getDouble("pos_x");
+            playerDB.posY = rs.getDouble("pos_y");
+         }
+         if (rowNum > 0) {
+            playerDB.badSid = false;
+         }
+      } catch (SQLException e) {
+//         throw new ServletException("Servlet Could not display records.", e);
+      } catch (ClassNotFoundException e) {
+//         throw new ServletException("JDBC Driver not found.", e);
+      }
+
+      return playerDB;
+   }
+
 }
