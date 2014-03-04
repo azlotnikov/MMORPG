@@ -64,6 +64,8 @@ public class Auth {
 
       jsonResponse.put("action", action);
 
+      UserDB user = new UserDB();
+
       switch (action) {
          case "register": {
             String message = "ok";
@@ -75,39 +77,43 @@ public class Auth {
             } else if (loginExists(login)) {
                message = "loginExists";
             } else {
-               UserDB user = new UserDB();
                user.setLogin(login);
                user.setPasswordMD5(password);
+               user.doInsert();
                jsonResponse.put("sid", user.getSid());
             }
 
             jsonResponse.put("result", message);
+            break;
          }
          case "login": {
-            UserDB user = new UserDB();
             if (!login.isEmpty() && !password.isEmpty()) {
                user.setLogin(login);
                user.setPasswordMD5(password);
-            }
-            if (user.getSid().equals("-1")) {
-               jsonResponse.put("result", "invalidCredentials");
+               if (user.doLogin()) {
+                  jsonResponse.put("result", "ok");
+                  jsonResponse.put("sid", user.getSid());
+               } else {
+                  jsonResponse.put("result", "invalidCredentials");
+               }
             } else {
-               jsonResponse.put("result", "ok");
-               jsonResponse.put("sid", user.getSid());
+               jsonResponse.put("result", "invalidCredentials");
             }
+            break;
          }
 
          case "logout": {
             jsonResponse.put("result", "badSid");
-            UserDB user = new UserDB();
             user.setSid(logout_sid);
             if (user.doLogout()) {
                jsonResponse.put("result", "ok");
             }
+            break;
          }
 
          default: {
             jsonResponse.put("result", "error");
+            break;
          }
       }
 

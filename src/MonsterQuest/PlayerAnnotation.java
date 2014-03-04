@@ -72,6 +72,7 @@ public class PlayerAnnotation {
          case "getDictionary": {
             jsonMsg.put("result", "ok");
             jsonMsg.put("dictionary", getDictionary());
+            break;
          }
 
          case "examine": {
@@ -86,10 +87,11 @@ public class PlayerAnnotation {
             } else {
                jsonMsg.put("result", "badId");
             }
+            break;
          }
 
          case "look": {
-
+            break;
          }
 
          case "move": {
@@ -118,10 +120,12 @@ public class PlayerAnnotation {
 
             player.moveTo(newStepLocation);
             jsonMsg.put("result", "ok");
+            break;
          }
 
          default: {
             jsonMsg.put("result", "error");
+            break;
          }
       }
 

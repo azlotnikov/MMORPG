@@ -15,12 +15,12 @@ public class UserDB {
    private static double defaultPosX = 5;
    private static double defaultPosY = 5;
 
-   private String login;
-   private String sid;
-   private String passwordHash;
-   private long id;
-   private double posX;
-   private double posY;
+   private String login = "";
+   private String sid = "-1";
+   private String passwordHash = "";
+   private long id = 0;
+   private double posX = defaultPosX;
+   private double posY = defaultPosY;
    private boolean badSid = true;
 
    private Connection connector;
@@ -58,8 +58,8 @@ public class UserDB {
          stmt.setString(2, passwordHash);
          sid = UUID.randomUUID().toString();
          stmt.setString(3, sid);
-         stmt.setDouble(4, defaultPosX);
-         stmt.setDouble(5, defaultPosY);
+         stmt.setDouble(4, posX);
+         stmt.setDouble(5, posY);
          stmt.setInt(6, 1);
          stmt.executeUpdate();
       } catch (Throwable e) {
