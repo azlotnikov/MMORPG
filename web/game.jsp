@@ -25,7 +25,7 @@
 <script type="application/javascript">
     "use strict";
 
-    var thisURL = "localhost:8080/MMORPG_war_exploded";
+    var webSocketUrl = getUrlVars()["websocket"];
     var Game = {};
 
     Game.socket = null;
@@ -65,11 +65,8 @@
                 }
             }
         }, false);
-        if (window.location.protocol == 'http:') {
-            Game.connect('ws://' + thisURL + '/game');
-        } else {
-            Game.connect('wss://' + thisURL + '/game');
-        }
+
+        Game.connect(webSocketUrl);
 
     };
 

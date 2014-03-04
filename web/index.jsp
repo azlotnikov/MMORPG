@@ -19,8 +19,8 @@
     <title>MMORPG</title>
 </head>
 <script type="text/javascript">
-    function goToGame(url, sid){
-        var newGame = window.open(url + "?sid=" + sid);
+    function goToGame(url, sid, websocket){
+        var newGame = window.open(url + "?sid=" + sid + "&websocket=" + websocket);
     }
 
     function sendRequest(action) {
@@ -43,7 +43,7 @@
                     ans_field.attr('class', 'green');
                     act_field.attr('class', 'green');
                     // make normal url
-                    goToGame("http://localhost:8080/MMORPG_war_exploded/game.jsp", data.sid);
+                    goToGame("http://localhost:8080/MMORPG_war_exploded/game.jsp", data.sid, data.websocket);
                 } else {
                     ans_field.attr('class', 'red');
                     act_field.attr('class', 'red');

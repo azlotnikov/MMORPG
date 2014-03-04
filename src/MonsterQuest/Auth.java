@@ -20,6 +20,7 @@ import java.io.PrintWriter;
 public class Auth {
 
    // https://github.com/rotanov/fefu-mmorpg-protocol
+   public static String webSocketUrl = "ws://localhost:8080/MMORPG_war_exploded/game";
 
    public static boolean validateLogin(String login) {
       return !(login.length() < 2 || !login.matches("\\w+") || login.length() > 36);
@@ -81,6 +82,7 @@ public class Auth {
                user.setPasswordMD5(password);
                user.doInsert();
                jsonResponse.put("sid", user.getSid());
+               jsonResponse.put("websocket", webSocketUrl);
             }
 
             jsonResponse.put("result", message);
@@ -93,6 +95,7 @@ public class Auth {
                if (user.doLogin()) {
                   jsonResponse.put("result", "ok");
                   jsonResponse.put("sid", user.getSid());
+                  jsonResponse.put("websocket", webSocketUrl);
                } else {
                   jsonResponse.put("result", "invalidCredentials");
                }
