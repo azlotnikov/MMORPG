@@ -19,6 +19,10 @@
     <title>MMORPG</title>
 </head>
 <script type="text/javascript">
+    function goToGame(url, sid){
+        var newGame = window.open(url + "?sid=" + sid);
+    }
+
     function sendRequest(action) {
         var login = $('#login').val();
         var password = $('#password').val();
@@ -38,6 +42,8 @@
                 if (data.result == 'ok') {
                     ans_field.attr('class', 'green');
                     act_field.attr('class', 'green');
+                    // make normal url
+                    goToGame("http://localhost:8080/MMORPG_war_exploded/game.jsp", data.sid);
                 } else {
                     ans_field.attr('class', 'red');
                     act_field.attr('class', 'red');
@@ -65,7 +71,7 @@
     <div><p id="act_field"></p></div>
     <div><p id="ans_field"></p></div>
     <label for="server">Сервер:</label>
-    <input id="server" value="http://localhost:8080/doaction.jsp" /><br/>
+    <input id="server" value="http://localhost:8080/MMORPG_war_exploded/doaction.jsp" /><br/>
     <label for="login">Логин:</label>
     <input id="login"/><br/>
     <label for="password">Пароль:</label>
