@@ -1,10 +1,8 @@
-package UserData;
+package MonsterQuest;
 
 /**
  * Created by Alexander on 3/3/14.
  */
-
-import java.util.logging.Logger;
 
 import java.util.Collection;
 import java.util.Collections;

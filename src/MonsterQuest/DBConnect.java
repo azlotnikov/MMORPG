@@ -1,9 +1,7 @@
-package UserData;
+package MonsterQuest;
 
 import java.sql.*;
-import java.util.*;
 import javax.servlet.*;
-import javax.servlet.http.*;
 import java.util.UUID;
 
 /**

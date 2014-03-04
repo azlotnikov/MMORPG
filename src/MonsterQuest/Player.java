@@ -1,13 +1,11 @@
-package UserData;
+package MonsterQuest;
 
 /**
  * Created by razoriii on 04.03.14.
  */
 
 import java.io.IOException;
-import java.util.ArrayDeque;
 import java.util.Collection;
-import java.util.Deque;
 
 import javax.websocket.CloseReason;
 import javax.websocket.CloseReason.CloseCodes;

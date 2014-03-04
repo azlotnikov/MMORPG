@@ -1,4 +1,4 @@
-package UserData;
+package MonsterQuest;
 
 /**
  * Created by razoriii on 25.02.14.
