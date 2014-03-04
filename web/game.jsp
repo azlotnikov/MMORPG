@@ -78,6 +78,7 @@ Game.initialize = function () {
 Game.connect = (function (host) {
     if ('WebSocket' in window) {
         Game.socket = new WebSocket(host);
+        Console.log('Info: WebSocket connection opened.');
     } else if ('MozWebSocket' in window) {
         Game.socket = new MozWebSocket(host);
     } else {
