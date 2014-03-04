@@ -20,12 +20,7 @@
 </head>
 <script type="text/javascript">
     function goToGame(url, sid){
-<<<<<<< HEAD
         var newGame = window.open(url + "?sid=" + sid);
-=======
-        var newGame = window.open(url, 'Game', sid);
-        newGame.focus;
->>>>>>> 04b605b74555640571c9289f1160bbd0874b1a62
     }
 
     function sendRequest(action) {
@@ -48,11 +43,7 @@
                     ans_field.attr('class', 'green');
                     act_field.attr('class', 'green');
                     // make normal url
-<<<<<<< HEAD
                     goToGame("http://localhost:8080/MMORPG_war_exploded/game.jsp", data.sid);
-=======
-                    goToGame('localhost:8080/game_.jsp', data.sid);
->>>>>>> 04b605b74555640571c9289f1160bbd0874b1a62
                 } else {
                     ans_field.attr('class', 'red');
                     act_field.attr('class', 'red');
@@ -80,11 +71,7 @@
     <div><p id="act_field"></p></div>
     <div><p id="ans_field"></p></div>
     <label for="server">Сервер:</label>
-<<<<<<< HEAD
     <input id="server" value="http://localhost:8080/MMORPG_war_exploded/doaction.jsp" /><br/>
-=======
-    <input id="server" value="http://localhost:8080/MMORPG_war_exploded3/doaction.jsp" /><br/>
->>>>>>> 04b605b74555640571c9289f1160bbd0874b1a62
     <label for="login">Логин:</label>
     <input id="login"/><br/>
     <label for="password">Пароль:</label>
