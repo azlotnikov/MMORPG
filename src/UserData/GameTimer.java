@@ -96,6 +96,10 @@ public class GameTimer {
       }
    }
 
+   public static long getCurrentTick() {
+      return tickValue;
+   }
+
 }
 
 

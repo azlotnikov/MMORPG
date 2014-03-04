@@ -67,14 +67,14 @@ public class PlayerAnnotation {
          active = true;
       }
 
-      switch ((String)jsonMsg.get("action")) {
+      switch ((String) jsonMsg.get("action")) {
          case "getDictionary": {
             jsonMsg.put("result", "ok");
             jsonMsg.put("dictionary", getDictionary());
          }
 
          case "examine": {
-            Player examPlayer = GameTimer.ExaminePlayer((long)jsonMsg.get("id"));
+            Player examPlayer = GameTimer.ExaminePlayer((long) jsonMsg.get("id"));
             if (examPlayer != null) {
                jsonMsg.put("result", "ok");
                jsonMsg.put("id", examPlayer.getId());
@@ -85,6 +85,38 @@ public class PlayerAnnotation {
             } else {
                jsonMsg.put("result", "badId");
             }
+         }
+
+         case "look": {
+
+         }
+
+         case "move": {
+            Direction newDirection;
+            switch ((String) jsonMsg.get("direction")) {
+               case "west":
+                  newDirection = Direction.WEST;
+               case "north":
+                  newDirection = Direction.NORTH;
+               case "east":
+                  newDirection = Direction.EAST;
+               case "south":
+                  newDirection = Direction.SOUTH;
+               default:
+                  newDirection = Direction.NONE;
+            }
+
+            long moveStartTickValue = (long) jsonMsg.get("tick");
+
+            Location newStepLocation = player.getLocation();
+
+//            for (int i = 1; i <= GameTimer.getCurrentTick() - moveStartTickValue; i++) {
+            newStepLocation = newStepLocation.getAdjacentLocation(newDirection, player.getVelocity());
+            //need to check collisions with walls
+//            }
+
+            player.moveTo(newStepLocation);
+            jsonMsg.put("result", "ok");
          }
 
          default: {
@@ -110,7 +142,7 @@ public class PlayerAnnotation {
       Throwable root = t;
       while (root.getCause() != null && count < 20) {
          root = root.getCause();
-         count ++;
+         count++;
       }
    }
 
