@@ -60,7 +60,10 @@ public class PlayerAnnotation {
       user.getDataBySid((String) jsonMsg.get("sid"));
       if (user.isBadSid()) {
          jsonMsg.put("result", "badSid");
-         System.out.println(jsonMsg.toJSONString());
+         try {
+            openedSession.getBasicRemote().sendText(jsonMsg.toJSONString());
+         } catch (Throwable e) {
+         }
          return;
       }
       if (!active) {
@@ -130,7 +133,7 @@ public class PlayerAnnotation {
          }
       }
 
-      System.out.println(jsonMsg.toJSONString());
+      player.sendMessage(jsonMsg.toJSONString());
    }
 
    @OnClose
