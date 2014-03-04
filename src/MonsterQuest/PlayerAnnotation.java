@@ -48,6 +48,15 @@ public class PlayerAnnotation {
       return jsonAns;
    }
 
+   public String getMap() {
+      return "[" +
+              "    [\"#\", \"#\", \".\", \"#\", \"#\", \"#\"]," +
+              "    [\".\", \".\", \".\", \".\", \".\", \".\"]," +
+              "    [\".\", \".\", \".\", \".\", \".\", \".\"]," +
+              "    [\"#\", \"#\", \"#\", \".\", \"#\", \"#\"]" +
+              "]";
+   }
+
    @OnOpen
    public void onOpen(Session session) {
       openedSession = session;
@@ -97,6 +106,9 @@ public class PlayerAnnotation {
          }
 
          case "look": {
+            jsonAns.put("result", "ok");
+            jsonAns.put("map", getMap());
+            jsonAns.put("actors", GameTimer.getActors());
             break;
          }
 

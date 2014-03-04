@@ -11,6 +11,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class GameTimer {
@@ -33,6 +34,21 @@ public class GameTimer {
 
    protected static Collection<Player> getPlayers() {
       return Collections.unmodifiableCollection(players.values());
+   }
+
+   protected static JSONArray getActors() {
+      JSONArray jsonAns = new JSONArray();
+      for (Iterator<Player> iterator = GameTimer.getPlayers().iterator();
+           iterator.hasNext();) {
+         Player player = iterator.next();
+         JSONObject jsonPlayer = new JSONObject();
+         jsonPlayer.put("type", "player");
+         jsonPlayer.put("id", player.getId());
+         jsonPlayer.put("x", player.getLocation().x);
+         jsonPlayer.put("y", player.getLocation().y);
+         jsonAns.add(jsonPlayer);
+      }
+      return jsonAns;
    }
 
    protected static Player ExaminePlayer(long playerId) {
