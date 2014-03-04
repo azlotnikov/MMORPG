@@ -54,13 +54,14 @@ public class PlayerAnnotation {
    }
 
    @OnMessage
-   public String onMessage(String message) {
+   public void onMessage(String message) {
       JSONObject jsonMsg = parseJsonString(message);
       UserDB user = new UserDB();
       user.getDataBySid((String) jsonMsg.get("sid"));
       if (user.isBadSid()) {
          jsonMsg.put("result", "badSid");
-         return jsonMsg.toJSONString();
+         System.out.println(jsonMsg.toJSONString());
+         return;
       }
       if (!active) {
          player = new Player(user.getId(), user.getSid(), user.getLogin(), openedSession, user.getLocation());
@@ -129,7 +130,7 @@ public class PlayerAnnotation {
          }
       }
 
-      return jsonMsg.toJSONString();
+      System.out.println(jsonMsg.toJSONString());
    }
 
    @OnClose
