@@ -11,16 +11,21 @@
     response.addHeader("Access-Control-Allow-Methods", "GET, POST");
 %>
 
-<link rel="stylesheet" type="text/css" href="styles.css"/>
+<link rel="stylesheet" type="text/css" href="styles/style.css"/>
 <script src="js/jquery.js"></script>
 
-<html>
+<!DOCTYPE html>
 <head>
     <title>MMORPG</title>
 </head>
 <script type="text/javascript">
     function goToGame(url, sid){
+<<<<<<< HEAD
         var newGame = window.open(url + "?sid=" + sid);
+=======
+        var newGame = window.open(url, 'Game', sid);
+        newGame.focus;
+>>>>>>> 04b605b74555640571c9289f1160bbd0874b1a62
     }
 
     function sendRequest(action) {
@@ -43,7 +48,11 @@
                     ans_field.attr('class', 'green');
                     act_field.attr('class', 'green');
                     // make normal url
+<<<<<<< HEAD
                     goToGame("http://localhost:8080/MMORPG_war_exploded/game.jsp", data.sid);
+=======
+                    goToGame('localhost:8080/game_.jsp', data.sid);
+>>>>>>> 04b605b74555640571c9289f1160bbd0874b1a62
                 } else {
                     ans_field.attr('class', 'red');
                     act_field.attr('class', 'red');
@@ -71,14 +80,18 @@
     <div><p id="act_field"></p></div>
     <div><p id="ans_field"></p></div>
     <label for="server">Сервер:</label>
+<<<<<<< HEAD
     <input id="server" value="http://localhost:8080/MMORPG_war_exploded/doaction.jsp" /><br/>
+=======
+    <input id="server" value="http://localhost:8080/MMORPG_war_exploded3/doaction.jsp" /><br/>
+>>>>>>> 04b605b74555640571c9289f1160bbd0874b1a62
     <label for="login">Логин:</label>
     <input id="login"/><br/>
     <label for="password">Пароль:</label>
     <input id="password" type="password"/><br/>
     <button class="button red" onclick="registerButtonClick();">Регистрация</button>
     <button class="button green" onclick="loginButtonClick();">Вход</button>
-    <button class="button" onclick="javascript:location.assign('/tests/test_1.jsp');">Тесты</button>
+    <button class="button" onclick="javascript:location.assign(window.location.pathname.substr(1) + '/tests/test_1.jsp');">Тесты</button>
 </div>
 </body>
 </html>

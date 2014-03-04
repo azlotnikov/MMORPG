@@ -1,4 +1,4 @@
-<%@ page import="UserData.Auth" %>
+<%@ page import="MonsterQuest.Auth" %>
 <%--
   Created by IntelliJ IDEA.
   Auth: razoriii
