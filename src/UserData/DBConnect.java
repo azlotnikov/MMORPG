@@ -173,4 +173,21 @@ public class DBConnect {
       return playerDB;
    }
 
+   public static void savePlayerDB(PlayerDB playerDB) {
+      Connection con = null;
+      try {
+         Class.forName("com.mysql.jdbc.Driver");
+         con = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+         PreparedStatement stmt = con.prepareStatement("UPDATE users SET pos_x = ?, pos_y = ? WHERE sid = ?");
+         stmt.setDouble(1, playerDB.posX);
+         stmt.setDouble(2, playerDB.posY);
+         stmt.setString(3, playerDB.sid);
+         stmt.executeQuery();
+      } catch (SQLException e) {
+//         throw new ServletException("Servlet Could not display records.", e);
+      } catch (ClassNotFoundException e) {
+//         throw new ServletException("JDBC Driver not found.", e);
+      }
+   }
+
 }

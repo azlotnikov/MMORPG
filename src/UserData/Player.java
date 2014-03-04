@@ -31,7 +31,10 @@ public class Player {
    }
 
    private void saveStateToBD() {
-
+      PlayerDB playerDB = new PlayerDB();
+      playerDB.posX = location.x;
+      playerDB.posY = location.y;
+      playerDB.sid = this.sid;
    }
 
    protected void sendMessage(String msg) {
@@ -50,10 +53,11 @@ public class Player {
 
    public synchronized void moveTo(Location newLocation) {
       location = newLocation;
+      saveStateToBD();
    }
 
    public synchronized void update(Collection<Player> players) {
-      saveStateToBD();
+//      saveStateToBD();
    }
 
    public String getLogin() {
