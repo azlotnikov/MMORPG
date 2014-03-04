@@ -115,7 +115,8 @@
             sid: Game.sid
         });
         Game.socket.send(jsonObj);
-    }
+    };
+
 
     Game.move = function (direction) {
         alert(Game.tick);
