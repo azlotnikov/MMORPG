@@ -34,6 +34,7 @@ var Game = {};
 
 Game.socket = null;
 Game.sid = getUrlVars()["sid"];
+Game.tick = '10';
 
 function getUrlVars() {
     var vars = {};
@@ -45,6 +46,28 @@ function getUrlVars() {
 };
 
 Game.initialize = function () {
+    window.addEventListener('keydown', function (e) {
+        var code = e.keyCode;
+        if (code > 36 && code < 41) {
+            switch (code) {
+                case 113:
+                    Game.logOut();
+                    break;
+                case 37:
+                    Game.move('west');
+                    break;
+                case 38:
+                    Game.move('north');
+                    break;
+                case 39:
+                    Game.move('east');
+                    break;
+                case 40:
+                    Game.move('south');
+                    break;
+            }
+        }
+    }, false);
     if (window.location.protocol == 'http:') {
         Game.connect('ws://' + thisURL + '/game');
     } else {
@@ -69,25 +92,50 @@ Game.connect = (function (host) {
 
     Game.socket.onclose = function () {
         alert('Info: WebSocket closed.');
-        Game.logOut();
     };
 
     Game.socket.onmessage = function (message) {
         var packet = JSON.parse(message.data);
+        if (packet.tick != '') {
+            Game.tick = packet.tick;
+//            Game.look();
+        }
         switch (packet.action) {
             case 'getDictionary':
                 Game.dictionary = packet.dictionary;
-                for (var key in packet.dictionary) {
-                    alert(key +" "+ packet.key);
-                }
+//                for (var key in packet.dictionary) {
+//                    alert(key +" "+ packet.key);
+//                }
+                break;
+            case 'look':
+                Game.draw(packet.map, packet.actors);
                 break;
         }
     };
 });
 
+Game.look = function () {
+    var jsonObj = JSON.stringify({
+        action: "look",
+        sid: Game.sid
+    });
+    Game.socket.send(jsonObj);
+}
+
+Game.move = function (direction) {
+    var jsonObj = JSON.stringify({
+        action: "move",
+        sid: Game.sid,
+        direction: direction,
+        tick: Game.tick
+    });
+    Game.socket.send(jsonObj);
+};
+
 Game.getDictionary = function () {
     var jsonObj = JSON.stringify({
-        action: "getDictionary"
+        action: "getDictionary",
+        sid: Game.sid
     });
     Game.socket.send(jsonObj);
 };
@@ -95,10 +143,14 @@ Game.getDictionary = function () {
 Game.logOut = function () {
     var jsonObj = JSON.stringify({
         action: "logout",
-        sid: sid
+        sid: Game.sid
     });
     Game.socket.send(jsonObj);
 };
+
+Game.draw = function (map, actors) {
+
+}
 
 Game.initialize();
 

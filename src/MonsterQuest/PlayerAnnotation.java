@@ -117,14 +117,19 @@ public class PlayerAnnotation {
             switch ((String) jsonMsg.get("direction")) {
                case "west":
                   newDirection = Direction.WEST;
+                  break;
                case "north":
                   newDirection = Direction.NORTH;
+                  break;
                case "east":
                   newDirection = Direction.EAST;
+                  break;
                case "south":
                   newDirection = Direction.SOUTH;
+                  break;
                default:
                   newDirection = Direction.NONE;
+                  break;
             }
 
             long moveStartTickValue = (long) jsonMsg.get("tick");
@@ -138,6 +143,17 @@ public class PlayerAnnotation {
 
             player.moveTo(newStepLocation);
             jsonAns.put("result", "ok");
+            break;
+         }
+
+         case "logout": {
+            jsonAns.put("result", "ok");
+            user.doLogout();
+            try {
+               player.getSession().close();
+            } catch (Throwable e) {
+
+            }
             break;
          }
 

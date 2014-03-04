@@ -20,7 +20,7 @@ public class GameTimer {
 
     private static long tickValue = 1;
 
-    private static final long TICK_DELAY = 100;
+    private static final long TICK_DELAY = 100000;
 
     private static final ConcurrentHashMap<Long, Player> players =
             new ConcurrentHashMap<>();

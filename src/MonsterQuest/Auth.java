@@ -102,14 +102,14 @@ public class Auth {
             break;
          }
 
-         case "logout": {
-            jsonResponse.put("result", "badSid");
-            user.setSid(logout_sid);
-            if (user.doLogout()) {
-               jsonResponse.put("result", "ok");
-            }
-            break;
-         }
+//         case "logout": {
+//            jsonResponse.put("result", "badSid");
+//            user.setSid(logout_sid);
+//            if (user.doLogout()) {
+//               jsonResponse.put("result", "ok");
+//            }
+//            break;
+//         }
 
          default: {
             jsonResponse.put("result", "error");

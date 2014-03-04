@@ -74,4 +74,8 @@ public class Player {
       return location;
    }
 
+   public Session getSession() {
+      return session;
+   }
+
 }
