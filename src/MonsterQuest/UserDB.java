@@ -60,8 +60,13 @@ public class UserDB {
          stmt.setString(3, sid);
          stmt.setDouble(4, posX);
          stmt.setDouble(5, posY);
-         stmt.setInt(6, 1);
+         stmt.setInt(6, 1); //!
          stmt.executeUpdate();
+         // some shit
+         stmt = connector.prepareStatement("UPDATE users SET game_id = id WHERE login = ?");
+         stmt.setString(1, login);
+         stmt.executeUpdate();
+         // end of shit
       } catch (Throwable e) {
 
       }
@@ -105,6 +110,7 @@ public class UserDB {
             sid = UUID.randomUUID().toString();
             stmt.setString(1, sid);
             stmt.setString(2, login.toLowerCase());
+            stmt.executeUpdate();
          }
       } catch (Throwable e) {
 
@@ -124,6 +130,7 @@ public class UserDB {
             sid = UUID.randomUUID().toString();
             stmt.setString(1, "-1");
             stmt.setString(2, sid);
+            stmt.executeUpdate();
          }
       } catch (Throwable e) {
 
@@ -157,7 +164,7 @@ public class UserDB {
          stmt.setDouble(1, posX);
          stmt.setDouble(2, posY);
          stmt.setString(3, sid);
-         stmt.executeQuery();
+         stmt.executeUpdate();
       } catch (Throwable e) {
 
       }
