@@ -67,14 +67,28 @@ public class PlayerAnnotation {
          active = true;
       }
 
-      jsonMsg.put("result", "ok");
-
       switch ((String)jsonMsg.get("action")) {
          case "getDictionary": {
+            jsonMsg.put("result", "ok");
             jsonMsg.put("dictionary", getDictionary());
          }
+
+         case "examine": {
+            Player examPlayer = GameTimer.ExaminePlayer((long)jsonMsg.get("id"));
+            if (examPlayer != null) {
+               jsonMsg.put("result", "ok");
+               jsonMsg.put("id", examPlayer.getId());
+               jsonMsg.put("type", "player");
+               jsonMsg.put("login", examPlayer.getLogin());
+               jsonMsg.put("x", examPlayer.getLocation().x);
+               jsonMsg.put("y", examPlayer.getLocation().y);
+            } else {
+               jsonMsg.put("result", "badId");
+            }
+         }
+
          default: {
-            //Ooops!
+            jsonMsg.put("result", "error");
          }
       }
 

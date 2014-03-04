@@ -37,6 +37,10 @@ public class GameTimer {
       return Collections.unmodifiableCollection(players.values());
    }
 
+   protected static Player ExaminePlayer(long playerId) {
+      return players.get(playerId);
+   }
+
    protected static synchronized void removePlayer(Player player) {
       players.remove(player.getId());
       if (players.size() == 0) {
@@ -58,9 +62,9 @@ public class GameTimer {
    }
 
    protected static void broadcast(String message) {
-      for (Player snake : GameTimer.getPlayers()) {
+      for (Player player : GameTimer.getPlayers()) {
          try {
-            snake.sendMessage(message);
+            player.sendMessage(message);
          } catch (IllegalStateException ise) {
             // An ISE can occur if an attempt is made to write to a
             // WebSocket connection after it has been closed. The

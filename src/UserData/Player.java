@@ -53,8 +53,11 @@ public class Player {
    }
 
    public synchronized void update(Collection<Player> players) {
-
       saveStateToBD();
+   }
+
+   public String getLogin() {
+      return login;
    }
 
    public long getId() {
