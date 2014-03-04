@@ -56,7 +56,7 @@ public class Auth {
       }
 
       String login = (String) jsonRequest.get("login");
-      String password = (String) jsonRequest.get("passwordHash");
+      String password = (String) jsonRequest.get("password");
       String action = (String) jsonRequest.get("action");
       String logout_sid = (String) jsonRequest.get("sid");
 
