@@ -56,13 +56,14 @@ public class PlayerAnnotation {
    @OnMessage
    public String onMessage(String message) {
       JSONObject jsonMsg = parseJsonString(message);
-      PlayerDB playerDB = DBConnect.getPlayerDBbySid((String) jsonMsg.get("sid"));
-      if (playerDB.badSid) {
+      UserDB user = new UserDB();
+      user.getDataBySid((String) jsonMsg.get("sid"));
+      if (user.isBadSid()) {
          jsonMsg.put("result", "badSid");
          return jsonMsg.toJSONString();
       }
       if (!active) {
-         player = new Player(playerDB.id, playerDB.sid, playerDB.login, openedSession, new Location(playerDB.posX, playerDB.posY));
+         player = new Player(user.getId(), user.getSid(), user.getLogin(), openedSession, user.getLocation());
          GameTimer.addPlayer(player);
          active = true;
       }

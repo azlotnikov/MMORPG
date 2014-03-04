@@ -29,10 +29,10 @@ public class Player {
    }
 
    private void saveStateToBD() {
-      PlayerDB playerDB = new PlayerDB();
-      playerDB.posX = location.x;
-      playerDB.posY = location.y;
-      playerDB.sid = this.sid;
+      UserDB user = new UserDB();
+      user.setLocation(location);
+      user.setSid(sid);
+      user.saveGameData();
    }
 
    protected void sendMessage(String msg) {

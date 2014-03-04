@@ -30,7 +30,8 @@ public class Auth {
    }
 
    public static boolean loginExists(String login) throws ServletException {
-      return DBConnect.checkLoginExists(login);
+      UserDB user = new UserDB();
+      return user.checkLoginExists(login);
    }
 
    public static void doAction(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ParseException {
@@ -55,7 +56,7 @@ public class Auth {
       }
 
       String login = (String) jsonRequest.get("login");
-      String password = (String) jsonRequest.get("password");
+      String password = (String) jsonRequest.get("passwordHash");
       String action = (String) jsonRequest.get("action");
       String logout_sid = (String) jsonRequest.get("sid");
 
@@ -74,27 +75,33 @@ public class Auth {
             } else if (loginExists(login)) {
                message = "loginExists";
             } else {
-               jsonResponse.put("sid", DBConnect.insertNewUser(login, password));
+               UserDB user = new UserDB();
+               user.setLogin(login);
+               user.setPasswordMD5(password);
+               jsonResponse.put("sid", user.getSid());
             }
 
             jsonResponse.put("result", message);
          }
          case "login": {
-            String sid = "-1";
+            UserDB user = new UserDB();
             if (!login.isEmpty() && !password.isEmpty()) {
-               sid = DBConnect.doLogin(login, password);
+               user.setLogin(login);
+               user.setPasswordMD5(password);
             }
-            if (sid.equals("-1")) {
+            if (user.getSid().equals("-1")) {
                jsonResponse.put("result", "invalidCredentials");
             } else {
                jsonResponse.put("result", "ok");
-               jsonResponse.put("sid", sid);
+               jsonResponse.put("sid", user.getSid());
             }
          }
 
          case "logout": {
             jsonResponse.put("result", "badSid");
-            if (DBConnect.doLogout(logout_sid)) {
+            UserDB user = new UserDB();
+            user.setSid(logout_sid);
+            if (user.doLogout()) {
                jsonResponse.put("result", "ok");
             }
          }

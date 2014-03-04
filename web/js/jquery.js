@@ -7818,7 +7818,7 @@ jQuery.extend({
 		data: null,
 		dataType: null,
 		username: null,
-		password: null,
+		passwordHash: null,
 		cache: null,
 		throws: false,
 		traditional: false,
