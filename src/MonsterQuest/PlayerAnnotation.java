@@ -56,12 +56,14 @@ public class PlayerAnnotation {
    @OnMessage
    public void onMessage(String message) {
       JSONObject jsonMsg = parseJsonString(message);
+      JSONObject jsonAns = new JSONObject();
+      jsonAns.put("action", jsonMsg.get("action"));
       UserDB user = new UserDB();
       user.getDataBySid((String) jsonMsg.get("sid"));
       if (user.isBadSid()) {
-         jsonMsg.put("result", "badSid");
+         jsonAns.put("result", "badSid");
          try {
-            openedSession.getBasicRemote().sendText(jsonMsg.toJSONString());
+            openedSession.getBasicRemote().sendText(jsonAns.toJSONString());
          } catch (Throwable e) {
          }
          return;
@@ -74,22 +76,22 @@ public class PlayerAnnotation {
 
       switch ((String) jsonMsg.get("action")) {
          case "getDictionary": {
-            jsonMsg.put("result", "ok");
-            jsonMsg.put("dictionary", getDictionary());
+            jsonAns.put("result", "ok");
+            jsonAns.put("dictionary", getDictionary());
             break;
          }
 
          case "examine": {
             Player examPlayer = GameTimer.ExaminePlayer((long) jsonMsg.get("id"));
             if (examPlayer != null) {
-               jsonMsg.put("result", "ok");
-               jsonMsg.put("id", examPlayer.getId());
-               jsonMsg.put("type", "player");
-               jsonMsg.put("login", examPlayer.getLogin());
-               jsonMsg.put("x", examPlayer.getLocation().x);
-               jsonMsg.put("y", examPlayer.getLocation().y);
+               jsonAns.put("result", "ok");
+               jsonAns.put("id", examPlayer.getId());
+               jsonAns.put("type", "player");
+               jsonAns.put("login", examPlayer.getLogin());
+               jsonAns.put("x", examPlayer.getLocation().x);
+               jsonAns.put("y", examPlayer.getLocation().y);
             } else {
-               jsonMsg.put("result", "badId");
+               jsonAns.put("result", "badId");
             }
             break;
          }
@@ -123,17 +125,17 @@ public class PlayerAnnotation {
 //            }
 
             player.moveTo(newStepLocation);
-            jsonMsg.put("result", "ok");
+            jsonAns.put("result", "ok");
             break;
          }
 
          default: {
-            jsonMsg.put("result", "error");
+            jsonAns.put("result", "error");
             break;
          }
       }
 
-      player.sendMessage(jsonMsg.toJSONString());
+      player.sendMessage(jsonAns.toJSONString());
    }
 
    @OnClose
