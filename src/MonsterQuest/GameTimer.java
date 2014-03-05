@@ -20,7 +20,7 @@ public class GameTimer {
 
     private static long tickValue = 1;
 
-    private static final long TICK_DELAY = 200;
+    private static final long TICK_DELAY = 170;
 
     private static final ConcurrentHashMap<Long, Player> players =
             new ConcurrentHashMap<>();
@@ -80,11 +80,6 @@ public class GameTimer {
             try {
                 player.sendMessage(message);
             } catch (IllegalStateException ise) {
-                // An ISE can occur if an attempt is made to write to a
-                // WebSocket connection after it has been closed. The
-                // alternative to catching this exception is to synchronise
-                // the writes to the clients along with the addSnake() and
-                // removeSnake() methods that are already synchronised.
             }
         }
     }
@@ -97,7 +92,6 @@ public class GameTimer {
                 try {
                     tick();
                 } catch (RuntimeException e) {
-//               logger.info("Caught to prevent timer from shutting down", e);
                 }
             }
         }, TICK_DELAY, TICK_DELAY);

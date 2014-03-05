@@ -4,7 +4,8 @@ package MonsterQuest;
  * Created by razoriii on 04.03.14.
  */
 
-import java.util.concurrent.atomic.AtomicInteger;
+import java.io.EOFException;
+//import java.util.concurrent.atomic.AtomicInteger;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -20,8 +21,7 @@ import javax.websocket.server.ServerEndpoint;
 
 @ServerEndpoint(value = "/game")
 public class PlayerAnnotation {
-   private static final AtomicInteger playerIds = new AtomicInteger(0);
-//   private static final Random random = new Random();
+//   private static final AtomicInteger playerIds = new AtomicInteger(0);
 
    private Player player;
    private Session openedSession;
@@ -213,6 +213,12 @@ public class PlayerAnnotation {
       while (root.getCause() != null && count < 20) {
          root = root.getCause();
          count++;
+      }
+      if (root instanceof EOFException) {
+         // Assume this is triggered by the user closing their browser and
+         // ignore it.
+      } else {
+         throw t;
       }
    }
 

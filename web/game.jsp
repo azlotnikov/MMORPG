@@ -34,6 +34,7 @@
     Game.playerId = -1;
     Game.tileSize = 100;
     Game.actorHalfSize = 40;
+    Game.context = document.getElementById('playground').getContext('2d');
 
     function getUrlVars() {
         var vars = {};
@@ -149,24 +150,20 @@
     };
 
     function drawImg(imgSrc, posX, posY) {
-        var ctx = document.getElementById('playground').getContext('2d');
         var img = new Image();
         img.onload = function () {
-            ctx.drawImage(img, posX, posY);
+            Game.context.drawImage(img, posX, posY);
         };
         img.src = imgSrc;
     }
 
 
     Game.draw = function (map, actors) {
-        var imgs = [];
-        var imgIndex = 0;
         var curHeight = 0;
 
         for (var i in map) {
             var curWidth = 0;
             for (var j in map[i]) {
-                imgs[imgIndex] = new Image();
                 switch (map[i][j]) {
                     case ".":
                         drawImg('http://localhost:8080/MMORPG_war_exploded/img/grass.png', curWidth, curHeight);
