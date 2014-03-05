@@ -135,7 +135,6 @@ public class UserDB {
          result = (getResultSetRowCount(rs) > 0);
          if (result) {
             stmt = connector.prepareStatement("UPDATE users SET sid = ? WHERE sid = ?");
-            sid = UUID.randomUUID().toString();
             stmt.setString(1, "-1");
             stmt.setString(2, sid);
             stmt.executeUpdate();

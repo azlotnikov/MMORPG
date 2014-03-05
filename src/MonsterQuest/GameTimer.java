@@ -32,6 +32,18 @@ public class GameTimer {
         players.put(player.getId(), player);
     }
 
+   protected static Player findPlayerBySid(String sid) {
+      for (Iterator<Player> iterator = GameTimer.getPlayers().iterator();
+           iterator.hasNext();) {
+         Player player = iterator.next();
+         if (player.getSid().equals(sid)) {
+            return player;
+         }
+      }
+
+      return null;
+   }
+
     protected static Collection<Player> getPlayers() {
         return Collections.unmodifiableCollection(players.values());
     }

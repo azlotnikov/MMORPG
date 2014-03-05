@@ -78,7 +78,7 @@
     <input id="password" type="password" value="pkjnybrjd"/><br/>
     <button class="button red" onclick="registerButtonClick();">Регистрация</button>
     <button class="button green" onclick="loginButtonClick();">Вход</button>
-    <button class="button" onclick="javascript:location.assign(window.location.pathname.substr(1) + '/tests/test_1.jsp');">Тесты</button>
+    <button class="button" onclick="javascript:location.assign('http://localhost:8080/MMORPG_war_exploded/tests/test_1.jsp');">Тесты</button>
 </div>
 </body>
 </html>

@@ -66,6 +66,8 @@ public class Player {
       return id;
    }
 
+   public String getSid() { return sid; }
+
    public double getVelocity() {
       return velocity;
    }

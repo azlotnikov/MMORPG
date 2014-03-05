@@ -25,7 +25,6 @@ public class PlayerAnnotation {
 
    private Player player;
    private Session openedSession;
-   private boolean active = false;
 
 //   public PlayerAnnotation() {
 //      this.id = playerIds.getAndIncrement();
@@ -97,21 +96,22 @@ public class PlayerAnnotation {
       boolean sendBack = true;
       JSONObject jsonMsg = parseJsonString(message);
       JSONObject jsonAns = new JSONObject();
+      String sid = (String) jsonMsg.get("sid");
       jsonAns.put("action", jsonMsg.get("action"));
-      UserDB user = new UserDB();
-      user.getDataBySid((String) jsonMsg.get("sid"));
-      if (user.isBadSid()) {
-         jsonAns.put("result", "badSid");
-         try {
-            openedSession.getBasicRemote().sendText(jsonAns.toJSONString());
-         } catch (Throwable e) {
+      player = GameTimer.findPlayerBySid(sid);
+      if (player == null) {
+         UserDB user = new UserDB();
+         user.getDataBySid(sid);
+         if (user.isBadSid()) {
+            jsonAns.put("result", "badSid");
+            try {
+               openedSession.getBasicRemote().sendText(jsonAns.toJSONString());
+            } catch (Throwable e) {
+            }
+            return;
          }
-         return;
-      }
-      if (!active) {
          player = new Player(user.getId(), user.getSid(), user.getLogin(), openedSession, user.getLocation());
          GameTimer.addPlayer(player);
-         active = true;
       }
 
       switch ((String) jsonMsg.get("action")) {
@@ -178,9 +178,13 @@ public class PlayerAnnotation {
          }
 
          case "logout": {
-            jsonAns.put("result", "ok");
-            user.doLogout();
+            UserDB user = new UserDB();
+            user.setSid(sid);
+            if (!user.doLogout()) {
+               jsonAns.put("result", "badSid");
+            } else
             try {
+               jsonAns.put("result", "ok");
                player.getSession().close();
             } catch (Throwable e) {
 
