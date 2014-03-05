@@ -19,7 +19,7 @@
 </head>
 <body>
 <div style="float: left">
-    <canvas id="playground" width="640" height="480"/>
+    <canvas id="playground" width="800" height="700"/>
 </div>
 
 <script type="application/javascript">
@@ -31,6 +31,9 @@
     Game.socket = null;
     Game.sid = getUrlVars()["sid"];
     Game.tick = 10;
+    Game.playerId = -1;
+    Game.tileSize = 100;
+    Game.actorHalfSize = 30;
 
     function getUrlVars() {
         var vars = {};
@@ -102,6 +105,10 @@
                     case 'look':
                         Game.draw(packet.map, packet.actors);
                         break;
+                    case 'move':
+                        break;
+                    case 'examine':
+                        break;
                 }
         };
     });
@@ -116,7 +123,6 @@
 
 
     Game.move = function (direction) {
-        alert(Game.tick);
         var jsonObj = JSON.stringify({
             action: "move",
             sid: Game.sid,
@@ -142,8 +148,42 @@
         Game.socket.send(jsonObj);
     };
 
-    Game.draw = function (map, actors) {
+    function drawImg(imgSrc, posX, posY) {
+        var ctx = document.getElementById('playground').getContext('2d');
+        var img = new Image();
+        img.onload = function () {
+            ctx.drawImage(img, posX, posY);
+        };
+        img.src = imgSrc;
+    }
 
+
+    Game.draw = function (map, actors) {
+        var imgs = [];
+        var imgIndex = 0;
+        var curHeight = 0;
+
+        for (var i in map) {
+            var curWidth = 0;
+            for (var j in map[i]) {
+                imgs[imgIndex] = new Image();
+                switch (map[i][j]) {
+                    case ".":
+                        drawImg('http://localhost:8080/MMORPG_war_exploded/img/grass.png', curWidth, curHeight);
+                        break;
+                    case "#":
+                        drawImg('http://localhost:8080/MMORPG_war_exploded/img/wall.png', curWidth, curHeight);
+                        break;
+                }
+                curWidth += Game.tileSize;
+            }
+            curHeight += Game.tileSize;
+        }
+
+        for (var t in actors) {
+            drawImg('http://localhost:8080/MMORPG_war_exploded/img/player.png',
+                    actors[t].x * Game.tileSize - Game.actorHalfSize, actors[t].y * Game.tileSize - Game.actorHalfSize)
+        }
     }
 
     Game.initialize();

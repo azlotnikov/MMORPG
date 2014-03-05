@@ -6,6 +6,7 @@ package MonsterQuest;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -48,13 +49,43 @@ public class PlayerAnnotation {
       return jsonAns;
    }
 
-   public String getMap() {
-      return "[" +
-              "    [\"#\", \"#\", \".\", \"#\", \"#\", \"#\"]," +
-              "    [\".\", \".\", \".\", \".\", \".\", \".\"]," +
-              "    [\".\", \".\", \".\", \".\", \".\", \".\"]," +
-              "    [\"#\", \"#\", \"#\", \".\", \"#\", \"#\"]" +
-              "]";
+   public JSONArray getMap() {
+      JSONArray arr = new JSONArray();
+      JSONArray subArr = new JSONArray();
+      subArr.add("#");
+      subArr.add("#");
+      subArr.add("#");
+      subArr.add("#");
+      subArr.add("#");
+      subArr.add("#");
+      subArr.add("#");
+      subArr.add("#");
+      arr.add(subArr);
+      subArr = new JSONArray();
+      subArr.add("#");
+      subArr.add(".");
+      subArr.add(".");
+      subArr.add(".");
+      subArr.add(".");
+      subArr.add(".");
+      subArr.add(".");
+      subArr.add("#");
+      arr.add(subArr);
+      arr.add(subArr);
+      arr.add(subArr);
+      arr.add(subArr);
+      arr.add(subArr);
+      subArr = new JSONArray();
+      subArr.add("#");
+      subArr.add("#");
+      subArr.add("#");
+      subArr.add("#");
+      subArr.add("#");
+      subArr.add("#");
+      subArr.add("#");
+      subArr.add("#");
+      arr.add(subArr);
+      return arr;
    }
 
    @OnOpen

@@ -16,7 +16,7 @@ public class Location {
    public Location getAdjacentLocation(Direction direction, double velocity) {
       switch (direction) {
          case NORTH:
-            return new Location(x, y + velocity);
+            return new Location(x, y - velocity);
          case SOUTH:
             return new Location(x, y + velocity);
          case EAST:
