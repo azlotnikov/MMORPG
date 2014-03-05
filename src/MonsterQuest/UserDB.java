@@ -23,8 +23,6 @@ public class UserDB {
    private double posY = defaultPosY;
    private boolean badSid = true;
 
-   private Connection connector;
-
    public static String getMD5(String md5) {
       try {
          java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
@@ -39,18 +37,19 @@ public class UserDB {
       return null;
    }
 
-   public UserDB() {
-      try {
-         Class.forName("com.mysql.jdbc.Driver");
-         connector = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-      } catch (Throwable e) {
-//         e.printStackTrace();
-      }
-   }
+//   public UserDB() {
+//      try {
+//
+//      } catch (Throwable e) {
+////         e.printStackTrace();
+//      }
+//   }
 
    public void doInsert() {
       sid = "-1";
       try {
+         Class.forName("com.mysql.jdbc.Driver");
+         Connection connector = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
          // need to generate game_id field
          PreparedStatement stmt = connector.prepareStatement("INSERT INTO users (login, password, sid, pos_x, pos_y, game_id) " +
                  "VALUES (?,?,?,?,?,?)");
@@ -66,6 +65,7 @@ public class UserDB {
          stmt = connector.prepareStatement("UPDATE users SET game_id = id WHERE login = ?");
          stmt.setString(1, login);
          stmt.executeUpdate();
+         connector.close();
          // end of shit
       } catch (Throwable e) {
 
@@ -87,10 +87,13 @@ public class UserDB {
    public boolean checkLoginExists(String newLogin) {
       boolean result = false;
       try {
+         Class.forName("com.mysql.jdbc.Driver");
+         Connection connector = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
          PreparedStatement stmt = connector.prepareStatement("SELECT * FROM users WHERE LOWER(login) = ?");
          stmt.setString(1, newLogin.toLowerCase());
          ResultSet rs = stmt.executeQuery();
          result = (getResultSetRowCount(rs) > 0);
+         connector.close();
       } catch (Throwable e) {
 
       }
@@ -100,6 +103,8 @@ public class UserDB {
    public boolean doLogin() {
       boolean result = false;
       try {
+         Class.forName("com.mysql.jdbc.Driver");
+         Connection connector = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
          PreparedStatement stmt = connector.prepareStatement("SELECT * FROM users WHERE LOWER(login) = ? AND password = ?");
          stmt.setString(1, login.toLowerCase());
          stmt.setString(2, passwordHash);
@@ -112,6 +117,7 @@ public class UserDB {
             stmt.setString(2, login.toLowerCase());
             stmt.executeUpdate();
          }
+         connector.close();
       } catch (Throwable e) {
 
       }
@@ -121,6 +127,8 @@ public class UserDB {
    public boolean doLogout() {
       boolean result = false;
       try {
+         Class.forName("com.mysql.jdbc.Driver");
+         Connection connector = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
          PreparedStatement stmt = connector.prepareStatement("SELECT * FROM users WHERE sid = ?");
          stmt.setString(1, sid);
          ResultSet rs = stmt.executeQuery();
@@ -132,6 +140,7 @@ public class UserDB {
             stmt.setString(2, sid);
             stmt.executeUpdate();
          }
+         connector.close();
       } catch (Throwable e) {
 
       }
@@ -143,6 +152,8 @@ public class UserDB {
       sid = newSid;
       badSid = true;
       try {
+         Class.forName("com.mysql.jdbc.Driver");
+         Connection connector = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
          PreparedStatement stmt = connector.prepareStatement("SELECT login, game_id, pos_x, pos_y  FROM users WHERE sid = ?");
          stmt.setString(1, sid);
          ResultSet rs = stmt.executeQuery();
@@ -153,6 +164,7 @@ public class UserDB {
             posY = rs.getDouble("pos_y");
             badSid = false;
          }
+         connector.close();
       } catch (Throwable e) {
 
       }
@@ -160,11 +172,14 @@ public class UserDB {
 
    public void saveGameData() {
       try {
+         Class.forName("com.mysql.jdbc.Driver");
+         Connection connector = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
          PreparedStatement stmt = connector.prepareStatement("UPDATE users SET pos_x = ?, pos_y = ? WHERE sid = ?");
          stmt.setDouble(1, posX);
          stmt.setDouble(2, posY);
          stmt.setString(3, sid);
          stmt.executeUpdate();
+         connector.close();
       } catch (Throwable e) {
 
       }
