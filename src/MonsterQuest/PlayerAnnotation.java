@@ -27,9 +27,9 @@ public class PlayerAnnotation {
    private Session openedSession;
    private boolean active = false;
 
-   public PlayerAnnotation() {
+//   public PlayerAnnotation() {
 //      this.id = playerIds.getAndIncrement();
-   }
+//   }
 
    public static JSONObject parseJsonString(String str) {
       JSONObject jsonResult = null;
@@ -37,7 +37,6 @@ public class PlayerAnnotation {
          JSONParser jsonParser = new JSONParser();
          jsonResult = (JSONObject) jsonParser.parse(str);
       } catch (ParseException e) {
-         // crash and burn
       }
       return jsonResult;
    }
@@ -95,6 +94,7 @@ public class PlayerAnnotation {
 
    @OnMessage
    public void onMessage(String message) {
+      boolean sendBack = true;
       JSONObject jsonMsg = parseJsonString(message);
       JSONObject jsonAns = new JSONObject();
       jsonAns.put("action", jsonMsg.get("action"));
@@ -173,7 +173,7 @@ public class PlayerAnnotation {
 //            }
 
             player.moveTo(newStepLocation);
-            jsonAns.put("result", "ok");
+            sendBack = false;
             break;
          }
 
@@ -193,8 +193,9 @@ public class PlayerAnnotation {
             break;
          }
       }
-
-      player.sendMessage(jsonAns.toJSONString());
+      if (sendBack) {
+         player.sendMessage(jsonAns.toJSONString());
+      }
    }
 
    @OnClose

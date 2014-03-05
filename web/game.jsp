@@ -44,7 +44,6 @@
                 });
         return vars;
     }
-    ;
 
     Game.initialize = function () {
         window.addEventListener('keydown', function (e) {
