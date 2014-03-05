@@ -33,7 +33,7 @@
     Game.tick = 10;
     Game.playerId = -1;
     Game.tileSize = 100;
-    Game.actorHalfSize = 30;
+    Game.actorHalfSize = 40;
 
     function getUrlVars() {
         var vars = {};
