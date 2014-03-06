@@ -37,49 +37,11 @@ public class PlayerAnnotation {
    }
 
    public static JSONObject getDictionary() {
-      JSONObject jsonAns = new JSONObject();
-      jsonAns.put(".", "grass");
-      jsonAns.put("#", "wall");
-      return jsonAns;
+      return GameDictionary.getJsonDictionary();
    }
 
    public JSONArray getMap() {
-      JSONArray arr = new JSONArray();
-      JSONArray subArr = new JSONArray();
-      subArr.add("#");
-      subArr.add("#");
-      subArr.add("#");
-      subArr.add("#");
-      subArr.add("#");
-      subArr.add("#");
-      subArr.add("#");
-      subArr.add("#");
-      arr.add(subArr);
-      subArr = new JSONArray();
-      subArr.add("#");
-      subArr.add(".");
-      subArr.add(".");
-      subArr.add(".");
-      subArr.add(".");
-      subArr.add(".");
-      subArr.add(".");
-      subArr.add("#");
-      arr.add(subArr);
-      arr.add(subArr);
-      arr.add(subArr);
-      arr.add(subArr);
-      arr.add(subArr);
-      subArr = new JSONArray();
-      subArr.add("#");
-      subArr.add("#");
-      subArr.add("#");
-      subArr.add("#");
-      subArr.add("#");
-      subArr.add("#");
-      subArr.add("#");
-      subArr.add("#");
-      arr.add(subArr);
-      return arr;
+      return GameMap.mapToJson();
    }
 
    @OnOpen

@@ -9,8 +9,8 @@ import java.util.UUID;
 
 public class UserDB {
 
-   private static double defaultPosX = 5;
-   private static double defaultPosY = 5;
+   private static final double defaultPosX = 5;
+   private static final double defaultPosY = 5;
 
    private String login = "";
    private String sid = "-1";

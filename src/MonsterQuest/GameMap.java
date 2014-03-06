@@ -4,6 +4,8 @@ package MonsterQuest;
  * Created by razoriii on 06.03.14.
  */
 
+import org.json.simple.JSONArray;
+
 import javax.sql.rowset.serial.SerialBlob;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
@@ -12,7 +14,7 @@ import java.sql.*;
 
 public class GameMap {
 
-   public static char[][] worldMap;
+   private static char[][] worldMap;
 
    public static void loadWorldMap() {
       try {
@@ -40,9 +42,36 @@ public class GameMap {
          final ObjectOutputStream oos = new ObjectOutputStream(baos);
          oos.writeObject(worldMap);
          stmt.setBlob(1, new SerialBlob(baos.toByteArray()));
+         stmt.executeUpdate();
       } catch (Throwable e) {
 
       }
+   }
+
+   public static JSONArray mapToJson() {
+      JSONArray jsonResult = new JSONArray();
+      JSONArray jsonLine;
+      for (char[] i : worldMap) {
+         jsonLine = new JSONArray();
+         for(char j : i) {
+            jsonLine.add(String.valueOf(j));
+         }
+         jsonResult.add(jsonLine);
+      }
+      return jsonResult;
+   }
+
+   public static void saveToBdDemoMap() {
+      worldMap = new char[][] {
+               "#...#..#".toCharArray()
+              ,"#...##.#".toCharArray()
+              ,"#....###".toCharArray()
+              ,"###..###".toCharArray()
+              ,"#.##...#".toCharArray()
+              ,"#....#.#".toCharArray()
+              ,"########".toCharArray()
+      };
+      saveWorldMap();
    }
 
 

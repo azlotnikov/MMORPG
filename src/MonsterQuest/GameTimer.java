@@ -93,6 +93,9 @@ public class GameTimer {
    }
 
    public static void startTimer() {
+      GameMap.saveToBdDemoMap();
+      GameMap.loadWorldMap();
+      GameDictionary.loadDictionary();
       gameTimer = new Timer(GameTimer.class.getSimpleName() + " Timer");
       gameTimer.scheduleAtFixedRate(new TimerTask() {
          @Override

@@ -84,7 +84,7 @@
         }
 
         Game.socket.onopen = function () {
-            alert('Info: WebSocket connection opened.');
+//            alert('Info: WebSocket connection opened.');
             Game.getDictionary();
         };
 
@@ -159,7 +159,6 @@
 
     Game.draw = function (map, actors) {
         var curHeight = 0;
-
         for (var i in map) {
             var curWidth = 0;
             for (var j in map[i]) {
