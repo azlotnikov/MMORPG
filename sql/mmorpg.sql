@@ -26,6 +26,8 @@ SET time_zone = "+00:00";
 -- Структура таблицы `dictionary`
 --
 
+DROP TABLE `dictionary`;
+
 CREATE TABLE IF NOT EXISTS `dictionary` (
   `char_value` char(1) NOT NULL,
   `description` varchar(100) NOT NULL
@@ -45,6 +47,8 @@ INSERT INTO `dictionary` (`char_value`, `description`) VALUES
 -- Структура таблицы `game_data`
 --
 
+DROP TABLE `game_data`;
+
 CREATE TABLE IF NOT EXISTS `game_data` (
   `map` blob NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -61,6 +65,8 @@ INSERT INTO `game_data` (`map`) VALUES
 --
 -- Структура таблицы `users`
 --
+
+DROP TABLE `users`;
 
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
