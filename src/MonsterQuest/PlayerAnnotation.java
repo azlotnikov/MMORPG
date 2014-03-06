@@ -40,7 +40,8 @@ public class PlayerAnnotation {
       return GameDictionary.getJsonDictionary();
    }
 
-   public JSONArray getMap() {
+   public JSONArray getMap(int x, int y) {
+      //TODO вырезка карты
       return GameMap.mapToJson();
    }
 
@@ -96,7 +97,7 @@ public class PlayerAnnotation {
 
          case "look": {
             jsonAns.put("result", "ok");
-            jsonAns.put("map", getMap());
+            jsonAns.put("map", getMap((int)player.getLocation().x, (int)player.getLocation().y));
             jsonAns.put("actors", GameTimer.getActors());
             break;
          }

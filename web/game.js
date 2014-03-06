@@ -3,6 +3,7 @@
  */
 
 "use strict";
+window.resizeTo(800, 600);
 
 var webSocketUrl = getUrlVars()["websocket"];
 var GAME_URL = 'http://localhost:8080/MMORPG_war_exploded';
