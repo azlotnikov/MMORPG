@@ -1,9 +1,5 @@
 package MonsterQuest;
 
-/**
- * Created by razoriii on 04.03.14.
- */
-
 import java.io.IOException;
 import java.util.Collection;
 
@@ -56,6 +52,12 @@ public class Player {
 
    public synchronized void update(Collection<Player> players) {
 //      saveStateToBD();
+   }
+
+   public synchronized boolean logout() {
+      UserDB user = new UserDB();
+      user.setSid(sid);
+      return user.doLogout();
    }
 
    public String getLogin() {

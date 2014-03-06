@@ -1,9 +1,5 @@
 package MonsterQuest;
 
-/**
- * Created by razoriii on 04.03.14.
- */
-
 import java.io.EOFException;
 //import java.util.concurrent.atomic.AtomicInteger;
 
@@ -178,9 +174,7 @@ public class PlayerAnnotation {
          }
 
          case "logout": {
-            UserDB user = new UserDB();
-            user.setSid(sid);
-            if (!user.doLogout()) {
+            if (!player.logout()) {
                jsonAns.put("result", "badSid");
             } else
             try {
