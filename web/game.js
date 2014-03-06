@@ -5,6 +5,7 @@
 "use strict";
 
 var webSocketUrl = getUrlVars()["websocket"];
+var GAME_URL = 'http://localhost:8080/MMORPG_war_exploded';
 var Game = {};
 
 Game.socket = null;
@@ -142,14 +143,14 @@ Game.draw = function (map, actors) {
     for (var i in map) {
         var curWidth = 0;
         for (var j in map[i]) {
-            drawImg('http://localhost:8080/MMORPG_war_exploded/img/' + Game.dictionary[map[i][j]] + '.png', curWidth, curHeight);
+            drawImg(GAME_URL + '/img/' + Game.dictionary[map[i][j]] + '.png', curWidth, curHeight);
             curWidth += Game.tileSize;
         }
         curHeight += Game.tileSize;
     }
 
     for (var t in actors) {
-        drawImg('http://localhost:8080/MMORPG_war_exploded/img/player.png',
+        drawImg(GAME_URL + '/img/player.png',
             actors[t].x * Game.tileSize - Game.actorHalfSize, actors[t].y * Game.tileSize - Game.actorHalfSize)
     }
 }
