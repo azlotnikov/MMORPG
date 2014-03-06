@@ -63,7 +63,7 @@ Game.connect = (function (host) {
     }
 
     Game.socket.onopen = function () {
-        alert('Info: WebSocket connection opened.');
+        //alert('Info: WebSocket connection opened.');
         Game.getDictionary();
     };
 
@@ -142,14 +142,7 @@ Game.draw = function (map, actors) {
     for (var i in map) {
         var curWidth = 0;
         for (var j in map[i]) {
-            switch (map[i][j]) {
-                case ".":
-                    drawImg('http://localhost:8080/MMORPG_war_exploded/img/grass.png', curWidth, curHeight);
-                    break;
-                case "#":
-                    drawImg('http://localhost:8080/MMORPG_war_exploded/img/wall.png', curWidth, curHeight);
-                    break;
-            }
+            drawImg('http://localhost:8080/MMORPG_war_exploded/img/' + Game.dictionary[map[i][j]] + '.png', curWidth, curHeight);
             curWidth += Game.tileSize;
         }
         curHeight += Game.tileSize;
