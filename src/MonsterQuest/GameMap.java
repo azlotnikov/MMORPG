@@ -74,7 +74,7 @@ public class GameMap {
       saveWorldMap();
    }
 
-   public static boolean canEnderTile(int x, int y) {
+   public static boolean canEnterTile(int x, int y) {
        return worldMap[y][x] != '#';
        // TODO в описании карты добавить пропускную способность
    }

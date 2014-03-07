@@ -16,22 +16,22 @@ public class Location {
    public Location getAdjacentLocation(Direction direction, double velocity) {
       switch (direction) {
          case NORTH:
-            if (GameMap.canEnderTile((int)x, (int)(y - velocity)))
+            if (GameMap.canEnterTile((int) x, (int) (y - velocity)))
                 return new Location(x, y - velocity);
             else
                 return new Location(x, y);
          case SOUTH:
-             if (GameMap.canEnderTile((int)x, (int)(y + velocity)))
+             if (GameMap.canEnterTile((int) x, (int) (y + velocity)))
                  return new Location(x, y + velocity);
              else
                  return new Location(x, y);
          case EAST:
-             if (GameMap.canEnderTile((int)(x + velocity), (int)y))
+             if (GameMap.canEnterTile((int) (x + velocity), (int) y))
                  return new Location(x + velocity, y);
              else
                  return new Location(x, y);
          case WEST:
-             if (GameMap.canEnderTile((int)(x - velocity), (int)y))
+             if (GameMap.canEnterTile((int) (x - velocity), (int) y))
                  return new Location(x - velocity, y);
              else
                  return new Location(x, y);
