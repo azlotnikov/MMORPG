@@ -6,21 +6,19 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<!DOCTYPE html>
+<html>
 <head>
     <title>Monster Quest</title>
-    <style type="text/css">
-        #playground {
-            width: 640px;
-            height: 480px;
-            background-color: #000;
-        }
-    </style>
+    <!-- Load the Paper.js library -->
+    <script type="text/javascript" src="paperjs/dist/paper.js"></script>
+    <!-- Load external PaperScript and associate it with myCanvas -->
+    <script type="text/paperscript" src="js/game.js" canvas="myCanvas"></script>
 </head>
 <body>
-<div style="float: left">
-    <canvas id="playground" width="800" height="700"/>
-</div>
-<script src="game.js"></script>
+<canvas id="myCanvas" resize></canvas>
+<img id="wall" style="display: none;" src="img/wall.png">
+<img id="grass" style="display: none;" src="img/grass.png">
+<img id="player" style="display: none;" src="img/player.png">
 </body>
 </html>
