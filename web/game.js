@@ -77,6 +77,7 @@ Game.connect = (function (host) {
         var packet = JSON.parse(message.data);
         if (packet.hasOwnProperty('tick')) {
             Game.tick = packet.tick;
+            Game.examine();
             Game.look();
         } else
             switch (packet.action) {
@@ -102,6 +103,13 @@ Game.look = function () {
     Game.socket.send(jsonObj);
 };
 
+Game.examine = function () {
+    var jsonObj = JSON.stringify({
+        action: "examine",
+        id: Game.playerId
+    });
+    Game.socket.send(jsonObj);
+};
 
 Game.move = function (direction) {
     var jsonObj = JSON.stringify({
@@ -140,7 +148,6 @@ function drawImg(imgSrc, posX, posY) {
 
 Game.draw = function (map, actors) {
     var curHeight = 0;
-
     for (var i in map) {
         var curWidth = 0;
         for (var j in map[i]) {
