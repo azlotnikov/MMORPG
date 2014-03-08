@@ -18,7 +18,7 @@ import javax.websocket.server.ServerEndpoint;
 @ServerEndpoint(value = "/game")
 public class PlayerAnnotation {
 //   private static final AtomicInteger playerIds = new AtomicInteger(0);
-
+   public static final int SIGHT_RADIUS = 5; //TODO Задокументировать облаcть видимости
    private Player player;
    private Session openedSession;
 
@@ -41,8 +41,7 @@ public class PlayerAnnotation {
    }
 
    public JSONArray getMap(int x, int y) {
-      //TODO вырезка карты
-      return GameMap.mapToJson();
+      return GameMap.mapToJson(x, y);
    }
 
    @OnOpen
@@ -98,7 +97,7 @@ public class PlayerAnnotation {
          case "look": {
             jsonAns.put("result", "ok");
             jsonAns.put("map", getMap((int)player.getLocation().x, (int)player.getLocation().y));
-            jsonAns.put("actors", GameTimer.getActors());
+            jsonAns.put("actors", GameTimer.getActors(player.getLocation().x, player.getLocation().y));
             break;
          }
 
@@ -128,7 +127,7 @@ public class PlayerAnnotation {
 
 //            for (int i = 1; i <= GameTimer.getCurrentTick() - moveStartTickValue; i++) {
             newStepLocation = newStepLocation.getAdjacentLocation(newDirection, player.getVelocity());
-            //need to check collisions with walls
+//            need to check collisions with walls
 //            }
 
             player.moveTo(newStepLocation);

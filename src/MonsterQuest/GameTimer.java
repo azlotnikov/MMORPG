@@ -44,11 +44,14 @@ public class GameTimer {
       return Collections.unmodifiableCollection(players.values());
    }
 
-   protected static JSONArray getActors() {
+   protected static JSONArray getActors(double x, double y) {
       JSONArray jsonAns = new JSONArray();
       for (Iterator<Player> iterator = GameTimer.getPlayers().iterator();
            iterator.hasNext(); ) {
          Player player = iterator.next();
+         if (Math.abs(player.getLocation().x - x) > PlayerAnnotation.SIGHT_RADIUS
+            && Math.abs(player.getLocation().y - y) > PlayerAnnotation.SIGHT_RADIUS)
+             continue;
          JSONObject jsonPlayer = new JSONObject();
          jsonPlayer.put("type", "player");
          jsonPlayer.put("id", player.getId());

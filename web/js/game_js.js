@@ -7,6 +7,7 @@ window.resizeTo(800, 600);
 
 var webSocketUrl = getUrlVars()["websocket"];
 var GAME_URL = 'http://localhost:8080/MMORPG_war_exploded';
+var SIGHT_RADIUS = 5; //TODO Задокументировать облаcть видимости (константа на сервере)
 var Game = {};
 
 Game.socket = null;
@@ -16,6 +17,8 @@ Game.playerId = -1;
 Game.tileSize = 100;
 Game.actorHalfSize = 40;
 Game.context = document.getElementById('playground').getContext('2d');
+document.getElementById('playground').height = (SIGHT_RADIUS * 2) * Game.tileSize;
+document.getElementById('playground').width = (SIGHT_RADIUS * 2) * Game.tileSize;
 
 function getUrlVars() {
     var vars = {};
@@ -93,7 +96,7 @@ Game.connect = (function (host) {
                     break;
                 case 'getPlayerID':
                     if (packet.result != "badSid")
-                        game.playerId = packet.id;
+                        Game.playerId = packet.id;
                     break;
             }
     };
@@ -137,9 +140,9 @@ Game.getDictionary = function () {
 Game.getPlayerID = function () {
     var jsonObj = JSON.stringify({
         action: "getPlayerID",
-        sid: game.sid
+        sid: Game.sid
     });
-    game.socket.send(jsonObj);
+    Game.socket.send(jsonObj);
 };
 
 Game.logOut = function () {
@@ -159,9 +162,20 @@ function drawImg(imgSrc, posX, posY) {
 }
 
 Game.draw = function (map, actors) {
-    var curHeight = 0;
+    var offsetX;
+    var offsetY;
+    // TODO Нужно эффективно узнавать координаты своего игрока
+    for (var t in actors) {
+        if (actors[t].id == Game.playerId){
+            offsetX = actors[t].x;
+            offsetY = actors[t].y;
+            break;
+        }
+    }
+
+    var curHeight = -(offsetY % 1) * Game.tileSize;
     for (var i in map) {
-        var curWidth = 0;
+        var curWidth = -(offsetX % 1) * Game.tileSize;
         for (var j in map[i]) {
             drawImg(GAME_URL + '/img/' + Game.dictionary[map[i][j]] + '.png', curWidth, curHeight);
             curWidth += Game.tileSize;
@@ -170,8 +184,9 @@ Game.draw = function (map, actors) {
     }
 
     for (var t in actors) {
-        drawImg(GAME_URL + '/img/player.png',
-            actors[t].x * Game.tileSize - Game.actorHalfSize, actors[t].y * Game.tileSize - Game.actorHalfSize)
+        drawImg(GAME_URL + '/img/player.png'
+            , (actors[t].x - offsetX + SIGHT_RADIUS) * Game.tileSize - Game.actorHalfSize
+            , (actors[t].y - offsetY + SIGHT_RADIUS) * Game.tileSize - Game.actorHalfSize)
     }
 }
 

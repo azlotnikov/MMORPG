@@ -48,13 +48,17 @@ public class GameMap {
       }
    }
 
-   public static JSONArray mapToJson() {
+   public static JSONArray mapToJson(int x, int y) {
       JSONArray jsonResult = new JSONArray();
       JSONArray jsonLine;
-      for (char[] i : worldMap) {
+      for (int i = y - PlayerAnnotation.SIGHT_RADIUS; i <= y + PlayerAnnotation.SIGHT_RADIUS; i++) {
          jsonLine = new JSONArray();
-         for(char j : i) {
-            jsonLine.add(String.valueOf(j));
+          for (int j = x - PlayerAnnotation.SIGHT_RADIUS; j <= x + PlayerAnnotation.SIGHT_RADIUS; j++) {
+              String symbol = String.valueOf('#');
+              if (i > 0 && i < worldMap.length && j > 0 && j < worldMap[0].length) {
+                  symbol = String.valueOf(worldMap[i][j]);
+              }
+              jsonLine.add(symbol);
          }
          jsonResult.add(jsonLine);
       }
@@ -62,55 +66,55 @@ public class GameMap {
    }
 
    public static void saveToBdDemoMap() {
-      worldMap = new char[][] {
-               "#...#..#".toCharArray()
-              ,"#...##.#".toCharArray()
-              ,"#....###".toCharArray()
-              ,"###..###".toCharArray()
-              ,"#.##...#".toCharArray()
-              ,"#....#.#".toCharArray()
-              ,"########".toCharArray()
-      };
 //      worldMap = new char[][] {
-//               "##############################".toCharArray()
-//              ,"#...#........................#".toCharArray()
-//              ,"#...#................###.###.#".toCharArray()
-//              ,"#...###..............#.....#.#".toCharArray()
-//              ,"#....................#.....#.#".toCharArray()
-//              ,"#######..............#.....#.#".toCharArray()
-//              ,"#.....#.........#########..#.#".toCharArray()
-//              ,"#.....#.........#..........#.#".toCharArray()
-//              ,"#..####.........#..........#.#".toCharArray()
-//              ,"#..#............#.....######.#".toCharArray()
-//              ,"#..#..................#......#".toCharArray()
-//              ,"#..##########....######......#".toCharArray()
-//              ,"#............................#".toCharArray()
-//              ,"#..###...#......#####........#".toCharArray()
-//              ,"#...#....#......#...#........#".toCharArray()
-//              ,"#...#....#......#...#........#".toCharArray()
-//              ,"#...#....#...#..#...#........#".toCharArray()
-//              ,"#..###...#####..#####........#".toCharArray()
-//              ,"#............................#".toCharArray()
-//              ,"#...##......##...####........#".toCharArray()
-//              ,"#....##....##....#...........#".toCharArray()
-//              ,"#.....##..##.....##..........#".toCharArray()
-//              ,"#......####......#...........#".toCharArray()
-//              ,"#.......##.......####........#".toCharArray()
-//              ,"#............................#".toCharArray()
-//              ,"#..####...#.####..####.......#".toCharArray()
-//              ,"#..#..#...#.#.....#..#.......#".toCharArray()
-//              ,"#..#####..#.##....#####......#".toCharArray()
-//              ,"#..#...#..#.#.....#...#......#".toCharArray()
-//              ,"#..#####..#.####..#####......#".toCharArray()
-//              ,"#............................#".toCharArray()
-//              ,"#...####..###................#".toCharArray()
-//              ,"#...#.....#..#...............#".toCharArray()
-//              ,"#...##....####...............#".toCharArray()
-//              ,"#...#.....#..##..............#".toCharArray()
-//              ,"#...####..#...##.............#".toCharArray()
-//              ,"#............................#".toCharArray()
-//              ,"##############################".toCharArray()
-//       };
+//               "#...#..#".toCharArray()
+//              ,"#...##.#".toCharArray()
+//              ,"#....###".toCharArray()
+//              ,"###..###".toCharArray()
+//              ,"#.##...#".toCharArray()
+//              ,"#....#.#".toCharArray()
+//              ,"########".toCharArray()
+//      };
+      worldMap = new char[][] {
+               "##############################".toCharArray()
+              ,"#...#........................#".toCharArray()
+              ,"#...#................###.###.#".toCharArray()
+              ,"#...###..............#.....#.#".toCharArray()
+              ,"#....................#.....#.#".toCharArray()
+              ,"#######..............#.....#.#".toCharArray()
+              ,"#.....#.........#########..#.#".toCharArray()
+              ,"#.....#.........#..........#.#".toCharArray()
+              ,"#..####.........#..........#.#".toCharArray()
+              ,"#..#............#.....######.#".toCharArray()
+              ,"#..#..................#......#".toCharArray()
+              ,"#..##########....######......#".toCharArray()
+              ,"#............................#".toCharArray()
+              ,"#..###...#......#####........#".toCharArray()
+              ,"#...#....#......#...#........#".toCharArray()
+              ,"#...#....#......#...#........#".toCharArray()
+              ,"#...#....#...#..#...#........#".toCharArray()
+              ,"#..###...#####..#####........#".toCharArray()
+              ,"#............................#".toCharArray()
+              ,"#...##......##...####........#".toCharArray()
+              ,"#....##....##....#...........#".toCharArray()
+              ,"#.....##..##.....##..........#".toCharArray()
+              ,"#......####......#...........#".toCharArray()
+              ,"#.......##.......####........#".toCharArray()
+              ,"#............................#".toCharArray()
+              ,"#..####...#.####..####.......#".toCharArray()
+              ,"#..#..#...#.#.....#..#.......#".toCharArray()
+              ,"#..#####..#.##....#####......#".toCharArray()
+              ,"#..#...#..#.#.....#...#......#".toCharArray()
+              ,"#..#####..#.####..#####......#".toCharArray()
+              ,"#............................#".toCharArray()
+              ,"#...####..###................#".toCharArray()
+              ,"#...#.....#..#...............#".toCharArray()
+              ,"#...##....####...............#".toCharArray()
+              ,"#...#.....#..##..............#".toCharArray()
+              ,"#...####..#...##.............#".toCharArray()
+              ,"#............................#".toCharArray()
+              ,"##############################".toCharArray()
+       };
       saveWorldMap();
    }
 
