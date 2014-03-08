@@ -78,6 +78,7 @@ game.connect = (function (host) {
     game.socket.onopen = function () {
         //alert('Info: WebSocket connection opened.');
         game.getDictionary();
+        game.getPlayerID();
     };
 
     game.socket.onclose = function () {
@@ -88,7 +89,6 @@ game.connect = (function (host) {
         var packet = JSON.parse(message.data);
         if (packet.hasOwnProperty('tick')) {
             game.tick = packet.tick;
-            game.examine();
             game.look();
         } else
             switch (packet.action) {
@@ -104,6 +104,10 @@ game.connect = (function (host) {
                     break;
                 case 'examine':
                     break;
+                case 'getPlayerID':
+                    if (packet.result != "badSid")
+                        game.playerId = packet.id;
+                    break;
             }
     };
 });
@@ -116,10 +120,19 @@ game.look = function () {
     game.socket.send(jsonObj);
 };
 
-game.examine = function () {
+game.examine = function (id) {
     var jsonObj = JSON.stringify({
         action: "examine",
-        id: game.playerId
+        id: id
+    });
+    game.socket.send(jsonObj);
+};
+
+//TODO Внести в протокол получение ID текущего игрока
+game.getPlayerID = function () {
+    var jsonObj = JSON.stringify({
+        action: "getPlayerID",
+        sid: game.sid
     });
     game.socket.send(jsonObj);
 };

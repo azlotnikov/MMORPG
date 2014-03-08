@@ -149,6 +149,19 @@ public class PlayerAnnotation {
             break;
          }
 
+         case "getPlayerID": {
+            if (player == null) {
+               jsonAns.put("result", "badSid");
+            } else
+               try {
+                  jsonAns.put("result", "ok");
+                  jsonAns.put("id", player.getId());
+               } catch (Throwable e) {
+
+               }
+            break;
+         }
+
          default: {
             jsonAns.put("result", "error");
             break;
