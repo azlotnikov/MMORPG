@@ -50,6 +50,7 @@ Game.initialize = function () {
                     Game.move('south');
                     break;
             }
+            e.preventDefault();
         }
     }, false);
 
