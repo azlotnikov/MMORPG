@@ -82,7 +82,7 @@ public class Auth {
                user.setPasswordMD5(password);
                user.doInsert();
                jsonResponse.put("sid", user.getSid());
-               jsonResponse.put("websocket", webSocketUrl);
+               jsonResponse.put("webSocket", webSocketUrl);
             }
 
             jsonResponse.put("result", message);
@@ -95,7 +95,7 @@ public class Auth {
                if (user.doLogin()) {
                   jsonResponse.put("result", "ok");
                   jsonResponse.put("sid", user.getSid());
-                  jsonResponse.put("websocket", webSocketUrl);
+                  jsonResponse.put("webSocket", webSocketUrl);
                } else {
                   jsonResponse.put("result", "invalidCredentials");
                }

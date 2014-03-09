@@ -43,7 +43,7 @@
                     ans_field.attr('class', 'green');
                     act_field.attr('class', 'green');
                     // make normal url
-                    goToGame("http://localhost:8080/MMORPG_war_exploded/game.jsp", data.sid, data.websocket);
+                    goToGame("http://localhost:8080/MMORPG_war_exploded/game.jsp", data.sid, data.webSocket);
                 } else {
                     ans_field.attr('class', 'red');
                     act_field.attr('class', 'red');
