@@ -8,7 +8,7 @@ function getUrlVars() {
 }
 
 var game = {};
-var SIGHT_RADIUS = 5;
+var SIGHT_RADIUS = 10;
 
 game.socket = null;
 game.socketurl = getUrlVars()["websocket"];
@@ -22,7 +22,7 @@ game.textures = {};
 game.stage = null;
 game.render = null;
 game.updateStage = false;
-game.tileSize = 100;
+game.tileSize = 32;
 
 game.init = function () {
 // create an new instance of a pixi stage
@@ -86,6 +86,10 @@ game.connect = (function (host) {
 
     game.socket.onmessage = function (message) {
         var packet = JSON.parse(message.data);
+        if (packet.result == "badSid") {
+            alert('Invalid sid!');
+            exit();
+        }
         if (packet.hasOwnProperty('tick')) {
             game.tick = packet.tick;
             game.look();
@@ -163,6 +167,9 @@ game.logOut = function () {
         sid: game.sid
     });
     game.socket.send(jsonObj);
+    game.map = {};
+    game.actors = {};
+    requestAnimFrame(animate);
 };
 
 game.createTexture = function (x, y, texture) {
