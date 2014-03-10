@@ -25,11 +25,11 @@ game.updateStage = false;
 game.tileSize = 100;
 
 game.init = function () {
-    // create an new instance of a pixi stage
+// create an new instance of a pixi stage
     game.stage = new PIXI.Stage(0x97c56e, true);
 
 // create a renderer instance
-    game.render = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight);
+    game.render = PIXI.autoDetectRenderer(SIGHT_RADIUS * 2 * game.tileSize, SIGHT_RADIUS * 2 * game.tileSize);
 
 // add the renderer view element to the DOM
     document.body.appendChild(game.render.view);
@@ -165,19 +165,13 @@ game.logOut = function () {
     game.socket.send(jsonObj);
 };
 
-game.draw = function () {
-
-};
-
 game.createTexture = function (x, y, texture) {
-//    alert(x + " " + y);
     var tile = new PIXI.Sprite(texture);
 //    tile.interactive = false;
     tile.anchor.x = 0.5;
     tile.anchor.y = 0.5;
-    tile.position.x = x;
-    tile.position.y = y;
-
+    tile.position.x = x + texture.width / 2;
+    tile.position.y = y + texture.width / 2;
     game.stage.addChild(tile);
 };
 
@@ -186,7 +180,6 @@ function animate() {
     for (var c = game.stage.children.length - 1; c >= 0; c--) {
         game.stage.removeChild(game.stage.children[c]);
     }
-
     var offsetX;
     var offsetY;
     // TODO Нужно эффективно узнавать координаты своего игрока
@@ -198,13 +191,11 @@ function animate() {
         }
     }
 
+    // TODO Определить единый размер tile
     var curHeight = -(offsetY % 1) * game.tileSize;
-//    var curHeight = 0;
     for (var i in game.map) {
         var curWidth = -(offsetX % 1) * game.tileSize;
-//        var curWidth = 0;
         for (var j in game.map[i]) {
-//                alert(game.map[i][j]);
             game.createTexture(curWidth, curHeight, game.textures[game.map[i][j]]);
             curWidth += game.tileSize;
         }
@@ -213,11 +204,10 @@ function animate() {
 
     for (var t in game.actors) {
         game.createTexture(
-            (game.actors[t].x - offsetX + SIGHT_RADIUS) * game.tileSize - game.textures['p'].width,
-            (game.actors[t].y - offsetY + SIGHT_RADIUS) * game.tileSize - game.textures['p'].height,
-            game.textures['p']
-
-        )
+            (game.actors[t].x - offsetX + SIGHT_RADIUS) * game.tileSize - game.textures['p'].width / 2
+            ,(game.actors[t].y - offsetY + SIGHT_RADIUS) * game.tileSize - game.textures['p'].height / 2
+            ,game.textures['p']
+        );
     }
     game.render.render(game.stage);
 }
