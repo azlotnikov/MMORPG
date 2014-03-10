@@ -1,4 +1,3 @@
-
 function getUrlVars() {
     var vars = {};
     var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,
@@ -9,7 +8,7 @@ function getUrlVars() {
 }
 
 var game = {};
-var updateCanvas = false;
+var SIGHT_RADIUS = 5;
 
 game.socket = null;
 game.socketurl = getUrlVars()["websocket"];
@@ -17,53 +16,56 @@ game.sid = getUrlVars()["sid"];
 game.tick = 10;
 game.playerId = -1;
 game.dictionary = {};
-game.tileSize = 100;
-game.playerTileSize = 80;
 game.map = {};
 game.actors = {};
+game.textures = {};
+game.stage = null;
+game.render = null;
+game.updateStage = false;
+game.tileSize = 100;
 
-//paper.install(window);
-//
-//window.onload = function() {
-//    paper.setup('myCanvas');
-//    alert('1');
-//    // Create a simple drawing tool:
-//    var gameTool = new Tool();
-//
-//    // Define a mousedown and mousedrag handler
-//    gameTool.onMouseDown = function(event) {
-//        // some code
-//    }
-//
-//    gameTool.onMouseDrag = function(event) {
-//         // some code
-//    }
-//
-//
-//
-//};
+game.init = function () {
+    // create an new instance of a pixi stage
+    game.stage = new PIXI.Stage(0x97c56e, true);
 
-function onKeyDown(event) {
-    if(event.key == 'q') {
-        game.logOut();
-    }
+// create a renderer instance
+    game.render = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight);
 
-    if(event.key == 'd') {
-        game.move('west');
-    }
+// add the renderer view element to the DOM
+    document.body.appendChild(game.render.view);
+    game.render.view.style.position = "absolute";
+    game.render.view.style.top = "0px";
+    game.render.view.style.left = "0px";
 
-    if(event.key == 'a') {
-        game.move('east');
-    }
+    window.addEventListener('keydown', function (e) {
+        var code = e.keyCode;
+        if (code > 36 && code < 66) {
+            switch (code) {
+                case 65:
+                    game.logOut();
+                    break;
+                case 37:
+                    game.move('west');
+                    break;
+                case 38:
+                    game.move('north');
+                    break;
+                case 39:
+                    game.move('east');
+                    break;
+                case 40:
+                    game.move('south');
+                    break;
+            }
+            e.preventDefault();
+        }
+    }, false);
 
-    if(event.key == 'w') {
-        game.move('north');
-    }
+//    requestAnimFrame(animate);
 
-    if(event.key == 's') {
-        game.move('south');
-    }
-}
+    game.connect(game.socketurl);
+
+};
 
 game.connect = (function (host) {
     if ('WebSocket' in window) {
@@ -94,11 +96,15 @@ game.connect = (function (host) {
             switch (packet.action) {
                 case 'getDictionary':
                     game.dictionary = packet.dictionary;
+                    for (var i in game.dictionary) {
+                        game.textures[i] = PIXI.Texture.fromImage("img/" + game.dictionary[i] + ".png", true);
+                    }
+                    game.textures['p'] = PIXI.Texture.fromImage("img/player.png", true);
                     break;
                 case 'look':
                     game.map = packet.map;
                     game.actors = packet.actors;
-                    updateCanvas = true;
+                    requestAnimFrame(animate);
                     break;
                 case 'move':
                     break;
@@ -163,34 +169,61 @@ game.logOut = function () {
     game.socket.send(jsonObj);
 };
 
-function drawImg(imgId, posX, posY) {
-//    alert(imgId + " X: " + posX + " Y: " + posY);
-    var raster = new Raster(imgId);
-    raster.onLoad = function() {
-        raster.position.x = posX;
-        raster.position.y = posY;
-    };
-}
+game.draw = function () {
 
-function onFrame(event) {
-    if(updateCanvas){
-//        paper.project.activeLayer.removeChildren();
-        updateCanvas = false;
-        var curHeight = 0;
-        for (var i in game.map) {
-            var curWidth = 0;
-            for (var j in game.map[i]) {
-                drawImg(game.dictionary[game.map[i][j]], curWidth, curHeight);
-                curWidth += game.tileSize;
-            }
-            curHeight += game.tileSize;
-        }
+};
 
-        for (var t in game.actors) {
-            drawImg('player',
-                game.actors[t].x * game.tileSize - game.playerTileSize / 2, game.actors[t].y * game.tileSize - game.playerTileSize / 2)
+game.createTexture = function (x, y, texture) {
+//    alert(x + " " + y);
+    var tile = new PIXI.Sprite(texture);
+//    tile.interactive = false;
+    tile.anchor.x = 0.5;
+    tile.anchor.y = 0.5;
+    tile.position.x = x;
+    tile.position.y = y;
+
+    game.stage.addChild(tile);
+};
+
+function animate() {
+
+    for (var c = game.stage.children.length - 1; c >= 0; c--) {
+        game.stage.removeChild(game.stage.children[c]);
+    }
+
+    var offsetX;
+    var offsetY;
+    // TODO Нужно эффективно узнавать координаты своего игрока
+    for (var t in game.actors) {
+        if (game.actors[t].id == game.playerId) {
+            offsetX = game.actors[t].x;
+            offsetY = game.actors[t].y;
+            break;
         }
     }
+
+    var curHeight = -(offsetY % 1) * game.tileSize;
+//    var curHeight = 0;
+    for (var i in game.map) {
+        var curWidth = -(offsetX % 1) * game.tileSize;
+//        var curWidth = 0;
+        for (var j in game.map[i]) {
+//                alert(game.map[i][j]);
+            game.createTexture(curWidth, curHeight, game.textures[game.map[i][j]]);
+            curWidth += game.tileSize;
+        }
+        curHeight += game.tileSize;
+    }
+
+    for (var t in game.actors) {
+        game.createTexture(
+            (game.actors[t].x - offsetX + SIGHT_RADIUS) * game.tileSize - game.textures['p'].width,
+            (game.actors[t].y - offsetY + SIGHT_RADIUS) * game.tileSize - game.textures['p'].height,
+            game.textures['p']
+
+        )
+    }
+    game.render.render(game.stage);
 }
 
-game.connect(game.socketurl);
+game.init();

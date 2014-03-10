@@ -162,7 +162,7 @@ function drawImg(imgSrc, posX, posY) {
     img.src = imgSrc;
 }
 
-Game.draw = function (map, actors) {
+Game.draw = function () {
     var offsetX;
     var offsetY;
     // TODO Нужно эффективно узнавать координаты своего игрока
