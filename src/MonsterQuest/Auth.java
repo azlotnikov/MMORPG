@@ -83,6 +83,7 @@ public class Auth {
                user.doInsert();
                jsonResponse.put("sid", user.getSid());
                jsonResponse.put("webSocket", webSocketUrl);
+               jsonResponse.put("id", user.getId());
             }
 
             jsonResponse.put("result", message);
@@ -96,6 +97,7 @@ public class Auth {
                   jsonResponse.put("result", "ok");
                   jsonResponse.put("sid", user.getSid());
                   jsonResponse.put("webSocket", webSocketUrl);
+                  jsonResponse.put("id", user.getId());
                } else {
                   jsonResponse.put("result", "invalidCredentials");
                }

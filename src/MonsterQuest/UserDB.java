@@ -106,8 +106,9 @@ public class UserDB {
          stmt.setString(1, login.toLowerCase());
          stmt.setString(2, passwordHash);
          ResultSet rs = stmt.executeQuery();
-         result = (getResultSetRowCount(rs) > 0);
+         result = rs.next();
          if (result) {
+            id = rs.getInt("id");
             stmt = connector.prepareStatement("UPDATE users SET sid = ? WHERE LOWER(login) = ?");
             sid = UUID.randomUUID().toString();
             stmt.setString(1, sid);
@@ -205,9 +206,7 @@ public class UserDB {
       return login;
    }
 
-   public long getId() {
-      return id;
-   }
+   public long getId() { return id; }
 
    public void setId(long id) {
       this.id = id;

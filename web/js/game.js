@@ -13,8 +13,8 @@ var SIGHT_RADIUS = 5;
 game.socket = null;
 game.socketurl = getUrlVars()["websocket"];
 game.sid = getUrlVars()["sid"];
+game.playerId = getUrlVars()["id"];
 game.tick = 10;
-game.playerId = -1;
 game.dictionary = {};
 game.map = {};
 game.actors = {};
@@ -60,9 +60,6 @@ game.init = function () {
             e.preventDefault();
         }
     }, false);
-
-//    requestAnimFrame(animate);
-
     game.connect(game.socketurl);
 
 };
@@ -80,7 +77,7 @@ game.connect = (function (host) {
     game.socket.onopen = function () {
         //alert('Info: WebSocket connection opened.');
         game.getDictionary();
-        game.getPlayerID();
+        //game.getPlayerID();
     };
 
     game.socket.onclose = function () {
@@ -110,10 +107,10 @@ game.connect = (function (host) {
                     break;
                 case 'examine':
                     break;
-                case 'getPlayerID':
-                    if (packet.result != "badSid")
-                        game.playerId = packet.id;
-                    break;
+//                case 'getPlayerID':
+//                    if (packet.result != "badSid")
+//                        game.playerId = packet.id;
+//                    break;
             }
     };
 });
@@ -134,14 +131,13 @@ game.examine = function (id) {
     game.socket.send(jsonObj);
 };
 
-//TODO Внести в протокол получение ID текущего игрока
-game.getPlayerID = function () {
-    var jsonObj = JSON.stringify({
-        action: "getPlayerID",
-        sid: game.sid
-    });
-    game.socket.send(jsonObj);
-};
+//game.getPlayerID = function () {
+//    var jsonObj = JSON.stringify({
+//        action: "getPlayerID",
+//        sid: game.sid
+//    });
+//    game.socket.send(jsonObj);
+//};
 
 game.move = function (direction) {
     var jsonObj = JSON.stringify({
