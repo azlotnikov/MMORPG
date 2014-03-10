@@ -81,9 +81,9 @@ public class Auth {
                user.setLogin(login);
                user.setPasswordMD5(password);
                user.doInsert();
-               jsonResponse.put("sid", user.getSid());
-               jsonResponse.put("webSocket", webSocketUrl);
-               jsonResponse.put("id", user.getId());
+//               jsonResponse.put("sid", user.getSid());
+//               jsonResponse.put("webSocket", webSocketUrl);
+//               jsonResponse.put("id", user.getId());
             }
 
             jsonResponse.put("result", message);

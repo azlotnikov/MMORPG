@@ -46,12 +46,14 @@
                 if (data.result == 'ok') {
                     ans_field.attr('class', 'green');
                     act_field.attr('class', 'green');
-                    // TODO make normal url
-                    goToGame("http://localhost:8080/MMORPG_war_exploded/game.jsp"
-                            , data.sid
-                            , data.webSocket
-                            , data.id
-                    );
+                    if (data.action == "login" ) {
+                        // TODO make normal url
+                        goToGame("http://localhost:8080/MMORPG_war_exploded/game.jsp"
+                                , data.sid
+                                , data.webSocket
+                                , data.id
+                        );
+                    }
                 } else {
                     ans_field.attr('class', 'red');
                     act_field.attr('class', 'red');
