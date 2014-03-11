@@ -47,7 +47,7 @@ public class UserDB {
       try {
          Class.forName("com.mysql.jdbc.Driver");
          Connection connector = DriverManager.getConnection(DBInfo.DB_URL, DBInfo.DB_USER, DBInfo.DB_PASS);
-         // need to generate game_id field
+         // TODO need to generate game_id field
          PreparedStatement stmt = connector.prepareStatement("INSERT INTO users (login, password, sid, pos_x, pos_y, game_id) " +
                  "VALUES (?,?,?,?,?,?)");
          stmt.setString(1, login);
@@ -58,7 +58,7 @@ public class UserDB {
          stmt.setDouble(5, posY);
          stmt.setInt(6, 1); //!
          stmt.executeUpdate();
-         // some shit
+         // TODO fix this shit
          stmt = connector.prepareStatement("UPDATE users SET game_id = id WHERE login = ?");
          stmt.setString(1, login);
          stmt.executeUpdate();

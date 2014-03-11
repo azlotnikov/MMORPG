@@ -209,13 +209,26 @@ function animate() {
         curHeight += game.tileSize;
     }
 
+    var currentActor = {};
+
     for (var t in game.actors) {
+        if (game.actors[t].id == game.playerId) {
+            currentActor = game.actors[t];
+            continue;
+        }
         game.createTexture(
             (game.actors[t].x - offsetX + SIGHT_RADIUS) * game.tileSize - game.textures['p'].width / 2
             ,(game.actors[t].y - offsetY + SIGHT_RADIUS) * game.tileSize - game.textures['p'].height / 2
             ,game.textures['p']
         );
     }
+
+    game.createTexture(
+        (currentActor.x - offsetX + SIGHT_RADIUS) * game.tileSize - game.textures['p'].width / 2
+        ,(currentActor.y - offsetY + SIGHT_RADIUS) * game.tileSize - game.textures['p'].height / 2
+        ,game.textures['p']
+    );
+
     game.render.render(game.stage);
 }
 
