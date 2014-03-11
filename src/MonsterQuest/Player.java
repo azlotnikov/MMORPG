@@ -14,7 +14,7 @@ public class Player {
    private final Session session;
    private Location location;
 
-   private double velocity = 0.135000;
+   private double velocity = 0.021000;
 
    public Player(long id, String sid, String login, Session session, Location location) {
       this.id = id;

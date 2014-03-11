@@ -14,19 +14,20 @@ game.socket = null;
 game.socketurl = getUrlVars()["websocket"];
 game.sid = getUrlVars()["sid"];
 game.playerId = getUrlVars()["id"];
-game.tick = 10;
+game.tick = 0;
+game.prevTick = 0;
 game.dictionary = {};
 game.map = {};
 game.actors = {};
 game.textures = {};
 game.stage = null;
 game.render = null;
-game.updateStage = false;
+game.keysDown = {};
 game.tileSize = 32;
 
 game.init = function () {
 // create an new instance of a pixi stage
-    game.stage = new PIXI.Stage(0x97c56e, true);
+    game.stage = new PIXI.Stage(0x000000, true);
 
 // create a renderer instance
     game.render = PIXI.autoDetectRenderer(SIGHT_RADIUS * 2 * game.tileSize, SIGHT_RADIUS * 2 * game.tileSize);
@@ -38,29 +39,27 @@ game.init = function () {
     game.render.view.style.left = "0px";
 
     window.addEventListener('keydown', function (e) {
+        e = e || event;
         var code = e.keyCode;
-        if (code > 36 && code < 66) {
-            switch (code) {
-                case 65:
-                    game.logOut();
-                    break;
-                case 37:
-                    game.move('west');
-                    break;
-                case 38:
-                    game.move('north');
-                    break;
-                case 39:
-                    game.move('east');
-                    break;
-                case 40:
-                    game.move('south');
-                    break;
-            }
+        if (code == 65) {
+            game.logOut();
+        }
+        if (code > 36 && code < 41) {
+            game.keysDown[code] = true;
             e.preventDefault();
         }
     }, false);
+    window.addEventListener('keyup', function (e) {
+        e = e || event;
+        var code = e.keyCode;
+        if (code > 36 && code < 41) {
+            game.keysDown[code] = false;
+            e.preventDefault();
+
+        }
+    }, false);
     game.connect(game.socketurl);
+    requestAnimFrame(animate);
 
 };
 
@@ -82,6 +81,10 @@ game.connect = (function (host) {
 
     game.socket.onclose = function () {
         alert('Info: WebSocket closed.');
+        game.map = {};
+        game.actors = {};
+        game.clearStage();
+        game.render.render(game.stage);
     };
 
     game.socket.onmessage = function (message) {
@@ -105,7 +108,6 @@ game.connect = (function (host) {
                 case 'look':
                     game.map = packet.map;
                     game.actors = packet.actors;
-                    requestAnimFrame(animate);
                     break;
                 case 'move':
                     break;
@@ -167,9 +169,13 @@ game.logOut = function () {
         sid: game.sid
     });
     game.socket.send(jsonObj);
-    game.map = {};
-    game.actors = {};
-    requestAnimFrame(animate);
+};
+
+game.checkKeyboard = function () {
+    if (game.keysDown[37]) game.move('west');
+    if (game.keysDown[38]) game.move('north');
+    if (game.keysDown[39]) game.move('east');
+    if (game.keysDown[40]) game.move('south');
 };
 
 game.createTexture = function (x, y, texture) {
@@ -182,54 +188,62 @@ game.createTexture = function (x, y, texture) {
     game.stage.addChild(tile);
 };
 
-function animate() {
-
+game.clearStage = function() {
     for (var c = game.stage.children.length - 1; c >= 0; c--) {
         game.stage.removeChild(game.stage.children[c]);
     }
-    var offsetX;
-    var offsetY;
-    // TODO Нужно эффективно узнавать координаты своего игрока
-    for (var t in game.actors) {
-        if (game.actors[t].id == game.playerId) {
-            offsetX = game.actors[t].x;
-            offsetY = game.actors[t].y;
-            break;
-        }
-    }
+};
 
-    // TODO Определить единый размер tile
-    var curHeight = -(offsetY % 1) * game.tileSize;
-    for (var i in game.map) {
-        var curWidth = -(offsetX % 1) * game.tileSize;
-        for (var j in game.map[i]) {
-            game.createTexture(curWidth, curHeight, game.textures[game.map[i][j]]);
-            curWidth += game.tileSize;
+function animate() {
+    game.checkKeyboard();
+    if (game.prevTick != game.tick) {
+        game.prevTick = game.tick;
+        game.clearStage();
+        var offsetX;
+        var offsetY;
+        // TODO Нужно эффективно узнавать координаты своего игрока
+        for (var t in game.actors) {
+            if (game.actors[t].id == game.playerId) {
+                offsetX = game.actors[t].x;
+                offsetY = game.actors[t].y;
+                break;
+            }
         }
-        curHeight += game.tileSize;
-    }
 
-    var currentActor = {};
-
-    for (var t in game.actors) {
-        if (game.actors[t].id == game.playerId) {
-            currentActor = game.actors[t];
-            continue;
+        // TODO Определить единый размер tile
+        var curHeight = -(offsetY % 1) * game.tileSize;
+        for (var i in game.map) {
+            var curWidth = -(offsetX % 1) * game.tileSize;
+            for (var j in game.map[i]) {
+                game.createTexture(curWidth, curHeight, game.textures[game.map[i][j]]);
+                curWidth += game.tileSize;
+            }
+            curHeight += game.tileSize;
         }
+
+        var currentActor = {};
+
+        for (var t in game.actors) {
+            if (game.actors[t].id == game.playerId) {
+                currentActor = game.actors[t];
+                continue;
+            }
+            game.createTexture(
+                (game.actors[t].x - offsetX + SIGHT_RADIUS) * game.tileSize - game.textures['p'].width / 2
+                , (game.actors[t].y - offsetY + SIGHT_RADIUS) * game.tileSize - game.textures['p'].height / 2
+                , game.textures['p']
+            );
+        }
+
         game.createTexture(
-            (game.actors[t].x - offsetX + SIGHT_RADIUS) * game.tileSize - game.textures['p'].width / 2
-            ,(game.actors[t].y - offsetY + SIGHT_RADIUS) * game.tileSize - game.textures['p'].height / 2
-            ,game.textures['p']
+            (currentActor.x - offsetX + SIGHT_RADIUS) * game.tileSize - game.textures['p'].width / 2
+            , (currentActor.y - offsetY + SIGHT_RADIUS) * game.tileSize - game.textures['p'].height / 2
+            , game.textures['p']
         );
+
+        game.render.render(game.stage);
     }
-
-    game.createTexture(
-        (currentActor.x - offsetX + SIGHT_RADIUS) * game.tileSize - game.textures['p'].width / 2
-        ,(currentActor.y - offsetY + SIGHT_RADIUS) * game.tileSize - game.textures['p'].height / 2
-        ,game.textures['p']
-    );
-
-    game.render.render(game.stage);
+    requestAnimFrame(animate);
 }
 
 game.init();
