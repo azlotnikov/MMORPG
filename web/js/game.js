@@ -202,10 +202,10 @@ function animate() {
         var offsetX;
         var offsetY;
         // TODO Нужно эффективно узнавать координаты своего игрока
-        for (var t in game.actors) {
-            if (game.actors[t].id == game.playerId) {
-                offsetX = game.actors[t].x;
-                offsetY = game.actors[t].y;
+        for (var a in game.actors) {
+            if (game.actors[a].id == game.playerId) {
+                offsetX = game.actors[a].x;
+                offsetY = game.actors[a].y;
                 break;
             }
         }
