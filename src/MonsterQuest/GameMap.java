@@ -18,8 +18,7 @@ public class GameMap {
 
    public static void loadWorldMap() {
       try {
-         Class.forName("com.mysql.jdbc.Driver");
-         Connection connector = DriverManager.getConnection(DBInfo.DB_URL, DBInfo.DB_USER, DBInfo.DB_PASS);
+         Connection connector = DBInfo.createConnection();
          PreparedStatement stmt = connector.prepareStatement("SELECT map FROM game_data");
          ResultSet rs = stmt.executeQuery();
          if (rs.next()) {
@@ -35,8 +34,7 @@ public class GameMap {
 
    public static void saveWorldMap() {
       try {
-         Class.forName("com.mysql.jdbc.Driver");
-         Connection connector = DriverManager.getConnection(DBInfo.DB_URL, DBInfo.DB_USER, DBInfo.DB_PASS);
+         Connection connector = DBInfo.createConnection();
          PreparedStatement stmt = connector.prepareStatement("UPDATE game_data SET map = ?");
          final ByteArrayOutputStream baos = new ByteArrayOutputStream();
          final ObjectOutputStream oos = new ObjectOutputStream(baos);

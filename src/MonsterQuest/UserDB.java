@@ -34,19 +34,10 @@ public class UserDB {
       return null;
    }
 
-//   public UserDB() {
-//      try {
-//
-//      } catch (Throwable e) {
-////         e.printStackTrace();
-//      }
-//   }
-
    public void doInsert() {
       sid = "-1";
       try {
-         Class.forName("com.mysql.jdbc.Driver");
-         Connection connector = DriverManager.getConnection(DBInfo.DB_URL, DBInfo.DB_USER, DBInfo.DB_PASS);
+         Connection connector = DBInfo.createConnection();
          // TODO need to generate game_id field
          PreparedStatement stmt = connector.prepareStatement("INSERT INTO users (login, password, sid, pos_x, pos_y, game_id) " +
                  "VALUES (?,?,?,?,?,?)");
@@ -84,8 +75,7 @@ public class UserDB {
    public boolean checkLoginExists(String newLogin) {
       boolean result = false;
       try {
-         Class.forName("com.mysql.jdbc.Driver");
-         Connection connector = DriverManager.getConnection(DBInfo.DB_URL, DBInfo.DB_USER, DBInfo.DB_PASS);
+         Connection connector = DBInfo.createConnection();
          PreparedStatement stmt = connector.prepareStatement("SELECT * FROM users WHERE LOWER(login) = ?");
          stmt.setString(1, newLogin.toLowerCase());
          ResultSet rs = stmt.executeQuery();
@@ -100,8 +90,7 @@ public class UserDB {
    public boolean doLogin() {
       boolean result = false;
       try {
-         Class.forName("com.mysql.jdbc.Driver");
-         Connection connector = DriverManager.getConnection(DBInfo.DB_URL, DBInfo.DB_USER, DBInfo.DB_PASS);
+         Connection connector = DBInfo.createConnection();
          PreparedStatement stmt = connector.prepareStatement("SELECT * FROM users WHERE LOWER(login) = ? AND password = ?");
          stmt.setString(1, login.toLowerCase());
          stmt.setString(2, passwordHash);
@@ -125,8 +114,7 @@ public class UserDB {
    public boolean doLogout() {
       boolean result = false;
       try {
-         Class.forName("com.mysql.jdbc.Driver");
-         Connection connector = DriverManager.getConnection(DBInfo.DB_URL, DBInfo.DB_USER, DBInfo.DB_PASS);
+         Connection connector = DBInfo.createConnection();
          PreparedStatement stmt = connector.prepareStatement("SELECT * FROM users WHERE sid = ?");
          stmt.setString(1, sid);
          ResultSet rs = stmt.executeQuery();
@@ -149,8 +137,7 @@ public class UserDB {
       sid = newSid;
       badSid = true;
       try {
-         Class.forName("com.mysql.jdbc.Driver");
-         Connection connector = DriverManager.getConnection(DBInfo.DB_URL, DBInfo.DB_USER, DBInfo.DB_PASS);
+         Connection connector = DBInfo.createConnection();
          PreparedStatement stmt = connector.prepareStatement("SELECT login, game_id, pos_x, pos_y  FROM users WHERE sid = ?");
          stmt.setString(1, sid);
          ResultSet rs = stmt.executeQuery();
@@ -169,8 +156,7 @@ public class UserDB {
 
    public void saveGameData() {
       try {
-         Class.forName("com.mysql.jdbc.Driver");
-         Connection connector = DriverManager.getConnection(DBInfo.DB_URL, DBInfo.DB_USER, DBInfo.DB_PASS);
+         Connection connector = DBInfo.createConnection();
          PreparedStatement stmt = connector.prepareStatement("UPDATE users SET pos_x = ?, pos_y = ? WHERE sid = ?");
          stmt.setDouble(1, posX);
          stmt.setDouble(2, posY);
