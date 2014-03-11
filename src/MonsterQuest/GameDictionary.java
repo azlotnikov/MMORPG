@@ -21,8 +21,7 @@ public class GameDictionary {
    public static void loadDictionary() {
       dictionary.clear();
       try {
-         Class.forName("com.mysql.jdbc.Driver");
-         Connection connector = DriverManager.getConnection(DBInfo.DB_URL, DBInfo.DB_USER, DBInfo.DB_PASS);
+         Connection connector = DBInfo.createConnection();
          PreparedStatement stmt = connector.prepareStatement("SELECT * FROM dictionary");
          ResultSet rs = stmt.executeQuery();
          while (rs.next()) {
