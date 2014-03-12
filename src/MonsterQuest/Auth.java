@@ -15,12 +15,12 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.PrintWriter;
+import java.net.InetAddress;
 
 
 public class Auth {
 
    // https://github.com/rotanov/fefu-mmorpg-protocol
-   public static String webSocketUrl = "ws://localhost:8080/MMORPG_war_exploded/game";
 
    public static boolean validateLogin(String login) {
       return !(login.length() < 2 || !login.matches("\\w+") || login.length() > 36);
@@ -96,7 +96,7 @@ public class Auth {
                if (user.doLogin()) {
                   jsonResponse.put("result", "ok");
                   jsonResponse.put("sid", user.getSid());
-                  jsonResponse.put("webSocket", webSocketUrl);
+                  jsonResponse.put("webSocket", "ws://" + InetAddress.getLocalHost().getHostAddress() + ":8080/MMORPG_war_exploded/game");
                   jsonResponse.put("id", user.getId());
                } else {
                   jsonResponse.put("result", "invalidCredentials");
@@ -107,14 +107,14 @@ public class Auth {
             break;
          }
 
-//         case "logout": {
-//            jsonResponse.put("result", "badSid");
-//            user.setSid(logout_sid);
-//            if (user.doLogout()) {
-//               jsonResponse.put("result", "ok");
-//            }
-//            break;
-//         }
+         case "logout": {
+            jsonResponse.put("result", "badSid");
+            user.setSid(logout_sid);
+            if (user.doLogout()) {
+               jsonResponse.put("result", "ok");
+            }
+            break;
+         }
 
          default: {
             jsonResponse.put("result", "error");

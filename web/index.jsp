@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     response.addHeader("Access-Control-Allow-Origin", "*");
-    response.addHeader("Access-Control-Allow-Methods", "GET, POST");
+    response.addHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
 %>
 
 <link rel="stylesheet" type="text/css" href="styles/style.css"/>
@@ -48,7 +48,7 @@
                     act_field.attr('class', 'green');
                     if (data.action == "login" ) {
                         // TODO make normal url
-                        goToGame("http://localhost:8080/MMORPG_war_exploded/game.jsp"
+                        goToGame("game.jsp"
                                 , data.sid
                                 , data.webSocket
                                 , data.id
@@ -81,14 +81,14 @@
     <div><p id="act_field"></p></div>
     <div><p id="ans_field"></p></div>
     <label for="server">Сервер:</label>
-    <input id="server" value="http://localhost:8080/MMORPG_war_exploded/doaction.jsp" /><br/>
+    <input id="server" value="doaction.jsp" /><br/>
     <label for="login">Логин:</label>
     <input id="login" value="gamer"/><br/>
     <label for="password">Пароль:</label>
     <input id="password" type="password" value="123456"/><br/>
     <button class="button red" onclick="registerButtonClick();">Регистрация</button>
     <button class="button green" onclick="loginButtonClick();">Вход</button>
-    <button class="button" onclick="javascript:location.assign('http://localhost:8080/MMORPG_war_exploded/tests/test_1.jsp');">Тесты</button>
+    <button class="button" onclick="javascript:location.assign('tests/test_1.jsp');">Тесты</button>
 </div>
 </body>
 </html>
