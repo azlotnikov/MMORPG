@@ -65,7 +65,7 @@
 <body>
 <div class="test_div">
     <label for="server">Сервер:</label>
-    <input id="server" value="http://localhost:8080/MMORPG_war_exploded3/doaction.jsp" /><br/>
+    <input id="server" value="http://localhost:8080/MMORPG_war_exploded/doaction.jsp" /><br/>
     <button class="button green" id="btn_tests" onclick="buttonClicked();">Начать тестирование</button>
     <button class="button red" onclick="$('#test_ans').text('');">Очистить</button>
 </div>
