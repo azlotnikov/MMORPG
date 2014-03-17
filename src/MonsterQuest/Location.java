@@ -13,26 +13,45 @@ public class Location {
       this.y = y;
    }
 
+   private static boolean nearCenter(double x, double eps)
+   {
+       return (x + eps > (int) x + 0.5 && x - eps < (int) x + 0.5);
+   }
+
    public Location getAdjacentLocation(Direction direction, double velocity) {
+      double playerSize = 1.0 - 0.001;
+      double eps = 0.1;
       switch (direction) {
          case NORTH:
-            if (GameMap.canEnterTile((int) x, (int) (y - velocity)))
+            if (GameMap.canEnterTile((int) (x - playerSize / 2), (int) (y - velocity - playerSize / 2))
+             && GameMap.canEnterTile((int) (x + playerSize / 2), (int) (y - velocity - playerSize / 2)))
                 return new Location(x, y - velocity);
+            else if (nearCenter(x, eps))
+                return new Location((int) x + 0.5, y);
             else
                 return new Location(x, y);
          case SOUTH:
-             if (GameMap.canEnterTile((int) x, (int) (y + velocity)))
+             if (GameMap.canEnterTile((int) (x - playerSize / 2), (int) (y + velocity + playerSize / 2))
+              && GameMap.canEnterTile((int) (x + playerSize / 2), (int) (y + velocity + playerSize / 2)))
                  return new Location(x, y + velocity);
+             else if (nearCenter(x, eps))
+                 return new Location((int) x + 0.5, y);
              else
                  return new Location(x, y);
          case EAST:
-             if (GameMap.canEnterTile((int) (x + velocity), (int) y))
+             if (GameMap.canEnterTile((int) (x + velocity + playerSize / 2), (int) (y - playerSize / 2))
+              && GameMap.canEnterTile((int) (x + velocity + playerSize / 2), (int) (y + playerSize / 2)))
                  return new Location(x + velocity, y);
+             else if (nearCenter(y, eps))
+                 return new Location(x, (int) y + 0.5);
              else
                  return new Location(x, y);
          case WEST:
-             if (GameMap.canEnterTile((int) (x - velocity), (int) y))
+             if (GameMap.canEnterTile((int) (x - velocity - playerSize / 2), (int) (y - playerSize / 2))
+              && GameMap.canEnterTile((int) (x - velocity - playerSize / 2), (int) (y + playerSize / 2)))
                  return new Location(x - velocity, y);
+             else if (nearCenter(y, eps))
+                 return new Location(x, (int) y + 0.5);
              else
                  return new Location(x, y);
          case NONE:
