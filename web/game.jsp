@@ -15,16 +15,10 @@
     <%--<!-- Load external PaperScript and associate it with myCanvas -->--%>
     <%--<script type="text/paperscript" src="js/game.js" canvas="myCanvas"></script>--%>
     <script src="js/pixi.dev.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/view.js"></script>
 </head>
 <body>
 <script src="js/game.js"></script>
-<%--<canvas id="myCanvas" resize></canvas>--%>
-<%--<img id="wall" style="display: none;" src="img/wall.png">--%>
-<%--<img id="grass" style="display: none;" src="img/grass.png">--%>
-<%--<img id="player" style="display: none;" src="img/player.png">--%>
-<%--<div style="float: left">--%>
-<%--<canvas id="playground" width="800" height="700"/>--%>
-<%--</div>--%>
-<%--<script src="js/game_js.js"></script>--%>
 </body>
 </html>

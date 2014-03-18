@@ -1,249 +1,151 @@
-function getUrlVars() {
-    var vars = {};
-    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,
-        function (m, key, value) {
-            vars[key] = value;
-        });
-    return vars;
+function Game() {
+    this.view = null;
+    this.socket = null;
+    this.sid = '';
+    this.socketUrl = '';
+    this.playerId = '';
+    this.tick = -1;
+    this.prevTick = -1;
+    this.keysDown = {};
 }
 
-var game = {};
-var SIGHT_RADIUS = 10;
-
-game.socket = null;
-game.socketurl = getUrlVars()["websocket"];
-game.sid = getUrlVars()["sid"];
-game.playerId = getUrlVars()["id"];
-game.tick = 0;
-game.prevTick = 0;
-game.dictionary = {};
-game.map = {};
-game.actors = {};
-game.textures = {};
-game.stage = null;
-game.render = null;
-game.keysDown = {};
-game.tileSize = 32;
-
-game.init = function () {
-// create an new instance of a pixi stage
-    game.stage = new PIXI.Stage(0x000000, true);
-
-// create a renderer instance
-    game.render = PIXI.autoDetectRenderer(SIGHT_RADIUS * 2 * game.tileSize, SIGHT_RADIUS * 2 * game.tileSize);
-
-// add the renderer view element to the DOM
-    document.body.appendChild(game.render.view);
-    game.render.view.style.position = "absolute";
-    game.render.view.style.top = "0px";
-    game.render.view.style.left = "0px";
-
-    window.addEventListener('keydown', function (e) {
-        e = e || event;
-        var code = e.keyCode;
-        if (code == 65) {
-            game.logOut();
-        }
-        if (code > 36 && code < 41) {
-            game.keysDown[code] = true;
-            e.preventDefault();
-        }
-    }, false);
-    window.addEventListener('keyup', function (e) {
-        e = e || event;
-        var code = e.keyCode;
-        if (code > 36 && code < 41) {
-            game.keysDown[code] = false;
-            e.preventDefault();
-
-        }
-    }, false);
-    game.connect(game.socketurl);
-    requestAnimFrame(animate);
-
-};
-
-game.connect = (function (host) {
+Game.prototype.initGame = function () {
+    this.sid = getUrlVars()['sid'];
+    this.socketUrl = getUrlVars()['websocket'];
+    this.playerId = getUrlVars()['id'];
+    this.view = new View();
     if ('WebSocket' in window) {
-        game.socket = new WebSocket(host);
-    } else if ('MozWebSocket' in window) {
-        game.socket = new MozWebSocket(host);
+        this.socket = new WebSocket(this.socketUrl);
     } else {
         alert('Error: WebSocket is not supported by this browser.');
+        exitGame();
         return;
     }
 
-    game.socket.onopen = function () {
-        //alert('Info: WebSocket connection opened.');
+    this.socket.onopen = function () {
         game.getDictionary();
-        //game.getPlayerID();
     };
 
-    game.socket.onclose = function () {
-        alert('Info: WebSocket closed.');
-        game.map = {};
-        game.actors = {};
-        game.clearStage();
-        game.render.render(game.stage);
+    this.socket.onclose = function () {
+        game.view.setActors({});
+        game.view.setMap({});
+        game.view.updateView(game.playerId);
+        exitGame();
     };
 
-    game.socket.onmessage = function (message) {
-        var packet = JSON.parse(message.data);
-        if (packet.result == "badSid") {
-            alert('Invalid sid!');
-            exit();
-        }
-        if (packet.hasOwnProperty('tick')) {
-            game.tick = packet.tick;
-            game.look();
-        } else
-            switch (packet.action) {
-                case 'getDictionary':
-                    game.dictionary = packet.dictionary;
-                    for (var i in game.dictionary) {
-                        game.textures[i] = PIXI.Texture.fromImage("img/" + game.dictionary[i] + ".png", true);
-                    }
-                    game.textures['p'] = PIXI.Texture.fromImage("img/player.png", true);
-                    break;
-                case 'look':
-                    game.map = packet.map;
-                    game.actors = packet.actors;
-                    break;
-                case 'move':
-                    break;
-                case 'examine':
-                    break;
-//                case 'getPlayerID':
-//                    if (packet.result != "badSid")
-//                        game.playerId = packet.id;
-//                    break;
-            }
+    this.socket.onmessage = function (message) {
+        game.receiveMsg(JSON.parse(message.data));
     };
-});
 
-game.look = function () {
-    var jsonObj = JSON.stringify({
-        action: "look",
-        sid: game.sid
-    });
-    game.socket.send(jsonObj);
+    requestAnimFrame(animate);
 };
 
-game.examine = function (id) {
-    var jsonObj = JSON.stringify({
-        action: "examine",
-        id: id
-    });
-    game.socket.send(jsonObj);
+Game.prototype.sendMsg = function (msg) {
+    this.socket.send(JSON.stringify(msg));
 };
 
-//game.getPlayerID = function () {
-//    var jsonObj = JSON.stringify({
-//        action: "getPlayerID",
-//        sid: game.sid
-//    });
-//    game.socket.send(jsonObj);
-//};
-
-game.move = function (direction) {
-    var jsonObj = JSON.stringify({
-        action: "move",
-        sid: game.sid,
-        direction: direction,
-        tick: game.tick
-    });
-    game.socket.send(jsonObj);
-};
-
-game.getDictionary = function () {
-    var jsonObj = JSON.stringify({
+Game.prototype.getDictionary = function () {
+    this.sendMsg({
         action: "getDictionary",
-        sid: game.sid
+        sid: this.sid
     });
-    game.socket.send(jsonObj);
 };
 
-game.logOut = function () {
-    var jsonObj = JSON.stringify({
+Game.prototype.look = function () {
+    this.sendMsg({
+        action: "look",
+        sid: this.sid
+    });
+};
+
+Game.prototype.examine = function (id) {
+    this.sendMsg({
+        action: "examine",
+        id: id,
+        sid: this.sid
+    });
+};
+
+Game.prototype.move = function (direction) {
+    this.sendMsg({
+        action: "move",
+        direction: direction,
+        tick: this.tick,
+        sid: this.sid
+    });
+};
+
+Game.prototype.logOut = function () {
+    this.sendMsg({
         action: "logout",
-        sid: game.sid
+        sid: this.sid
     });
-    game.socket.send(jsonObj);
 };
 
-game.checkKeyboard = function () {
-    if (game.keysDown[37]) game.move('west');
-    if (game.keysDown[38]) game.move('north');
-    if (game.keysDown[39]) game.move('east');
-    if (game.keysDown[40]) game.move('south');
+Game.prototype.checkKeyboard = function () {
+    if (this.keysDown[37]) this.move('west');
+    if (this.keysDown[38]) this.move('north');
+    if (this.keysDown[39]) this.move('east');
+    if (this.keysDown[40]) this.move('south');
 };
 
-game.createTexture = function (x, y, texture) {
-    var tile = new PIXI.Sprite(texture);
-//    tile.interactive = false;
-    tile.anchor.x = 0.5;
-    tile.anchor.y = 0.5;
-    tile.position.x = x + texture.width / 2;
-    tile.position.y = y + texture.width / 2;
-    game.stage.addChild(tile);
-};
-
-game.clearStage = function() {
-    for (var c = game.stage.children.length - 1; c >= 0; c--) {
-        game.stage.removeChild(game.stage.children[c]);
+Game.prototype.receiveMsg = function (msg) {
+    if (msg.hasOwnProperty('tick')) {
+        this.tick = msg.tick;
+        this.look();
+        return;
+    }
+    if (!msg.hasOwnProperty('result')) return;
+    if (msg.result == 'badSid') {
+        alert('Invalid sid!');
+        exitGame();
+        return;
+    }
+    switch (msg.action) {
+        case 'getDictionary':
+            this.view.setDictionary(msg.dictionary);
+            break;
+        case 'look':
+            this.view.setMap(msg.map);
+            this.view.setActors(msg.actors);
+            break;
     }
 };
+
+game = new Game();
 
 function animate() {
     game.checkKeyboard();
-    if (game.prevTick != game.tick) {
+
+    if (game.tick != game.prevTick) {
         game.prevTick = game.tick;
-        game.clearStage();
-        var offsetX;
-        var offsetY;
-        // TODO Нужно эффективно узнавать координаты своего игрока
-        for (var a in game.actors) {
-            if (game.actors[a].id == game.playerId) {
-                offsetX = game.actors[a].x;
-                offsetY = game.actors[a].y;
-                break;
-            }
-        }
-
-        // TODO Определить единый размер tile
-        var curHeight = -(offsetY % 1) * game.tileSize;
-        for (var i in game.map) {
-            var curWidth = -(offsetX % 1) * game.tileSize;
-            for (var j in game.map[i]) {
-                game.createTexture(curWidth, curHeight, game.textures[game.map[i][j]]);
-                curWidth += game.tileSize;
-            }
-            curHeight += game.tileSize;
-        }
-
-        var currentActor = {};
-
-        for (var t in game.actors) {
-            if (game.actors[t].id == game.playerId) {
-                currentActor = game.actors[t];
-                continue;
-            }
-            game.createTexture(
-                (game.actors[t].x - offsetX + SIGHT_RADIUS) * game.tileSize - game.textures['p'].width / 2
-                , (game.actors[t].y - offsetY + SIGHT_RADIUS) * game.tileSize - game.textures['p'].height / 2
-                , game.textures['p']
-            );
-        }
-
-        game.createTexture(
-            (currentActor.x - offsetX + SIGHT_RADIUS) * game.tileSize - game.textures['p'].width / 2
-            , (currentActor.y - offsetY + SIGHT_RADIUS) * game.tileSize - game.textures['p'].height / 2
-            , game.textures['p']
-        );
-
-        game.render.render(game.stage);
+//        alert(game.prevTick);
+        game.view.updateView(game.playerId);
     }
+
     requestAnimFrame(animate);
 }
 
-game.init();
+document.onkeydown = function (e) {
+    e = e || event;
+    var code = e.keyCode;
+    if (code == 65) {
+        game.logOut();
+    }
+    if (code > 36 && code < 41) {
+        game.keysDown[code] = true;
+        e.preventDefault();
+    }
+};
+
+document.onkeyup = function (e) {
+    e = e || event;
+    var code = e.keyCode;
+    if (code > 36 && code < 41) {
+        game.keysDown[code] = false;
+        e.preventDefault();
+    }
+};
+
+game.initGame();
+
