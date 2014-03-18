@@ -1,5 +1,7 @@
 package MonsterQuest;
 
+import org.json.simple.JSONObject;
+
 import java.io.IOException;
 import java.util.Collection;
 
@@ -31,9 +33,9 @@ public class Player {
       user.saveGameData();
    }
 
-   protected void sendMessage(String msg) {
+   protected void sendMessage(JSONObject msg) {
       try {
-         session.getBasicRemote().sendText(msg);
+         session.getBasicRemote().sendText(msg.toJSONString());
       } catch (IOException ioe) {
          CloseReason cr =
                  new CloseReason(CloseCodes.CLOSED_ABNORMALLY, ioe.getMessage());
@@ -45,9 +47,20 @@ public class Player {
       }
    }
 
-   public synchronized void moveTo(Location newLocation) {
-      location = newLocation;
-//      saveStateToBD();
+   public JSONObject examine() {
+      JSONObject result = new JSONObject();
+      result.put("action", "examine");
+      result.put("id", id);
+      result.put("type", "player");
+      result.put("login", login);
+      result.put("x", location.x);
+      result.put("y", location.y);
+      result.put("result", "ok");
+      return result;
+   }
+
+   public synchronized void moveTo(Location location) {
+      this.location = location;
    }
 
    public synchronized void update(Collection<Player> players) {

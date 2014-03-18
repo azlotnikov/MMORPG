@@ -1,7 +1,6 @@
 package MonsterQuest;
 
 import java.io.EOFException;
-//import java.util.concurrent.atomic.AtomicInteger;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -17,6 +16,7 @@ import javax.websocket.server.ServerEndpoint;
 
 @ServerEndpoint(value = "/game")
 public class PlayerAnnotation {
+
    private Player player;
    private Session openedSession;
 
@@ -31,7 +31,47 @@ public class PlayerAnnotation {
    }
 
    public static JSONObject getDictionary() {
-      return GameDictionary.getJsonDictionary();
+      JSONObject result = new JSONObject();
+      result.put("action", "getDictionary");
+      result.put("dictionary", GameDictionary.getJsonDictionary());
+      result.put("result", "ok");
+      return result;
+   }
+
+   public static JSONObject getBadId() {
+      JSONObject result = new JSONObject();
+      result.put("action", "examine");
+      result.put("result", "badId");
+      return result;
+   }
+
+   public static JSONObject getBadSid(String action) {
+      JSONObject result = new JSONObject();
+      result.put("action", action);
+      result.put("result", "badSid");
+      return result;
+   }
+
+   public static JSONObject getLogout() {
+      JSONObject result = new JSONObject();
+      result.put("action", "logout");
+      result.put("result", "ok");
+      return result;
+   }
+
+   public static JSONObject getError() {
+      JSONObject result = new JSONObject();
+      result.put("result", "error");
+      return result;
+   }
+
+   public JSONObject getLook() {
+      JSONObject result = new JSONObject();
+      result.put("action", "look");
+      result.put("result", "ok");
+      result.put("map", getMap((int) player.getLocation().x, (int) player.getLocation().y));
+      result.put("actors", Game.getActors(player.getLocation().x, player.getLocation().y));
+      return result;
    }
 
    public JSONArray getMap(int x, int y) {
@@ -48,14 +88,16 @@ public class PlayerAnnotation {
       boolean sendBack = true;
       JSONObject jsonMsg = parseJsonString(message);
       JSONObject jsonAns = new JSONObject();
+
       String sid = (String) jsonMsg.get("sid");
-      jsonAns.put("action", jsonMsg.get("action"));
+      String action = (String) jsonMsg.get("action");
+
       player = Game.findPlayerBySid(sid);
       if (player == null) {
          UserDB user = new UserDB();
          user.getDataBySid(sid);
          if (user.isBadSid()) {
-            jsonAns.put("result", "badSid");
+            jsonAns = getBadSid(action);
             try {
                openedSession.getBasicRemote().sendText(jsonAns.toJSONString());
             } catch (Throwable e) {
@@ -66,32 +108,24 @@ public class PlayerAnnotation {
          Game.addPlayer(player);
       }
 
-      switch ((String) jsonMsg.get("action")) {
+      switch (action) {
          case "getDictionary": {
-            jsonAns.put("result", "ok");
-            jsonAns.put("dictionary", getDictionary());
+            jsonAns = getDictionary();
             break;
          }
 
          case "examine": {
             Player examPlayer = Game.ExaminePlayer((long) jsonMsg.get("id"));
             if (examPlayer != null) {
-               jsonAns.put("result", "ok");
-               jsonAns.put("id", examPlayer.getId());
-               jsonAns.put("type", "player");
-               jsonAns.put("login", examPlayer.getLogin());
-               jsonAns.put("x", examPlayer.getLocation().x);
-               jsonAns.put("y", examPlayer.getLocation().y);
+               jsonAns = examPlayer.examine();
             } else {
-               jsonAns.put("result", "badId");
+               jsonAns = getBadId();
             }
             break;
          }
 
          case "look": {
-            jsonAns.put("result", "ok");
-            jsonAns.put("map", getMap((int) player.getLocation().x, (int) player.getLocation().y));
-            jsonAns.put("actors", Game.getActors(player.getLocation().x, player.getLocation().y));
+            jsonAns = getLook();
             break;
          }
 
@@ -115,7 +149,7 @@ public class PlayerAnnotation {
                   break;
             }
 
-            long moveStartTickValue = (long) jsonMsg.get("tick");
+//            long moveStartTickValue = (long) jsonMsg.get("tick");
 
             Location newLocation = player.getLocation();
 
@@ -123,9 +157,7 @@ public class PlayerAnnotation {
             newLocation = newLocation.getNewLocation(newDirection, player.getVelocity());
 //            need to check collisions with walls
 //            }
-            if (!newLocation.equal(player.getLocation())) {
-               player.moveTo(newLocation);
-            }
+            player.moveTo(newLocation);
 
             sendBack = false;
             break;
@@ -133,24 +165,23 @@ public class PlayerAnnotation {
 
          case "logout": {
             if (!player.logout()) {
-               jsonAns.put("result", "badSid");
+               jsonAns = getBadSid(action);
             } else
                try {
-                  jsonAns.put("result", "ok");
+                  jsonAns = getLogout();
                   player.getSession().close();
                } catch (Throwable e) {
-
                }
             break;
          }
 
          default: {
-            jsonAns.put("result", "error");
+            jsonAns = getError();
             break;
          }
       }
       if (sendBack) {
-         player.sendMessage(jsonAns.toJSONString());
+         player.sendMessage(jsonAns);
       }
    }
 
