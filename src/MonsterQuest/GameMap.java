@@ -14,6 +14,8 @@ import java.sql.*;
 
 public class GameMap {
 
+   public static final int SIGHT_RADIUS = 10; //TODO Задокументировать облаcть видимости
+
    private static char[][] worldMap;
 
    public static void loadWorldMap() {
@@ -49,9 +51,9 @@ public class GameMap {
    public static JSONArray mapToJson(int x, int y) {
       JSONArray jsonResult = new JSONArray();
       JSONArray jsonLine;
-      for (int i = y - PlayerAnnotation.SIGHT_RADIUS; i <= y + PlayerAnnotation.SIGHT_RADIUS; i++) {
+      for (int i = y - SIGHT_RADIUS; i <= y + SIGHT_RADIUS; i++) {
          jsonLine = new JSONArray();
-          for (int j = x - PlayerAnnotation.SIGHT_RADIUS; j <= x + PlayerAnnotation.SIGHT_RADIUS; j++) {
+          for (int j = x - SIGHT_RADIUS; j <= x + SIGHT_RADIUS; j++) {
               String symbol = String.valueOf('#');
               if (i > 0 && i < worldMap.length && j > 0 && j < worldMap[0].length) {
                   symbol = String.valueOf(worldMap[i][j]);

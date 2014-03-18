@@ -17,7 +17,6 @@ import javax.websocket.server.ServerEndpoint;
 
 @ServerEndpoint(value = "/game")
 public class PlayerAnnotation {
-   public static final int SIGHT_RADIUS = 10; //TODO Задокументировать облаcть видимости
    private Player player;
    private Session openedSession;
 

@@ -45,8 +45,8 @@ public class Game {
    protected static JSONArray getActors(double x, double y) {
       JSONArray jsonAns = new JSONArray();
       for (Player player : Game.getPlayers()) {
-         if (Math.abs(player.getLocation().x - x) > PlayerAnnotation.SIGHT_RADIUS
-                 && Math.abs(player.getLocation().y - y) > PlayerAnnotation.SIGHT_RADIUS)
+         if (Math.abs(player.getLocation().x - x) > GameMap.SIGHT_RADIUS
+                 && Math.abs(player.getLocation().y - y) > GameMap.SIGHT_RADIUS)
             continue;
          JSONObject jsonPlayer = new JSONObject();
          jsonPlayer.put("type", "player");
