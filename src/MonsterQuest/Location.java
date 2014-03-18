@@ -5,6 +5,8 @@ package MonsterQuest;
  */
 public class Location {
 
+   public static double playerSize = 1.0 - 0.001;
+
    public double x;
    public double y;
 
@@ -13,14 +15,17 @@ public class Location {
       this.y = y;
    }
 
+   public boolean equal(Location location) {
+      return (location.x == this.x && location.y == this.y);
+   }
+
    private static boolean nearCenter(double x, double eps)
    {
        return (x + eps > (int) x + 0.5 && x - eps < (int) x + 0.5);
    }
 
-   public Location getAdjacentLocation(Direction direction, double velocity) {
-      double playerSize = 1.0 - 0.001;
-      double eps = 0.1;
+   public Location getNewLocation(Direction direction, double velocity) {
+      double eps = 0.15;
       switch (direction) {
          case NORTH:
             if (GameMap.canEnterTile((int) (x - playerSize / 2), (int) (y - velocity - playerSize / 2))

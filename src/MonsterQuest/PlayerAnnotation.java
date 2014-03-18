@@ -91,7 +91,7 @@ public class PlayerAnnotation {
 
          case "look": {
             jsonAns.put("result", "ok");
-            jsonAns.put("map", getMap((int)player.getLocation().x, (int)player.getLocation().y));
+            jsonAns.put("map", getMap((int) player.getLocation().x, (int) player.getLocation().y));
             jsonAns.put("actors", Game.getActors(player.getLocation().x, player.getLocation().y));
             break;
          }
@@ -118,14 +118,16 @@ public class PlayerAnnotation {
 
             long moveStartTickValue = (long) jsonMsg.get("tick");
 
-            Location newStepLocation = player.getLocation();
+            Location newLocation = player.getLocation();
 
 //            for (int i = 1; i <= Game.getCurrentTick() - moveStartTickValue; i++) {
-            newStepLocation = newStepLocation.getAdjacentLocation(newDirection, player.getVelocity());
+            newLocation = newLocation.getNewLocation(newDirection, player.getVelocity());
 //            need to check collisions with walls
 //            }
+            if (!newLocation.equal(player.getLocation())) {
+               player.moveTo(newLocation);
+            }
 
-            player.moveTo(newStepLocation);
             sendBack = false;
             break;
          }
@@ -134,12 +136,12 @@ public class PlayerAnnotation {
             if (!player.logout()) {
                jsonAns.put("result", "badSid");
             } else
-            try {
-               jsonAns.put("result", "ok");
-               player.getSession().close();
-            } catch (Throwable e) {
+               try {
+                  jsonAns.put("result", "ok");
+                  player.getSession().close();
+               } catch (Throwable e) {
 
-            }
+               }
             break;
          }
 
