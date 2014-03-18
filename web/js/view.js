@@ -5,10 +5,10 @@ function View() {
     this.stage = new PIXI.Stage(0x000000, true);
     this.renderer = PIXI.autoDetectRenderer(SIGHT_RADIUS * 2 * TILE_SIZE, SIGHT_RADIUS * 2 * TILE_SIZE);
 
-    this.atlas = PIXI.BaseTexture.fromImage("img/tileset.png");
+    this.atlas = PIXI.BaseTexture.fromImage('img/tileset.png');
     this.textures = {
-        '.': new PIXI.Texture(this.atlas, new PIXI.Rectangle(22 * TILE_SIZE, 16 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
-        '#': new PIXI.Texture(this.atlas, new PIXI.Rectangle(23 * TILE_SIZE, 16 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
+        'grass': new PIXI.Texture(this.atlas, new PIXI.Rectangle(22 * TILE_SIZE, 16 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
+        'wall': new PIXI.Texture(this.atlas, new PIXI.Rectangle(23 * TILE_SIZE, 16 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
         'player': new PIXI.Texture(this.atlas, new PIXI.Rectangle(0 * TILE_SIZE, 2 * TILE_SIZE, TILE_SIZE, TILE_SIZE))
     };
 
@@ -55,7 +55,7 @@ View.prototype.updateView = function (playerId) {
     for (i in this.map) {
         curWidth = -(offsetX % 1) * TILE_SIZE;
         for (j in this.map[i]) {
-            this.drawTile(curWidth, curHeight, this.map[i][j]);
+            this.drawTile(curWidth, curHeight, this.dictionary[this.map[i][j]]);
             curWidth += TILE_SIZE;
         }
         curHeight += TILE_SIZE;
