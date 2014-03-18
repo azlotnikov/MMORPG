@@ -47,11 +47,11 @@ public class Player {
 
    public synchronized void moveTo(Location newLocation) {
       location = newLocation;
-      saveStateToBD();
+//      saveStateToBD();
    }
 
    public synchronized void update(Collection<Player> players) {
-//      saveStateToBD();
+      saveStateToBD();
    }
 
    public synchronized boolean logout() {

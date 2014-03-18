@@ -17,14 +17,9 @@ import javax.websocket.server.ServerEndpoint;
 
 @ServerEndpoint(value = "/game")
 public class PlayerAnnotation {
-//   private static final AtomicInteger playerIds = new AtomicInteger(0);
    public static final int SIGHT_RADIUS = 10; //TODO Задокументировать облаcть видимости
    private Player player;
    private Session openedSession;
-
-//   public PlayerAnnotation() {
-//      this.id = playerIds.getAndIncrement();
-//   }
 
    public static JSONObject parseJsonString(String str) {
       JSONObject jsonResult = null;
@@ -56,7 +51,7 @@ public class PlayerAnnotation {
       JSONObject jsonAns = new JSONObject();
       String sid = (String) jsonMsg.get("sid");
       jsonAns.put("action", jsonMsg.get("action"));
-      player = GameTimer.findPlayerBySid(sid);
+      player = Game.findPlayerBySid(sid);
       if (player == null) {
          UserDB user = new UserDB();
          user.getDataBySid(sid);
@@ -69,7 +64,7 @@ public class PlayerAnnotation {
             return;
          }
          player = new Player(user.getId(), user.getSid(), user.getLogin(), openedSession, user.getLocation());
-         GameTimer.addPlayer(player);
+         Game.addPlayer(player);
       }
 
       switch ((String) jsonMsg.get("action")) {
@@ -80,7 +75,7 @@ public class PlayerAnnotation {
          }
 
          case "examine": {
-            Player examPlayer = GameTimer.ExaminePlayer((long) jsonMsg.get("id"));
+            Player examPlayer = Game.ExaminePlayer((long) jsonMsg.get("id"));
             if (examPlayer != null) {
                jsonAns.put("result", "ok");
                jsonAns.put("id", examPlayer.getId());
@@ -97,7 +92,7 @@ public class PlayerAnnotation {
          case "look": {
             jsonAns.put("result", "ok");
             jsonAns.put("map", getMap((int)player.getLocation().x, (int)player.getLocation().y));
-            jsonAns.put("actors", GameTimer.getActors(player.getLocation().x, player.getLocation().y));
+            jsonAns.put("actors", Game.getActors(player.getLocation().x, player.getLocation().y));
             break;
          }
 
@@ -125,7 +120,7 @@ public class PlayerAnnotation {
 
             Location newStepLocation = player.getLocation();
 
-//            for (int i = 1; i <= GameTimer.getCurrentTick() - moveStartTickValue; i++) {
+//            for (int i = 1; i <= Game.getCurrentTick() - moveStartTickValue; i++) {
             newStepLocation = newStepLocation.getAdjacentLocation(newDirection, player.getVelocity());
 //            need to check collisions with walls
 //            }
@@ -148,19 +143,6 @@ public class PlayerAnnotation {
             break;
          }
 
-//         case "getPlayerID": {
-//            if (player == null) {
-//               jsonAns.put("result", "badSid");
-//            } else
-//               try {
-//                  jsonAns.put("result", "ok");
-//                  jsonAns.put("id", player.getId());
-//               } catch (Throwable e) {
-//
-//               }
-//            break;
-//         }
-
          default: {
             jsonAns.put("result", "error");
             break;
@@ -173,7 +155,7 @@ public class PlayerAnnotation {
 
    @OnClose
    public void onClose() {
-      GameTimer.removePlayer(player);
+      Game.removePlayer(player);
    }
 
 

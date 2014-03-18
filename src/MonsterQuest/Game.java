@@ -10,13 +10,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-public class GameTimer {
+public class Game {
 
    private static Timer gameTimer = null;
 
    private static long tickValue = 1;
 
-   private static final long TICK_DELAY = 50;
+   private static final long TICK_DELAY = 80;
 
    private static final ConcurrentHashMap<Long, Player> players =
            new ConcurrentHashMap<>();
@@ -29,9 +29,7 @@ public class GameTimer {
    }
 
    protected static Player findPlayerBySid(String sid) {
-      for (Iterator<Player> iterator = GameTimer.getPlayers().iterator();
-           iterator.hasNext(); ) {
-         Player player = iterator.next();
+      for (Player player : Game.getPlayers()) {
          if (player.getSid().equals(sid)) {
             return player;
          }
@@ -46,12 +44,10 @@ public class GameTimer {
 
    protected static JSONArray getActors(double x, double y) {
       JSONArray jsonAns = new JSONArray();
-      for (Iterator<Player> iterator = GameTimer.getPlayers().iterator();
-           iterator.hasNext(); ) {
-         Player player = iterator.next();
+      for (Player player : Game.getPlayers()) {
          if (Math.abs(player.getLocation().x - x) > PlayerAnnotation.SIGHT_RADIUS
-            && Math.abs(player.getLocation().y - y) > PlayerAnnotation.SIGHT_RADIUS)
-             continue;
+                 && Math.abs(player.getLocation().y - y) > PlayerAnnotation.SIGHT_RADIUS)
+            continue;
          JSONObject jsonPlayer = new JSONObject();
          jsonPlayer.put("type", "player");
          jsonPlayer.put("id", player.getId());
@@ -77,17 +73,15 @@ public class GameTimer {
       JSONObject jsonAns = new JSONObject();
       tickValue++;
       jsonAns.put("tick", tickValue);
-      for (Iterator<Player> iterator = GameTimer.getPlayers().iterator();
-           iterator.hasNext(); ) {
-         Player player = iterator.next();
-         player.update(GameTimer.getPlayers());
+      for (Player player : Game.getPlayers()) {
+         player.update(Game.getPlayers());
          //some things
       }
       broadcast(jsonAns.toJSONString());
    }
 
    protected static void broadcast(String message) {
-      for (Player player : GameTimer.getPlayers()) {
+      for (Player player : Game.getPlayers()) {
          try {
             player.sendMessage(message);
          } catch (IllegalStateException ise) {
@@ -99,7 +93,7 @@ public class GameTimer {
       GameMap.saveToBdDemoMap();
       GameMap.loadWorldMap();
       GameDictionary.loadDictionary();
-      gameTimer = new Timer(GameTimer.class.getSimpleName() + " Timer");
+      gameTimer = new Timer(Game.class.getSimpleName() + " Timer");
       gameTimer.scheduleAtFixedRate(new TimerTask() {
          @Override
          public void run() {
