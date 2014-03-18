@@ -77,10 +77,10 @@ public class Game {
          player.update(Game.getPlayers());
          //some things
       }
-      broadcast(jsonAns.toJSONString());
+      broadcast(jsonAns);
    }
 
-   protected static void broadcast(String message) {
+   protected static void broadcast(JSONObject message) {
       for (Player player : Game.getPlayers()) {
          try {
             player.sendMessage(message);
