@@ -16,7 +16,11 @@ public class Game {
 
    private static long tickValue = 1;
 
-   private static final long TICK_DELAY = 60;
+   private static int saveToDBTick = 1;
+
+   private static int DB_SAVE_DELAY = 20;
+
+   private static final long TICK_DELAY = 50;
 
    private static final ConcurrentHashMap<Long, Player> players =
            new ConcurrentHashMap<>();
@@ -36,7 +40,7 @@ public class Game {
 
 
    protected static Player findPlayerBySid(String sid) {
-      for (Player player : Game.getPlayers()) {
+      for (Player player : getPlayers()) {
          if (player.getSid().equals(sid)) {
             return player;
          }
@@ -55,7 +59,7 @@ public class Game {
 
    protected static JSONArray getActors(double x, double y) {
       JSONArray jsonAns = new JSONArray();
-      for (Player player : Game.getPlayers()) {
+      for (Player player : getPlayers()) {
          if (Math.abs(player.getLocation().x - x) > GameMap.SIGHT_RADIUS
                  && Math.abs(player.getLocation().y - y) > GameMap.SIGHT_RADIUS)
             continue;
@@ -66,7 +70,7 @@ public class Game {
          jsonPlayer.put("y", player.getLocation().y);
          jsonAns.add(jsonPlayer);
       }
-      for (Monster monster : Game.getMonsters()) {
+      for (Monster monster : getMonsters()) {
          if (Math.abs(monster.getLocation().x - x) > GameMap.SIGHT_RADIUS
                  && Math.abs(monster.getLocation().y - y) > GameMap.SIGHT_RADIUS)
             continue;
@@ -102,19 +106,22 @@ public class Game {
    protected static void tick() {
       JSONObject jsonAns = new JSONObject();
       tickValue++;
+      saveToDBTick++;
       jsonAns.put("tick", tickValue);
-      // TODO сохранять реже
-      for (Player player : Game.getPlayers()) {
-         player.saveStateToBD();
-      }
-      for (Monster monster : Game.getMonsters()) {
-         monster.saveStateToBD();
+      if (saveToDBTick >= DB_SAVE_DELAY) {
+         for (Player player : getPlayers()) {
+            player.saveStateToBD();
+         }
+         for (Monster monster : getMonsters()) {
+            monster.saveStateToBD();
+         }
+         saveToDBTick = 0;
       }
       broadcast(jsonAns);
    }
 
    protected static void broadcast(JSONObject message) {
-      for (Player player : Game.getPlayers()) {
+      for (Player player : getPlayers()) {
          try {
             player.sendMessage(message);
          } catch (IllegalStateException ise) {

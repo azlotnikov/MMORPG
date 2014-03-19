@@ -40,18 +40,21 @@ View.prototype.updateView = function (playerId) {
     // TODO Нужно эффективно узнавать координаты своего игрока
     var a;
     var mainActorId;
+    var swapActor = false;
     for (a in this.actors) {
         if (this.actors[a].id == playerId) {
             offsetX = this.actors[a].x;
             offsetY = this.actors[a].y;
             mainActorId = a;
+            swapActor = true;
             break;
         }
     }
-
-    var mainActor = this.actors[mainActorId];
-    delete this.actors[mainActorId];
-    this.actors.push(mainActor);
+    if (swapActor) {
+        var mainActor = this.actors[mainActorId];
+        delete this.actors[mainActorId];
+        this.actors.push(mainActor);
+    }
 
     var curHeight = -(offsetY % 1) * TILE_SIZE;
     var curWidth;
