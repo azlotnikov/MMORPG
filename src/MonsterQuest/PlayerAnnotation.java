@@ -172,6 +172,7 @@ public class PlayerAnnotation {
             } else
                try {
                   jsonAns = getLogout();
+                  player.saveStateToBD();
                   player.getSession().close();
                } catch (Throwable e) {
                }

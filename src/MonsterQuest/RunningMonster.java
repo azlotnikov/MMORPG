@@ -4,7 +4,7 @@ package MonsterQuest;
  * Created by Alexander on 3/18/14.
  */
 public class RunningMonster extends Monster{
-    private static final double step = 0.015;
+    private static final double step = 0.025;
     private Direction direction;
 
     public RunningMonster(Location location, Direction direction, String name, long id){

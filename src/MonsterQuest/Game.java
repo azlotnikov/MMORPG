@@ -117,6 +117,9 @@ public class Game {
          }
          saveToDBTick = 0;
       }
+      for (Monster monster : getMonsters()) {
+         monster.move();
+      }
       broadcast(jsonAns);
    }
 
@@ -140,6 +143,7 @@ public class Game {
       GameMap.loadWorldMap();
       GameDictionary.loadDictionary();
       Game.loadMonsters();
+//      MonsterDB.insertManyMonsters();
       gameTimer = new Timer(Game.class.getSimpleName() + " Timer");
       gameTimer.scheduleAtFixedRate(new TimerTask() {
          @Override
