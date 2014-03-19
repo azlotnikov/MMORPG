@@ -39,15 +39,19 @@ View.prototype.updateView = function (playerId) {
     var offsetY;
     // TODO Нужно эффективно узнавать координаты своего игрока
     var a;
-    var mainActor;
+    var mainActorId;
     for (a in this.actors) {
         if (this.actors[a].id == playerId) {
             offsetX = this.actors[a].x;
             offsetY = this.actors[a].y;
-            mainActor = a;
+            mainActorId = a;
             break;
         }
     }
+
+    var mainActor = this.actors[mainActorId];
+    delete this.actors[mainActorId];
+    this.actors.push(mainActor);
 
     var curHeight = -(offsetY % 1) * TILE_SIZE;
     var curWidth;
