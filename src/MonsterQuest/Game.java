@@ -71,8 +71,8 @@ public class Game {
          jsonAns.add(jsonPlayer);
       }
       for (Monster monster : getMonsters()) {
-         if (Math.abs(monster.getLocation().x - x) > GameMap.SIGHT_RADIUS
-                 && Math.abs(monster.getLocation().y - y) > GameMap.SIGHT_RADIUS)
+         if (Math.abs(monster.getLocation().x - x) > GameMap.SIGHT_RADIUS_X
+                 && Math.abs(monster.getLocation().y - y) > GameMap.SIGHT_RADIUS_Y)
             continue;
          JSONObject jsonPlayer = new JSONObject();
          jsonPlayer.put("type", "monster");
