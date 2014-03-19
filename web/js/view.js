@@ -1,10 +1,11 @@
-var SIGHT_RADIUS = 10;
+var SIGHT_RADIUS_X = 12;
+var SIGHT_RADIUS_Y = 8;
 var TILE_SIZE = 32;
 
 function View() {
     this.stage = new PIXI.Stage(0x000000, true);
-    this.renderer = PIXI.autoDetectRenderer(SIGHT_RADIUS * 2 * TILE_SIZE, SIGHT_RADIUS * 2 * TILE_SIZE);
-
+    this.renderer = PIXI.autoDetectRenderer(SIGHT_RADIUS_X * 2 * TILE_SIZE, SIGHT_RADIUS_Y * 2 * TILE_SIZE);
+    // todo чтобы влезал в экран
     this.atlas = PIXI.BaseTexture.fromImage('img/tileset.png');
     this.textures = {
         'grass': new PIXI.Texture(this.atlas, new PIXI.Rectangle(22 * TILE_SIZE, 16 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
@@ -72,8 +73,8 @@ View.prototype.updateView = function (playerId) {
     var t;
     for (t in this.actors) {
         this.drawTile(
-            (this.actors[t].x - offsetX + SIGHT_RADIUS) * TILE_SIZE - TILE_SIZE / 2,
-            (this.actors[t].y - offsetY + SIGHT_RADIUS) * TILE_SIZE - TILE_SIZE / 2,
+            (this.actors[t].x - offsetX + SIGHT_RADIUS_X) * TILE_SIZE - TILE_SIZE / 2,
+            (this.actors[t].y - offsetY + SIGHT_RADIUS_Y) * TILE_SIZE - TILE_SIZE / 2,
             this.actors[t].type
         );
     }

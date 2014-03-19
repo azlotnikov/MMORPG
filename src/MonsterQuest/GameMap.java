@@ -14,7 +14,8 @@ import java.sql.*;
 
 public class GameMap {
 
-   public static final int SIGHT_RADIUS = 10; //TODO Задокументировать облаcть видимости
+   public static final int SIGHT_RADIUS_X = 12; //TODO Задокументировать облаcть видимости
+   public static final int SIGHT_RADIUS_Y = 8;
 
    private static char[][] worldMap;
 
@@ -51,9 +52,9 @@ public class GameMap {
    public static JSONArray mapToJson(int x, int y) {
       JSONArray jsonResult = new JSONArray();
       JSONArray jsonLine;
-      for (int i = y - SIGHT_RADIUS; i <= y + SIGHT_RADIUS; i++) {
+      for (int i = y - SIGHT_RADIUS_Y; i <= y + SIGHT_RADIUS_Y; i++) {
          jsonLine = new JSONArray();
-          for (int j = x - SIGHT_RADIUS; j <= x + SIGHT_RADIUS; j++) {
+          for (int j = x - SIGHT_RADIUS_X; j <= x + SIGHT_RADIUS_X; j++) {
               String symbol = String.valueOf('#');
               if (i > 0 && i < worldMap.length && j > 0 && j < worldMap[0].length) {
                   symbol = String.valueOf(worldMap[i][j]);
@@ -79,11 +80,11 @@ public class GameMap {
                "##############################".toCharArray()
               ,"#...#........................#".toCharArray()
               ,"#...#................###.###.#".toCharArray()
-              ,"#...###..............#.....#.#".toCharArray()
-              ,"#....................#.....#.#".toCharArray()
-              ,"#######..............#.....#.#".toCharArray()
-              ,"#.....#.........#########..#.#".toCharArray()
-              ,"#.....#.........#..........#.#".toCharArray()
+              ,"#...###.###..........#.....#.#".toCharArray()
+              ,"#.........#..........#.....#.#".toCharArray()
+              ,"#..#.....##..........#.....#.#".toCharArray()
+              ,"#..##.##........#########..#.#".toCharArray()
+              ,"#...............#..........#.#".toCharArray()
               ,"#..####.........#..........#.#".toCharArray()
               ,"#..#............#.....######.#".toCharArray()
               ,"#..#..................#......#".toCharArray()
