@@ -116,8 +116,11 @@ public class PlayerAnnotation {
 
          case "examine": {
             Player examPlayer = Game.ExaminePlayer((long) jsonMsg.get("id"));
+            Monster examMonster = Game.ExamineMonster((long) jsonMsg.get("id"));
             if (examPlayer != null) {
                jsonAns = examPlayer.examine();
+            } else if (examMonster != null) {
+               jsonAns = examMonster.examine();
             } else {
                jsonAns = getBadId();
             }

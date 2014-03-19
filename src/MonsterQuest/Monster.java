@@ -1,5 +1,7 @@
 package MonsterQuest;
 
+import org.json.simple.JSONObject;
+
 /**
  * Created by Alexander on 3/18/14.
  */
@@ -18,6 +20,17 @@ public abstract class Monster {
 
    public void saveStateToBD() {
       MonsterDB.saveMonsterStateToDB(this);
+   }
+
+   public JSONObject examine() {
+      JSONObject result = new JSONObject();
+      result.put("action", "examine");
+      result.put("id", id);
+      result.put("type", "monster");
+      result.put("x", location.x);
+      result.put("y", location.y);
+      result.put("result", "ok");
+      return result;
    }
 
    public abstract void move();
