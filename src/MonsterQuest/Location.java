@@ -26,8 +26,13 @@ public class Location {
            case SOUTH:
                for (Player player : Game.getPlayers())
                    if ((player.getLocation().x != x || player.getLocation().y != y)
-                       && Math.abs(player.getLocation().x - x) < 1.0
-                       && Math.abs(player.getLocation().y - y - velocity) < 1.0)
+                           && Math.abs(player.getLocation().x - x) < 1.0
+                           && Math.abs(player.getLocation().y - y - velocity) < 1.0)
+                       return true;
+               for (Monster monster: Game.getMonsters())
+                   if ((monster.getLocation().x != x || monster.getLocation().y != y)
+                           && Math.abs(monster.getLocation().x - x) < 1.0
+                           && Math.abs(monster.getLocation().y - y - velocity) < 1.0)
                        return true;
                break;
            case WEST:
@@ -36,6 +41,11 @@ public class Location {
                    if ((player.getLocation().x != x || player.getLocation().y != y)
                        && Math.abs(player.getLocation().y - y) < 1.0
                        && Math.abs(player.getLocation().x - x - velocity) < 1.0)
+                       return true;
+               for (Monster monster: Game.getMonsters())
+                   if ((monster.getLocation().x != x || monster.getLocation().y != y)
+                           && Math.abs(monster.getLocation().y - y) < 1.0
+                           && Math.abs(monster.getLocation().x - x - velocity) < 1.0)
                        return true;
                break;
        }
