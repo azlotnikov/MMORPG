@@ -19,6 +19,29 @@ public class Location {
       return (location.x == this.x && location.y == this.y);
    }
 
+   public boolean isActiveObjectInFront(Direction direction, double velocity)
+   {
+       switch (direction) {
+           case NORTH:
+           case SOUTH:
+               for (Player player : Game.getPlayers())
+                   if ((player.getLocation().x != x || player.getLocation().y != y)
+                       && Math.abs(player.getLocation().x - x) < 1.0
+                       && Math.abs(player.getLocation().y - y - velocity) < 1.0)
+                       return true;
+               break;
+           case WEST:
+           case EAST:
+               for (Player player : Game.getPlayers())
+                   if ((player.getLocation().x != x || player.getLocation().y != y)
+                       && Math.abs(player.getLocation().y - y) < 1.0
+                       && Math.abs(player.getLocation().x - x - velocity) < 1.0)
+                       return true;
+               break;
+       }
+       return false;
+   }
+
    public Location getNewLocation(Direction direction, double velocity) {
       double eps = 0.15;
       double left = x - playerSize / 2;
@@ -32,6 +55,8 @@ public class Location {
             velocity *= -1;
             vFront = top;
          case SOUTH:
+             if (isActiveObjectInFront(direction, velocity))
+                 return new Location(x, y);
              if (GameMap.canEnterTile((int)left, (int) (vFront + velocity))
               && GameMap.canEnterTile((int)right, (int) (vFront + velocity)))
                  return new Location(x, y + velocity);
@@ -44,6 +69,8 @@ public class Location {
             velocity *= -1;
             hFront = left;
          case EAST:
+            if (isActiveObjectInFront(direction,velocity))
+                 return new Location(x, y);
             if (GameMap.canEnterTile((int) (hFront + velocity), (int)top)
              && GameMap.canEnterTile((int) (hFront + velocity), (int)bottom))
                 return new Location(x + velocity, y);
