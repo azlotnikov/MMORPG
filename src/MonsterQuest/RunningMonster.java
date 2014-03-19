@@ -7,8 +7,8 @@ public class RunningMonster extends Monster{
     private static final double step = 0.015;
     private Direction direction;
 
-    public RunningMonster(Location location, Direction direction){
-        super(MonsterType.RUNNING_MONSTER, location);
+    public RunningMonster(Location location, Direction direction, String name, long id){
+        super(MonsterType.RUNNING_MONSTER, location, name, id);
         this.direction = direction;
     }
 

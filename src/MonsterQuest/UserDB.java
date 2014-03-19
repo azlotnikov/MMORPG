@@ -47,7 +47,7 @@ public class UserDB {
          stmt.setString(3, sid);
          stmt.setDouble(4, posX);
          stmt.setDouble(5, posY);
-         stmt.setInt(6, 1); //!
+         stmt.setLong(6, 1); //!
          stmt.executeUpdate();
          // TODO fix this shit
          stmt = connector.prepareStatement("UPDATE users SET game_id = id WHERE login = ?");

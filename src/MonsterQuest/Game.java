@@ -20,6 +20,8 @@ public class Game {
 
    private static final ConcurrentHashMap<Long, Player> players =
            new ConcurrentHashMap<>();
+   private static final ConcurrentHashMap<Long, Monster> monsters =
+           new ConcurrentHashMap<>();
 
    protected static synchronized void addPlayer(Player player) {
       if (players.size() == 0) {
@@ -27,6 +29,11 @@ public class Game {
       }
       players.put(player.getId(), player);
    }
+
+   protected static synchronized void addMonster(Monster monster) {
+      monsters.put(monster.getId(), monster);
+   }
+
 
    protected static Player findPlayerBySid(String sid) {
       for (Player player : Game.getPlayers()) {
@@ -42,6 +49,10 @@ public class Game {
       return Collections.unmodifiableCollection(players.values());
    }
 
+   protected static Collection<Monster> getMonsters() {
+      return Collections.unmodifiableCollection(monsters.values());
+   }
+
    protected static JSONArray getActors(double x, double y) {
       JSONArray jsonAns = new JSONArray();
       for (Player player : Game.getPlayers()) {
@@ -55,11 +66,26 @@ public class Game {
          jsonPlayer.put("y", player.getLocation().y);
          jsonAns.add(jsonPlayer);
       }
+      for (Monster monster : Game.getMonsters()) {
+         if (Math.abs(monster.getLocation().x - x) > GameMap.SIGHT_RADIUS
+                 && Math.abs(monster.getLocation().y - y) > GameMap.SIGHT_RADIUS)
+            continue;
+         JSONObject jsonPlayer = new JSONObject();
+         jsonPlayer.put("type", "monster");
+         jsonPlayer.put("id", monster.getId());
+         jsonPlayer.put("x", monster.getLocation().x);
+         jsonPlayer.put("y", monster.getLocation().y);
+         jsonAns.add(jsonPlayer);
+      }
       return jsonAns;
    }
 
    protected static Player ExaminePlayer(long playerId) {
       return players.get(playerId);
+   }
+
+   protected static Monster ExamineMonster(long monsterId) {
+      return monsters.get(monsterId);
    }
 
    protected static synchronized void removePlayer(Player player) {
@@ -69,13 +95,20 @@ public class Game {
       }
    }
 
+   protected static synchronized void removeMonster(Monster monster) {
+      monsters.remove(monster.getId());
+   }
+
    protected static void tick() {
       JSONObject jsonAns = new JSONObject();
       tickValue++;
       jsonAns.put("tick", tickValue);
+      // TODO сохранять реже
       for (Player player : Game.getPlayers()) {
-         player.update(Game.getPlayers());
-         //some things
+         player.saveStateToBD();
+      }
+      for (Monster monster : Game.getMonsters()) {
+         monster.saveStateToBD();
       }
       broadcast(jsonAns);
    }
@@ -89,10 +122,17 @@ public class Game {
       }
    }
 
+   private static void loadMonsters() {
+      for (Monster monster : MonsterDB.loadMonstersFromDB()) {
+         Game.addMonster(monster);
+      }
+   }
+
    public static void startTimer() {
       GameMap.saveToBdDemoMap();
       GameMap.loadWorldMap();
       GameDictionary.loadDictionary();
+      Game.loadMonsters();
       gameTimer = new Timer(Game.class.getSimpleName() + " Timer");
       gameTimer.scheduleAtFixedRate(new TimerTask() {
          @Override

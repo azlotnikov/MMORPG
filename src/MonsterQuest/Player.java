@@ -26,7 +26,7 @@ public class Player {
       this.location = location;
    }
 
-   private void saveStateToBD() {
+   public void saveStateToBD() {
       UserDB user = new UserDB();
       user.setLocation(location);
       user.setSid(sid);
@@ -63,9 +63,9 @@ public class Player {
       this.location = location;
    }
 
-   public synchronized void update(Collection<Player> players) {
-      saveStateToBD();
-   }
+//   public synchronized void update(Collection<Player> players) {
+//      saveStateToBD();
+//   }
 
    public synchronized boolean logout() {
       UserDB user = new UserDB();
