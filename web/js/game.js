@@ -7,6 +7,7 @@ function Game() {
     this.tick = -1;
     this.prevTick = -1;
     this.keysDown = {};
+    this.actorsMap = [];
 }
 
 Game.prototype.initGame = function () {
@@ -145,6 +146,28 @@ document.onkeyup = function (e) {
     if (code > 36 && code < 41) {
         game.keysDown[code] = false;
         e.preventDefault();
+    }
+};
+
+function fixPageXY(e) {
+    if (e.pageX == null && e.clientX != null ) {
+        var html = document.documentElement;
+        var body = document.body;
+        e.pageX = e.clientX + (html.scrollLeft || body && body.scrollLeft || 0);
+        e.pageX -= html.clientLeft || 0;
+        e.pageY = e.clientY + (html.scrollTop || body && body.scrollTop || 0);
+        e.pageY -= html.clientTop || 0;
+    }
+};
+
+document.onclick = function(e) {
+    e = e || window.event;
+    fixPageXY(e);
+    //alert(game.actorsMap[Math.floor(e.pageY / TILE_SIZE)][Math.floor(e.pageX / TILE_SIZE)]);
+    var id = game.actorsMap[Math.floor(e.pageY / TILE_SIZE)][Math.floor(e.pageX / TILE_SIZE)];
+    // TODO Поиск объекта в области
+    if (id) {
+        game.examine(id);
     }
 };
 

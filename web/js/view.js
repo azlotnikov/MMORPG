@@ -39,20 +39,30 @@ View.prototype.updateView = function (playerId) {
     var curWidth;
     var i;
     var j;
+    var x = 0;
+    game.actorsMap = [];
     for (i in this.map) {
         curWidth = -(this.x % 1) * TILE_SIZE;
+        game.actorsMap[x] = [];
+        y = 0;
         for (j in this.map[i]) {
             this.drawTile(curWidth, curHeight, this.dictionary[this.map[i][j]]);
             curWidth += TILE_SIZE;
+            game.actorsMap[x][y++] = 0;
         }
         curHeight += TILE_SIZE;
+        x++;
     }
-
     var t;
+    var offsetX;
+    var offsetY;
     for (t in this.actors) {
+        var offsetX = this.actors[t].x - this.x + SIGHT_RADIUS_X;
+        var offsetY = this.actors[t].y - this.y + SIGHT_RADIUS_Y;
+        game.actorsMap[Math.floor(offsetY)][Math.floor(offsetX)] = this.actors[t].id;
         this.drawTile(
-            (this.actors[t].x - this.x + SIGHT_RADIUS_X) * TILE_SIZE - TILE_SIZE / 2,
-            (this.actors[t].y - this.y + SIGHT_RADIUS_Y) * TILE_SIZE - TILE_SIZE / 2,
+            offsetX * TILE_SIZE - TILE_SIZE / 2,
+            offsetY * TILE_SIZE - TILE_SIZE / 2,
             this.actors[t].type
         );
     }
@@ -62,7 +72,7 @@ View.prototype.updateView = function (playerId) {
         SIGHT_RADIUS_Y * TILE_SIZE - TILE_SIZE / 2,
         "player"
     );
-
+    game.actorsMap[SIGHT_RADIUS_Y][SIGHT_RADIUS_X] = game.playerId;
     this.renderer.render(this.stage);
 };
 
