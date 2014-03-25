@@ -35,34 +35,12 @@ View.prototype.drawTile = function (x, y, textureName) {
 
 View.prototype.updateView = function (playerId) {
     this.clearView();
-
-    var offsetX;
-    var offsetY;
-    // TODO Нужно эффективно узнавать координаты своего игрока
-    var a;
-    var mainActorId;
-    var swapActor = false;
-    for (a in this.actors) {
-        if (this.actors[a].id == playerId) {
-            offsetX = this.actors[a].x;
-            offsetY = this.actors[a].y;
-            mainActorId = a;
-            swapActor = true;
-            break;
-        }
-    }
-    if (swapActor) {
-        var mainActor = this.actors[mainActorId];
-        delete this.actors[mainActorId];
-        this.actors.push(mainActor);
-    }
-
-    var curHeight = -(offsetY % 1) * TILE_SIZE;
+    var curHeight = -(this.y % 1) * TILE_SIZE;
     var curWidth;
     var i;
     var j;
     for (i in this.map) {
-        curWidth = -(offsetX % 1) * TILE_SIZE;
+        curWidth = -(this.x % 1) * TILE_SIZE;
         for (j in this.map[i]) {
             this.drawTile(curWidth, curHeight, this.dictionary[this.map[i][j]]);
             curWidth += TILE_SIZE;
@@ -73,11 +51,17 @@ View.prototype.updateView = function (playerId) {
     var t;
     for (t in this.actors) {
         this.drawTile(
-            (this.actors[t].x - offsetX + SIGHT_RADIUS_X) * TILE_SIZE - TILE_SIZE / 2,
-            (this.actors[t].y - offsetY + SIGHT_RADIUS_Y) * TILE_SIZE - TILE_SIZE / 2,
+            (this.actors[t].x - this.x + SIGHT_RADIUS_X) * TILE_SIZE - TILE_SIZE / 2,
+            (this.actors[t].y - this.y + SIGHT_RADIUS_Y) * TILE_SIZE - TILE_SIZE / 2,
             this.actors[t].type
         );
     }
+
+    this.drawTile(
+        SIGHT_RADIUS_X * TILE_SIZE - TILE_SIZE / 2,
+        SIGHT_RADIUS_Y * TILE_SIZE - TILE_SIZE / 2,
+        "player"
+    );
 
     this.renderer.render(this.stage);
 };
@@ -95,6 +79,11 @@ View.prototype.setActors = function (actors) {
 
 View.prototype.setDictionary = function (dictionary) {
     this.dictionary = dictionary;
+};
+
+View.prototype.setPlayerLocation = function (x, y) {
+    this.x = x;
+    this.y = y;
 };
 
 View.prototype.setMap = function (map) {

@@ -70,8 +70,10 @@ public class PlayerAnnotation {
       result.put("action", "look");
       result.put("result", "ok");
       result.put("map", getMap((int) player.getLocation().x, (int) player.getLocation().y));
-      result.put("actors", Game.getActors(player.getLocation().x, player.getLocation().y));
-      return result;
+      result.put("actors", Game.getActors(player.getLocation()));
+      result.put("x", player.getLocation().x);
+      result.put("y", player.getLocation().y);
+       return result;
    }
 
    public JSONArray getMap(int x, int y) {

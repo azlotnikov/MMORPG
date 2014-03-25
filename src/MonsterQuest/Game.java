@@ -57,11 +57,12 @@ public class Game {
       return Collections.unmodifiableCollection(monsters.values());
    }
 
-   protected static JSONArray getActors(double x, double y) {
+   protected static JSONArray getActors(Location location) {
       JSONArray jsonAns = new JSONArray();
       for (Player player : Game.getPlayers()) {
-         if (Math.abs(player.getLocation().x - x) > GameMap.SIGHT_RADIUS_X
-                 && Math.abs(player.getLocation().y - y) > GameMap.SIGHT_RADIUS_Y)
+         if (Math.abs(player.getLocation().x - location.x) > GameMap.SIGHT_RADIUS_X
+                 && Math.abs(player.getLocation().y - location.y) > GameMap.SIGHT_RADIUS_Y
+             || location.equal(player.getLocation()))
             continue;
          JSONObject jsonPlayer = new JSONObject();
          jsonPlayer.put("type", "player");
@@ -71,8 +72,8 @@ public class Game {
          jsonAns.add(jsonPlayer);
       }
       for (Monster monster : getMonsters()) {
-         if (Math.abs(monster.getLocation().x - x) > GameMap.SIGHT_RADIUS_X
-                 && Math.abs(monster.getLocation().y - y) > GameMap.SIGHT_RADIUS_Y)
+         if (Math.abs(monster.getLocation().x - location.x) > GameMap.SIGHT_RADIUS_X
+                 && Math.abs(monster.getLocation().y - location.y) > GameMap.SIGHT_RADIUS_Y)
             continue;
          JSONObject jsonPlayer = new JSONObject();
          jsonPlayer.put("type", "monster");

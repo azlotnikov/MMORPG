@@ -108,6 +108,7 @@ Game.prototype.receiveMsg = function (msg) {
         case 'look':
             this.view.setMap(msg.map);
             this.view.setActors(msg.actors);
+            this.view.setPlayerLocation(msg.x, msg.y);
             break;
     }
 };
