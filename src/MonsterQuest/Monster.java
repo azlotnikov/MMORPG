@@ -8,14 +8,17 @@ import org.json.simple.JSONObject;
 public class Monster {
    protected final long id;
    protected final String name;
+   protected final String type;
    protected final double hp;
    protected final BehaviorType behavior;
    protected final double speed;
    protected Location location;
+   protected Direction direction = Direction.WEST;
 
-   public Monster(long id, String name, double hp, BehaviorType behavior, double speed, Location location)  {
+   public Monster(long id, String name, String type, double hp, BehaviorType behavior, double speed, Location location)  {
       this.location = location;
       this.name = name;
+      this.type = type;
       this.id = id;
       this.hp = hp;
       this.behavior = behavior;
@@ -23,31 +26,32 @@ public class Monster {
    }
 
    public void move(){
-//      Location newLocation = location.getNewLocation(direction, speed);
-//      if (super.location.equal(newLocation))
-//         switch (direction) {
-//            case NORTH:
-//               direction = Direction.SOUTH;
-//               break;
-//            case SOUTH:
-//               direction = Direction.NORTH;
-//               break;
-//            case WEST:
-//               direction = Direction.EAST;
-//               break;
-//            case EAST:
-//               direction = Direction.WEST;
-//               break;
-//         }
-//      else
-//         super.location = newLocation;
+      Location newLocation = location.getNewLocation(direction, speed);
+      if (location.equal(newLocation))
+         switch (direction) {
+            case NORTH:
+               direction = Direction.SOUTH;
+               break;
+            case SOUTH:
+               direction = Direction.NORTH;
+               break;
+            case WEST:
+               direction = Direction.EAST;
+               break;
+            case EAST:
+               direction = Direction.WEST;
+               break;
+         }
+      else
+         location = newLocation;
    }
 
    public JSONObject examine() {
       JSONObject result = new JSONObject();
       result.put("action", "examine");
       result.put("id", id);
-      result.put("type", "monster");
+      result.put("name", name);
+      result.put("type", type);
       result.put("x", location.x);
       result.put("y", location.y);
       result.put("result", "ok");
@@ -60,6 +64,9 @@ public class Monster {
 
    public String getName() {
       return name;
+   }
+   public String getType() {
+      return type;
    }
 
    public long getId() {

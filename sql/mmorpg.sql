@@ -83,8 +83,34 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- Дамп данных таблицы `users`
 --
 
-INSERT INTO `users` (`id`, `login`, `password`, `sid`, `game_id`, `pos_x`, `pos_y`) VALUES
-  (1, 'gamer', 'e10adc3949ba59abbe56e057f20f883e', '-1', 1, 4.8469999999999995, 4.693999999999999);
+INSERT INTO `users` (`id`, `login`, `password`, `sid`, `pos_x`, `pos_y`) VALUES
+  (1, 'gamer', 'e10adc3949ba59abbe56e057f20f883e', '-1', 12.382000000000033, 4.472999999999921);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `monster_types`
+--
+
+# DROP TABLE `monster_types`;
+
+CREATE TABLE IF NOT EXISTS `monster_types` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `type` varchar(100) NOT NULL,
+  `speed` double NOT NULL,
+  `hit_points` double NOT NULL,
+  `behavior_type` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+--
+-- Дамп данных таблицы `monster_types`
+--
+
+INSERT INTO `monster_types` (`id`, `name`, `type`, `speed`, `hit_points`, `behavior_type`) VALUES
+  (1, 'Goblin', 'goblin', 0.025, 500, 1),
+  (2, 'Ogr', 'ogr', 0.065, 1000, 1);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

@@ -52,7 +52,7 @@ public class Player {
       result.put("action", "examine");
       result.put("id", id);
       result.put("type", "player");
-      result.put("login", login);
+      result.put("name", login);
       result.put("x", location.x);
       result.put("y", location.y);
       result.put("result", "ok");

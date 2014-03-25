@@ -42,7 +42,7 @@ public class Game {
    }
 
    protected static Monster createMonster(MonsterDB monsterType, Location location) {
-      return new Monster(getNextGlobalId(), monsterType.getName(), monsterType.getHp(),
+      return new Monster(getNextGlobalId(), monsterType.getName(), monsterType.getType(), monsterType.getHp(),
               monsterType.getBehavior(), monsterType.getSpeed(), location);
    }
 
@@ -83,7 +83,7 @@ public class Game {
                  && Math.abs(monster.getLocation().y - location.y) > GameMap.SIGHT_RADIUS_Y)
             continue;
          JSONObject jsonPlayer = new JSONObject();
-         jsonPlayer.put("type", "monster");
+         jsonPlayer.put("type", monster.getType());
          jsonPlayer.put("id", monster.getId());
          jsonPlayer.put("x", monster.getLocation().x);
          jsonPlayer.put("y", monster.getLocation().y);
@@ -102,9 +102,6 @@ public class Game {
 
    protected static synchronized void removePlayer(Player player) {
       players.remove(player.getId());
-      if (players.size() == 0) {
-         stopTimer();
-      }
    }
 
    protected static synchronized void removeMonster(Monster monster) {
@@ -148,6 +145,8 @@ public class Game {
       GameMap.loadWorldMap();
       GameDictionary.loadDictionary();
       Game.loadMonsterTypes();
+      addMonster(createMonster(monsterTypes.get(0), new Location(13, 3)));
+      addMonster(createMonster(monsterTypes.get(1), new Location(13, 6)));
       gameTimer = new Timer(Game.class.getSimpleName() + " Timer");
       gameTimer.scheduleAtFixedRate(new TimerTask() {
          @Override

@@ -12,13 +12,15 @@ import java.util.Iterator;
 public class MonsterDB {
 
    private final String name;
+   private final String type;
    private final double hp;
    private final BehaviorType behavior;
    private final double speed;
 
-   public MonsterDB(String name, double hp, BehaviorType behavior, double speed) {
+   public MonsterDB(String name, String type, double hp, BehaviorType behavior, double speed) {
       this.name = name;
       this.hp = hp;
+      this.type = type;
       this.behavior = behavior;
       this.speed = speed;
    }
@@ -32,6 +34,7 @@ public class MonsterDB {
          while (rs.next()) {
             MonsterDB monster = new MonsterDB(
                     rs.getString("name"),
+                    rs.getString("type"),
                     rs.getDouble("hit_points"),
                     BehaviorType.BH_SIMPLE,
                     rs.getDouble("speed")
@@ -59,5 +62,9 @@ public class MonsterDB {
 
    public double getSpeed() {
       return speed;
+   }
+
+   public String getType() {
+      return type;
    }
 }
