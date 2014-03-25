@@ -7,7 +7,6 @@ function Game() {
     this.tick = -1;
     this.prevTick = -1;
     this.keysDown = {};
-    this.actorsMap = [];
 }
 
 Game.prototype.initGame = function () {
@@ -111,6 +110,9 @@ Game.prototype.receiveMsg = function (msg) {
             this.view.setActors(msg.actors);
             this.view.setPlayerLocation(msg.x, msg.y);
             break;
+        case 'examine':
+            msg;
+            break;
     }
 };
 
@@ -163,11 +165,19 @@ function fixPageXY(e) {
 document.onclick = function(e) {
     e = e || window.event;
     fixPageXY(e);
-    //alert(game.actorsMap[Math.floor(e.pageY / TILE_SIZE)][Math.floor(e.pageX / TILE_SIZE)]);
-    var id = game.actorsMap[Math.floor(e.pageY / TILE_SIZE)][Math.floor(e.pageX / TILE_SIZE)];
-    // TODO Поиск объекта в области
+    var id = game.GetActorID(e.pageX / TILE_SIZE, e.pageY / TILE_SIZE);
     if (id) {
         game.examine(id);
+    }
+};
+
+Game.prototype.GetActorID = function (x, y) {
+    var i;
+    for(i in game.view.actors){
+        if (Math.abs(x - game.view.actors[i].x + game.view.x - SIGHT_RADIUS_X) < 0.5
+         && Math.abs(y - game.view.actors[i].y + game.view.y - SIGHT_RADIUS_Y) < 0.5){
+            return game.view.actors[i].id;
+        }
     }
 };
 
