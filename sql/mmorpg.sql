@@ -25,6 +25,7 @@ SET time_zone = "+00:00";
 --
 -- Структура таблицы `dictionary`
 --
+DROP TABLE `dictionary`;
 
 CREATE TABLE IF NOT EXISTS `dictionary` (
   `char_value` char(1) NOT NULL,
@@ -44,6 +45,7 @@ INSERT INTO `dictionary` (`char_value`, `description`) VALUES
 --
 -- Структура таблицы `game_data`
 --
+DROP TABLE `game_data`;
 
 CREATE TABLE IF NOT EXISTS `game_data` (
   `map` blob NOT NULL
@@ -61,7 +63,7 @@ INSERT INTO `game_data` (`map`) VALUES
 --
 -- Структура таблицы `monster_types`
 --
-
+drop table `monster_types`;
 CREATE TABLE IF NOT EXISTS `monster_types` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
@@ -86,6 +88,7 @@ INSERT INTO `monster_types` (`id`, `name`, `type`, `speed`, `hit_points`, `behav
 -- Структура таблицы `users`
 --
 
+DROP TABLE `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `login` varchar(100) NOT NULL,
