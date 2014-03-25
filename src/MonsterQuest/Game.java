@@ -17,6 +17,8 @@ public class Game {
 
    private static long tickValue = 1;
 
+   private static boolean started = false;
+
    private static int saveToDBTick = 1;
 
    private static final int DB_SAVE_DELAY = 20;
@@ -31,7 +33,7 @@ public class Game {
    private static final ArrayList<MonsterDB> monsterTypes = new ArrayList<>();
 
    protected static synchronized void addPlayer(Player player) {
-      if (players.size() == 0) {
+      if (!started) {
          startTimer();
       }
       players.put(player.getId(), player);
@@ -141,6 +143,7 @@ public class Game {
    }
 
    public static void startTimer() {
+      started = true;
       GameMap.saveToBdDemoMap();
       GameMap.loadWorldMap();
       GameDictionary.loadDictionary();
