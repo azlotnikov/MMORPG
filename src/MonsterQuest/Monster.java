@@ -5,21 +5,42 @@ import org.json.simple.JSONObject;
 /**
  * Created by Alexander on 3/18/14.
  */
-public abstract class Monster {
-   protected final MonsterType type;
-   protected final String name;
+public class Monster {
    protected final long id;
+   protected final String name;
+   protected final double hp;
+   protected final BehaviorType behavior;
+   protected final double speed;
    protected Location location;
 
-   public Monster(MonsterType type, Location location, String name, long id) {
-      this.type = type;
+   public Monster(long id, String name, double hp, BehaviorType behavior, double speed, Location location)  {
       this.location = location;
       this.name = name;
       this.id = id;
+      this.hp = hp;
+      this.behavior = behavior;
+      this.speed = speed;
    }
 
-   public void saveStateToBD() {
-      MonsterDB.saveMonsterStateToDB(this);
+   public void move(){
+//      Location newLocation = location.getNewLocation(direction, speed);
+//      if (super.location.equal(newLocation))
+//         switch (direction) {
+//            case NORTH:
+//               direction = Direction.SOUTH;
+//               break;
+//            case SOUTH:
+//               direction = Direction.NORTH;
+//               break;
+//            case WEST:
+//               direction = Direction.EAST;
+//               break;
+//            case EAST:
+//               direction = Direction.WEST;
+//               break;
+//         }
+//      else
+//         super.location = newLocation;
    }
 
    public JSONObject examine() {
@@ -32,8 +53,6 @@ public abstract class Monster {
       result.put("result", "ok");
       return result;
    }
-
-   public abstract void move();
 
    public Location getLocation() {
       return location;

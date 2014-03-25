@@ -94,10 +94,12 @@ public class Auth {
                user.setLogin(login);
                user.setPasswordMD5(password);
                if (user.doLogin()) {
+                  long newId = Game.getNextGlobalId();
+                  Game.setPlayerIdBySid(user.getSid(), newId);
                   jsonResponse.put("result", "ok");
                   jsonResponse.put("sid", user.getSid());
                   jsonResponse.put("webSocket", "ws://" + InetAddress.getLocalHost().getHostAddress() + ":8080/MMORPG_war_exploded/game");
-                  jsonResponse.put("id", user.getId());
+                  jsonResponse.put("id", newId);
                } else {
                   jsonResponse.put("result", "invalidCredentials");
                }

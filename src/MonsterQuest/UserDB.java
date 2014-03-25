@@ -15,7 +15,6 @@ public class UserDB {
    private String login = "";
    private String sid = "-1";
    private String passwordHash = "";
-   private long id = 0;
    private double posX = defaultPosX;
    private double posY = defaultPosY;
    private boolean badSid = true;
@@ -47,14 +46,7 @@ public class UserDB {
          stmt.setString(3, sid);
          stmt.setDouble(4, posX);
          stmt.setDouble(5, posY);
-         stmt.setLong(6, 1); //!
          stmt.executeUpdate();
-         // TODO fix this shit
-         stmt = connector.prepareStatement("UPDATE users SET game_id = id WHERE login = ?");
-         stmt.setString(1, login);
-         stmt.executeUpdate();
-         connector.close();
-         // end of shit
       } catch (Throwable e) {
 
       }
@@ -97,7 +89,6 @@ public class UserDB {
          ResultSet rs = stmt.executeQuery();
          result = rs.next();
          if (result) {
-            id = rs.getInt("id");
             stmt = connector.prepareStatement("UPDATE users SET sid = ? WHERE LOWER(login) = ?");
             sid = UUID.randomUUID().toString();
             stmt.setString(1, sid);
@@ -138,12 +129,11 @@ public class UserDB {
       badSid = true;
       try {
          Connection connector = DBInfo.createConnection();
-         PreparedStatement stmt = connector.prepareStatement("SELECT login, game_id, pos_x, pos_y  FROM users WHERE sid = ?");
+         PreparedStatement stmt = connector.prepareStatement("SELECT login, pos_x, pos_y  FROM users WHERE sid = ?");
          stmt.setString(1, sid);
          ResultSet rs = stmt.executeQuery();
          if (rs.next()) {
             login = rs.getString("login");
-            id = rs.getInt("game_id");
             posX = rs.getDouble("pos_x");
             posY = rs.getDouble("pos_y");
             badSid = false;
@@ -190,12 +180,6 @@ public class UserDB {
 
    public String getLogin() {
       return login;
-   }
-
-   public long getId() { return id; }
-
-   public void setId(long id) {
-      this.id = id;
    }
 
    public String getSid() {

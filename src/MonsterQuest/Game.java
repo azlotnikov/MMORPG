@@ -1,10 +1,7 @@
 package MonsterQuest;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.json.simple.JSONArray;
@@ -12,13 +9,17 @@ import org.json.simple.JSONObject;
 
 public class Game {
 
+   private static final AtomicInteger globalId = new AtomicInteger(0);
+
+   private static final HashMap<String, Long> playerIdsBySid = new HashMap<>();
+
    private static Timer gameTimer = null;
 
    private static long tickValue = 1;
 
    private static int saveToDBTick = 1;
 
-   private static int DB_SAVE_DELAY = 20;
+   private static final int DB_SAVE_DELAY = 20;
 
    private static final long TICK_DELAY = 50;
 
@@ -26,6 +27,8 @@ public class Game {
            new ConcurrentHashMap<>();
    private static final ConcurrentHashMap<Long, Monster> monsters =
            new ConcurrentHashMap<>();
+
+   private static final ArrayList<MonsterDB> monsterTypes = new ArrayList<>();
 
    protected static synchronized void addPlayer(Player player) {
       if (players.size() == 0) {
@@ -38,6 +41,10 @@ public class Game {
       monsters.put(monster.getId(), monster);
    }
 
+   protected static Monster createMonster(MonsterDB monsterType, Location location) {
+      return new Monster(getNextGlobalId(), monsterType.getName(), monsterType.getHp(),
+              monsterType.getBehavior(), monsterType.getSpeed(), location);
+   }
 
    protected static Player findPlayerBySid(String sid) {
       for (Player player : getPlayers()) {
@@ -113,9 +120,6 @@ public class Game {
          for (Player player : getPlayers()) {
             player.saveStateToBD();
          }
-         for (Monster monster : getMonsters()) {
-            monster.saveStateToBD();
-         }
          saveToDBTick = 0;
       }
       for (Monster monster : getMonsters()) {
@@ -133,9 +137,9 @@ public class Game {
       }
    }
 
-   private static void loadMonsters() {
-      for (Monster monster : MonsterDB.loadMonstersFromDB()) {
-         Game.addMonster(monster);
+   private static void loadMonsterTypes() {
+      for (MonsterDB monsterDB : MonsterDB.loadMonstersFromDB()) {
+         monsterTypes.add(monsterDB);
       }
    }
 
@@ -143,8 +147,7 @@ public class Game {
       GameMap.saveToBdDemoMap();
       GameMap.loadWorldMap();
       GameDictionary.loadDictionary();
-      Game.loadMonsters();
-//      MonsterDB.insertManyMonsters();
+      Game.loadMonsterTypes();
       gameTimer = new Timer(Game.class.getSimpleName() + " Timer");
       gameTimer.scheduleAtFixedRate(new TimerTask() {
          @Override
@@ -166,6 +169,18 @@ public class Game {
 
    public static long getCurrentTick() {
       return tickValue;
+   }
+
+   public static synchronized long getNextGlobalId() {
+      return globalId.getAndIncrement();
+   }
+
+   public static long getPlayerIdBySid(String sid) {
+      return playerIdsBySid.get(sid);
+   }
+
+   public static void setPlayerIdBySid(String sid, long id) {
+      playerIdsBySid.put(sid, id);
    }
 
 }
