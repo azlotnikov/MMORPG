@@ -10,12 +10,12 @@ public class Dice {
 
     private static Random rand = new Random();
 
-    public static int Shoot(int N, int count_shoot){
+    public static int shoot(int N, int count_shoot){
         int result = 0;
         while(count_shoot > 0){
             result += rand.nextInt(N);
             count_shoot--;
         }
         return result;
-    };
+    }
 }

@@ -13,9 +13,9 @@ public class Monster {
    protected final BehaviorType behavior;
    protected final double speed;
    protected Location location;
-   protected Direction direction = Direction.WEST;
+   protected Direction direction = Direction.randomDirection();
 
-   public Monster(long id, String name, String type, double hp, BehaviorType behavior, double speed, Location location)  {
+   public Monster(long id, String name, String type, double hp, BehaviorType behavior, double speed, Location location) {
       this.location = location;
       this.name = name;
       this.type = type;
@@ -25,25 +25,19 @@ public class Monster {
       this.speed = speed;
    }
 
-   public void move(){
-      Location newLocation = location.getNewLocation(direction, speed);
-      if (location.equal(newLocation))
-         switch (direction) {
-            case NORTH:
-               direction = Direction.SOUTH;
-               break;
-            case SOUTH:
-               direction = Direction.NORTH;
-               break;
-            case WEST:
-               direction = Direction.EAST;
-               break;
-            case EAST:
-               direction = Direction.WEST;
-               break;
-         }
-      else
-         location = newLocation;
+   public void move() {
+      switch (behavior) {
+         case BH_SIMPLE:
+            Location newLocation = location.getNewLocation(direction, speed);
+            while (newLocation.equal(location)) {
+               direction = Direction.randomDirection();
+               newLocation = location.getNewLocation(direction, speed);
+            }
+            location = newLocation;
+            break;
+         case BH_OTHER:
+            break;
+      }
    }
 
    public JSONObject examine() {
@@ -65,6 +59,7 @@ public class Monster {
    public String getName() {
       return name;
    }
+
    public String getType() {
       return type;
    }

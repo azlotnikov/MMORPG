@@ -36,7 +36,7 @@ public class MonsterDB {
                     rs.getString("name"),
                     rs.getString("type"),
                     rs.getDouble("hit_points"),
-                    BehaviorType.BH_SIMPLE,
+                    BehaviorType.fromInteger(rs.getInt("behavior_type")),
                     rs.getDouble("speed")
             );
             monsters.add(monster);

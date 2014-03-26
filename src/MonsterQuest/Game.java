@@ -21,7 +21,11 @@ public class Game {
 
    private static int saveToDBTick = 1;
 
+   private static int spawnMonsterTick = 1;
+
    private static final int DB_SAVE_DELAY = 20;
+
+   private static final int MONSTER_SPAWN_DELAY = 80;
 
    private static final long TICK_DELAY = 50;
 
@@ -32,6 +36,8 @@ public class Game {
 
    private static final ArrayList<MonsterDB> monsterTypes = new ArrayList<>();
 
+   private static final ArrayList<SpawnPoint> spawnPoints = new ArrayList<>();
+
    protected static synchronized void addPlayer(Player player) {
       if (!started) {
          startTimer();
@@ -41,6 +47,9 @@ public class Game {
 
    protected static synchronized void addMonster(Monster monster) {
       monsters.put(monster.getId(), monster);
+   }
+   protected static synchronized void addSpawnPoint(SpawnPoint spawnPoint) {
+      spawnPoints.add(spawnPoint);
    }
 
    protected static Monster createMonster(MonsterDB monsterType, Location location) {
@@ -64,6 +73,10 @@ public class Game {
 
    protected static Collection<Monster> getMonsters() {
       return Collections.unmodifiableCollection(monsters.values());
+   }
+
+   protected static ArrayList<MonsterDB> getMonsterTypes() {
+      return monsterTypes;
    }
 
    protected static JSONArray getActors(Location location) {
@@ -114,6 +127,7 @@ public class Game {
       JSONObject jsonAns = new JSONObject();
       tickValue++;
       saveToDBTick++;
+      spawnMonsterTick++;
       jsonAns.put("tick", tickValue);
       if (saveToDBTick >= DB_SAVE_DELAY) {
          for (Player player : getPlayers()) {
@@ -121,6 +135,14 @@ public class Game {
          }
          saveToDBTick = 0;
       }
+
+      if (spawnMonsterTick >= MONSTER_SPAWN_DELAY) {
+         for (SpawnPoint spawnPoint : spawnPoints) {
+            spawnPoint.spawnMonster();
+         }
+         spawnMonsterTick = 0;
+      }
+
       for (Monster monster : getMonsters()) {
          monster.move();
       }
@@ -148,8 +170,9 @@ public class Game {
       GameMap.loadWorldMap();
       GameDictionary.loadDictionary();
       Game.loadMonsterTypes();
-      addMonster(createMonster(monsterTypes.get(0), new Location(13, 3)));
-      addMonster(createMonster(monsterTypes.get(1), new Location(13, 6)));
+//      addMonster(createMonster(monsterTypes.get(0), new Location(13, 3)));
+//      addMonster(createMonster(monsterTypes.get(1), new Location(13, 6)));
+      addSpawnPoint(new SpawnPoint(new Location(13, 6)));
       gameTimer = new Timer(Game.class.getSimpleName() + " Timer");
       gameTimer.scheduleAtFixedRate(new TimerTask() {
          @Override
