@@ -38,8 +38,8 @@ public class UserDB {
       try {
          Connection connector = DBInfo.createConnection();
          // TODO need to generate game_id field
-         PreparedStatement stmt = connector.prepareStatement("INSERT INTO users (login, password, sid, pos_x, pos_y, game_id) " +
-                 "VALUES (?,?,?,?,?,?)");
+         PreparedStatement stmt = connector.prepareStatement("INSERT INTO users (login, password, sid, pos_x, pos_y) " +
+                 "VALUES (?,?,?,?,?)");
          stmt.setString(1, login);
          stmt.setString(2, passwordHash);
          sid = UUID.randomUUID().toString();
@@ -47,6 +47,7 @@ public class UserDB {
          stmt.setDouble(4, posX);
          stmt.setDouble(5, posY);
          stmt.executeUpdate();
+         connector.close();
       } catch (Throwable e) {
 
       }
