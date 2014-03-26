@@ -19,9 +19,29 @@ public class Location {
       return (location.x == this.x && location.y == this.y);
    }
 
+   public Location getFreeLocation(){
+       double left = x - actorSize / 2;
+       double right = x + actorSize / 2;
+       double top = y - actorSize / 2;
+       double bottom = y + actorSize / 2;
+       if (GameMap.canEnterTile((int)left, (int)top) && GameMap.canEnterTile((int)right, (int)top)
+            && GameMap.canEnterTile((int)left, (int)bottom) && GameMap.canEnterTile((int)right, (int)bottom)
+            && !isActiveObjectInFront(Direction.NORTH, 0))
+           return this;
+       else {
+           int deltaX = Dice.getInt(2, 2) * (int)Math.pow(-1, Dice.getInt(2, 1));
+           int deltaY = Dice.getInt(2, 2) * (int)Math.pow(-1, Dice.getInt(2, 1));
+           Location newLocation = new Location(x + deltaX, y + deltaY);
+           return newLocation.getFreeLocation();
+       }
+
+
+   }
+
    public boolean isActiveObjectInFront(Direction direction, double velocity) {
       switch (direction) {
          case NORTH:
+            velocity *= -1;
          case SOUTH:
             for (Player player : Game.getPlayers())
                if ((player.getLocation().x != x || player.getLocation().y != y)
@@ -35,6 +55,7 @@ public class Location {
                   return true;
             break;
          case WEST:
+            velocity *= -1;
          case EAST:
             for (Player player : Game.getPlayers())
                if ((player.getLocation().x != x || player.getLocation().y != y)
@@ -59,37 +80,38 @@ public class Location {
       double bottom = y + actorSize / 2;
       double vFront = bottom;
       double hFront = right;
+      int vector = 1;
       switch (direction) {
          case NORTH:
-            velocity *= -1;
+            vector = -1;
             vFront = top;
          case SOUTH:
             if (isActiveObjectInFront(direction, velocity))
                return new Location(x, y);
-            if (GameMap.canEnterTile((int) left, (int) (vFront + velocity))
-                    && GameMap.canEnterTile((int) right, (int) (vFront + velocity)))
-               return new Location(x, y + velocity);
-            else if (GameMap.canEnterTile((int) (left + eps), (int) (vFront + velocity))
-                    && GameMap.canEnterTile((int) (right - eps), (int) (vFront + velocity)))
-               return new Location((int) ((x + eps) / 0.5) * 0.5, y + velocity);
+            if (GameMap.canEnterTile((int) left, (int) (vFront + velocity * vector))
+                    && GameMap.canEnterTile((int) right, (int) (vFront + velocity * vector)))
+               return new Location(x, y + velocity * vector);
+            else if (GameMap.canEnterTile((int) (left + eps), (int) (vFront + velocity * vector))
+                    && GameMap.canEnterTile((int) (right - eps), (int) (vFront + velocity * vector)))
+               return new Location((int) ((x + eps) / 0.5) * 0.5, y + velocity * vector);
             else
                return new Location(x, y);
          case WEST:
-            velocity *= -1;
+            vector = -1;
             hFront = left;
          case EAST:
             if (isActiveObjectInFront(direction, velocity))
                return new Location(x, y);
-            if (GameMap.canEnterTile((int) (hFront + velocity), (int) top)
-                    && GameMap.canEnterTile((int) (hFront + velocity), (int) bottom))
-               return new Location(x + velocity, y);
-            else if (GameMap.canEnterTile((int) (hFront + velocity), (int) (top + eps))
-                    && GameMap.canEnterTile((int) (hFront + velocity), (int) (bottom - eps)))
-               return new Location(x + velocity, (int) ((y + eps) / 0.5) * 0.5);
+            if (GameMap.canEnterTile((int) (hFront + velocity * vector), (int) top)
+                    && GameMap.canEnterTile((int) (hFront + velocity * vector), (int) bottom))
+               return new Location(x + velocity * vector, y);
+            else if (GameMap.canEnterTile((int) (hFront + velocity * vector), (int) (top + eps))
+                    && GameMap.canEnterTile((int) (hFront + velocity * vector), (int) (bottom - eps)))
+               return new Location(x + velocity * vector, (int) ((y + eps) / 0.5) * 0.5);
             else
                return new Location(x, y);
          case NONE:
-            // fall through
+             return new Location(x, y);
          default:
             return this;
       }

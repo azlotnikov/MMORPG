@@ -13,7 +13,7 @@ public class Monster {
    protected final BehaviorType behavior;
    protected final double speed;
    protected Location location;
-   protected Direction direction = Direction.randomDirection();
+   protected Direction direction = Dice.getDirection();
 
    public Monster(long id, String name, String type, double hp, BehaviorType behavior, double speed, Location location) {
       this.location = location;
@@ -30,7 +30,7 @@ public class Monster {
          case BH_SIMPLE:
             Location newLocation = location.getNewLocation(direction, speed);
             while (newLocation.equal(location)) {
-               direction = Direction.randomDirection();
+               direction = Dice.getDirection();
                newLocation = location.getNewLocation(direction, speed);
             }
             location = newLocation;

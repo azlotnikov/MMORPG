@@ -52,10 +52,11 @@ public class Game {
       spawnPoints.add(spawnPoint);
    }
 
-   protected static Monster createMonster(MonsterDB monsterType, Location location) {
-      return new Monster(getNextGlobalId(), monsterType.getName(), monsterType.getType(), monsterType.getHp(),
-              monsterType.getBehavior(), monsterType.getSpeed(), location);
-   }
+    protected static Monster createMonster(MonsterDB monsterType, Location location) {
+        Location newLocation = location.getFreeLocation();
+        return new Monster(getNextGlobalId(), monsterType.getName(), monsterType.getType(), monsterType.getHp(),
+                monsterType.getBehavior(), monsterType.getSpeed(),newLocation);
+    }
 
    protected static Player findPlayerBySid(String sid) {
       for (Player player : getPlayers()) {
