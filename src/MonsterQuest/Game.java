@@ -21,11 +21,7 @@ public class Game {
 
    private static int saveToDBTick = 1;
 
-   private static int spawnMonsterTick = 1;
-
    private static final int DB_SAVE_DELAY = 20;
-
-   private static final int MONSTER_SPAWN_DELAY = 80;
 
    private static final long TICK_DELAY = 50;
 
@@ -128,7 +124,6 @@ public class Game {
       JSONObject jsonAns = new JSONObject();
       tickValue++;
       saveToDBTick++;
-      spawnMonsterTick++;
       jsonAns.put("tick", tickValue);
       if (saveToDBTick >= DB_SAVE_DELAY) {
          for (Player player : getPlayers()) {
@@ -137,11 +132,10 @@ public class Game {
          saveToDBTick = 0;
       }
 
-      if (spawnMonsterTick >= MONSTER_SPAWN_DELAY) {
-         for (SpawnPoint spawnPoint : spawnPoints) {
+      for (SpawnPoint spawnPoint : spawnPoints) {
+         if (Dice.getBool(7)){
             spawnPoint.spawnMonster();
          }
-         spawnMonsterTick = 0;
       }
 
       for (Monster monster : getMonsters()) {
