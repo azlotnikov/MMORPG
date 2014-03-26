@@ -17,7 +17,7 @@ public class Dice {
             count_shoot--;
         }
         return result;
-    };
+    }
 
     public static boolean getBool(int count_shoot){
         boolean result = true;
@@ -26,10 +26,10 @@ public class Dice {
             count_shoot--;
         }
         return result;
-    };
+    }
 
     public static Direction getDirection(){
         Direction result[] = {Direction.EAST, Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.NONE};
         return result[rand.nextInt(4)];
-    };
+    }
 }

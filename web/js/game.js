@@ -111,7 +111,7 @@ Game.prototype.receiveMsg = function (msg) {
             this.view.setPlayerLocation(msg.x, msg.y);
             break;
         case 'examine':
-            msg;
+            alert('Name: ' + msg.name + "\nType: " + msg.type + "\nX: " + msg.x + "\nY: " + msg.y + "\nID: " + msg.id);
             break;
     }
 };

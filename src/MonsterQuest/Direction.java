@@ -10,7 +10,7 @@ import java.util.Random;
  */
 public enum Direction {
    NONE, NORTH, SOUTH, EAST, WEST;
-
+//
 //   private static final List<Direction> VALUES =
 //           Collections.unmodifiableList(Arrays.asList(values()));
 //   private static final int SIZE = VALUES.size();
