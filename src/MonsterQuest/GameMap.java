@@ -19,6 +19,14 @@ public class GameMap {
 
    private static char[][] worldMap;
 
+   public static int getHeight(){
+      return worldMap.length;
+   }
+
+   public static int getWidth(){
+      return worldMap[0].length;
+   }
+
    public static void loadWorldMap() {
       try {
          Connection connector = DBInfo.createConnection();
@@ -56,7 +64,7 @@ public class GameMap {
          jsonLine = new JSONArray();
           for (int j = x - SIGHT_RADIUS_X; j <= x + SIGHT_RADIUS_X; j++) {
               String symbol = String.valueOf('#');
-              if (i > 0 && i < worldMap.length && j > 0 && j < worldMap[0].length) {
+              if (i > 0 && i < getHeight() && j > 0 && j < getWidth()) {
                   symbol = String.valueOf(worldMap[i][j]);
               }
               jsonLine.add(symbol);
