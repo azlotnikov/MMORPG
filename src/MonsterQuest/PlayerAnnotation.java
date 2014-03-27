@@ -107,7 +107,6 @@ public class PlayerAnnotation {
             return;
          }
          player = new Player(Game.getPlayerIdBySid(user.getSid()),user.getSid(), user.getLogin(), openedSession, user.getLocation());
-         Game.setIdInLocation(player.getLocation());
          Game.addPlayer(player);
       }
 

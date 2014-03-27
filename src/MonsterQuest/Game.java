@@ -57,6 +57,7 @@ public class Game {
       if (!started) {
          startTimer();
       }
+      Game.setIdInLocation(player.getLocation());
       players.put(player.getId(), player);
    }
 
@@ -69,9 +70,8 @@ public class Game {
 
     protected static Monster createMonster(MonsterDB monsterType, Location location) {
         Location newLocation = location.getFreeLocation();
-        long id = getNextGlobalId();
         Game.setIdInLocation(location);
-        return new Monster(id, monsterType.getName(), monsterType.getType(), monsterType.getHp(),
+        return new Monster(getNextGlobalId(), monsterType.getName(), monsterType.getType(), monsterType.getHp(),
                 monsterType.getBehavior(), monsterType.getSpeed(),newLocation);
     }
 
