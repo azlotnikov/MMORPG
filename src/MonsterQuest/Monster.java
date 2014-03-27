@@ -33,6 +33,8 @@ public class Monster {
                direction = Dice.getDirection();
                newLocation = location.getNewLocation(direction, speed);
             }
+            Game.unsetIdInLocation(location);
+            Game.setIdInLocation(newLocation);
             location = newLocation;
             break;
          case BH_OTHER:

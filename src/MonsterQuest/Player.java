@@ -60,7 +60,9 @@ public class Player {
    }
 
    public synchronized void moveTo(Location location) {
-      this.location = location;
+       Game.unsetIdInLocation(this.location);
+       Game.setIdInLocation(location);
+       this.location = location;
    }
 
 //   public synchronized void update(Collection<Player> players) {

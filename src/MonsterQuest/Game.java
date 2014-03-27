@@ -9,6 +9,8 @@ import org.json.simple.JSONObject;
 
 public class Game {
 
+   // TODO Убрать static (может быть много карт)
+
    private static final AtomicInteger globalId = new AtomicInteger(0);
 
    private static final HashMap<String, Long> playerIdsBySid = new HashMap<>();
@@ -24,6 +26,23 @@ public class Game {
    private static final int DB_SAVE_DELAY = 20;
 
    private static final long TICK_DELAY = 50;
+
+   private static Location[][] actorsMap;
+
+   private static void initializeActorsMap(int height, int width){
+       Location[] line = new Location[width];
+       Arrays.fill(line, null);
+       actorsMap = new Location[height][];
+       Arrays.fill(actorsMap, line);
+   }
+
+   public static void setIdInLocation(Location location){
+      actorsMap[(int)location.y][(int)location.x] = location;
+   }
+
+   public static void unsetIdInLocation(Location location){
+      actorsMap[(int)location.y][(int)location.x] = null;
+   }
 
    private static final ConcurrentHashMap<Long, Player> players =
            new ConcurrentHashMap<>();
@@ -50,7 +69,9 @@ public class Game {
 
     protected static Monster createMonster(MonsterDB monsterType, Location location) {
         Location newLocation = location.getFreeLocation();
-        return new Monster(getNextGlobalId(), monsterType.getName(), monsterType.getType(), monsterType.getHp(),
+        long id = getNextGlobalId();
+        Game.setIdInLocation(location);
+        return new Monster(id, monsterType.getName(), monsterType.getType(), monsterType.getHp(),
                 monsterType.getBehavior(), monsterType.getSpeed(),newLocation);
     }
 
@@ -167,6 +188,7 @@ public class Game {
       Game.loadMonsterTypes();
 //      addMonster(createMonster(monsterTypes.get(0), new Location(13, 3)));
 //      addMonster(createMonster(monsterTypes.get(1), new Location(13, 6)));
+      initializeActorsMap(GameMap.getHeight(), GameMap.getWidth());
       addSpawnPoint(new SpawnPoint(new Location(13, 6)));
       gameTimer = new Timer(Game.class.getSimpleName() + " Timer");
       gameTimer.scheduleAtFixedRate(new TimerTask() {
