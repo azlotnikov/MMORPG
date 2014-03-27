@@ -20,23 +20,17 @@ public class Location {
    }
 
    public Location getFreeLocation(){
-       double left = x - actorSize / 2;
-       double right = x + actorSize / 2;
-       double top = y - actorSize / 2;
-       double bottom = y + actorSize / 2;
-       if (GameMap.canEnterTile((int)left, (int)top) && GameMap.canEnterTile((int)right, (int)top)
-            && GameMap.canEnterTile((int)left, (int)bottom) && GameMap.canEnterTile((int)right, (int)bottom)
-            && !isActiveObjectInFront(Direction.NORTH, 0))
-           return this;
-       else {
-           int deltaX = (Dice.getInt(2, 2) - 2) * (int)Math.pow(-1, Dice.getInt(2, 1));
-           int deltaY = (Dice.getInt(2, 2) - 2) * (int)Math.pow(-1, Dice.getInt(2, 1));
-           Location newLocation = new Location(x + deltaX, y + deltaY);
-           return newLocation.getFreeLocation();
+       while (!GameMap.canEnterTile((int)(x - actorSize / 2), (int)(y - actorSize / 2))
+           || !GameMap.canEnterTile((int)(x + actorSize / 2), (int)(y - actorSize / 2))
+           || !GameMap.canEnterTile((int)(x - actorSize / 2), (int)(y + actorSize / 2))
+           || !GameMap.canEnterTile((int)(x + actorSize / 2), (int)(y + actorSize / 2))
+           || isActiveObjectInFront(Direction.NORTH, 0)){
+
+           x += (Dice.getInt(2, 2) - 2) * (int)Math.pow(-1, Dice.getInt(2, 1));
+           y += (Dice.getInt(2, 2) - 2) * (int)Math.pow(-1, Dice.getInt(2, 1));
        }
-
-
-   }
+       return this;
+}
 
    public boolean isActiveObjectInFront(Direction direction, double velocity) {
       switch (direction) {
@@ -111,7 +105,7 @@ public class Location {
             else
                return new Location(x, y);
          case NONE:
-             return new Location(x, y);
+               return new Location(x, y);
          default:
             return this;
       }
