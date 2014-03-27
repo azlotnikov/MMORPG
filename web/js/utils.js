@@ -8,5 +8,6 @@ function getUrlVars() {
 }
 
 function exitGame() {
-    alert('Game quit!');
+    //alert('Game quit!');
+    window.close();
 }

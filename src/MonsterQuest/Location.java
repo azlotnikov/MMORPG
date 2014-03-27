@@ -26,7 +26,6 @@ public class Location {
        return y + actorSize / 2;
    }
 
-
     public Location(double x, double y) {
       this.x = x;
       this.y = y;
