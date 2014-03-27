@@ -29,8 +29,8 @@ public class Location {
             && !isActiveObjectInFront(Direction.NORTH, 0))
            return this;
        else {
-           int deltaX = Dice.getInt(2, 2) * (int)Math.pow(-1, Dice.getInt(2, 1));
-           int deltaY = Dice.getInt(2, 2) * (int)Math.pow(-1, Dice.getInt(2, 1));
+           int deltaX = (Dice.getInt(2, 2) - 2) * (int)Math.pow(-1, Dice.getInt(2, 1));
+           int deltaY = (Dice.getInt(2, 2) - 2) * (int)Math.pow(-1, Dice.getInt(2, 1));
            Location newLocation = new Location(x + deltaX, y + deltaY);
            return newLocation.getFreeLocation();
        }

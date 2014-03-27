@@ -13,7 +13,7 @@ public class Dice {
     public static int getInt(int N, int count_shoot){
         int result = 0;
         while(count_shoot > 0){
-            result += rand.nextInt(N);
+            result += rand.nextInt(N) + 1;
             count_shoot--;
         }
         return result;
