@@ -30,10 +30,12 @@ public class Game {
    private static Location[][] actorsMap;
 
    private static void initializeActorsMap(int height, int width){
-       Location[] line = new Location[width];
-       Arrays.fill(line, null);
-       actorsMap = new Location[height][];
-       Arrays.fill(actorsMap, line);
+      actorsMap = new Location[height][];
+      for(int i = 0; i < height; i++) {
+         Location[] line = new Location[width];
+         Arrays.fill(line, null);
+         actorsMap[i] = line;
+      }
    }
 
    public static void setIdInLocation(Location location){
@@ -42,6 +44,10 @@ public class Game {
 
    public static void unsetIdInLocation(Location location){
       actorsMap[(int)location.y][(int)location.x] = null;
+   }
+
+   public static Location getActors(int x, int y){
+      return actorsMap[y][x];
    }
 
    private static final ConcurrentHashMap<Long, Player> players =
