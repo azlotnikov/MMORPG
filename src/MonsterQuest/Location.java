@@ -51,32 +51,32 @@ public class Location {
 }
 
    private static boolean isLocationIntersect(Location l1, Location l2, double deltaX, double deltaY){
-      return l1 != null && l2 != null
-            && Math.abs(l1.x - l2.x) - deltaX < 1.0
-            && Math.abs(l1.y - l2.y) - deltaY < 1.0;
+      return l1 != null && l2 != null && !l1.equal(l2)
+            && Math.abs(l1.x - l2.x - deltaX) < 1.0
+            && Math.abs(l1.y - l2.y - deltaY) < 1.0;
    }
 
    public boolean isActiveObjectInFront(Direction direction, double velocity) {
       boolean result = false;
-      int deltaX = 1;
-      int deltaY = 1;
+      double deltaX = 0;
+      double deltaY = 0;
       switch (direction) {
          case NORTH:
-            deltaY = -1;
+            deltaY = -velocity;
+            break;
          case SOUTH:
-            deltaX = x % 1 > 0.5 ? 1 : -1; // point lies to the right or left of tile's center
-            result |= isLocationIntersect(Game.getActors((int)this.x, (int)this.y + deltaY), this, 0, velocity);
-            result |= isLocationIntersect(Game.getActors((int)this.x + deltaX, (int)this.y + deltaY), this, 0, velocity);
-
+            deltaY = velocity;
             break;
          case WEST:
-            deltaX = -1;
-         case EAST:
-            deltaY = y % 1 > 0.5 ? 1 : -1; //point lies to the above or below of tile's center
-            result |= isLocationIntersect(Game.getActors((int)this.x + deltaX, (int)this.y), this, velocity, 0);
-            result |= isLocationIntersect(Game.getActors((int)this.x + deltaX, (int)this.y + deltaY), this, velocity, 0);
+            deltaX = -velocity;
             break;
-      }  
+         case EAST:
+            deltaX = velocity;
+            break;
+      }
+      for(int i = -1; i <= 1; i++)
+         for(int j = -1; j <= 1; j++)
+            result |= isLocationIntersect(Game.getActors((int)this.x + i, (int)this.y + j), this, deltaX, deltaY);
       return result;
    }
 
