@@ -50,38 +50,34 @@ public class Location {
        return this;
 }
 
+   private static boolean isLocationIntersect(Location l1, Location l2, double deltaX, double deltaY){
+      return l1 != null && l2 != null
+            && Math.abs(l1.x - l2.x) - deltaX < 1.0
+            && Math.abs(l1.y - l2.y) - deltaY < 1.0;
+   }
+
    public boolean isActiveObjectInFront(Direction direction, double velocity) {
+      boolean result = false;
+      int deltaX = 1;
+      int deltaY = 1;
       switch (direction) {
          case NORTH:
-            velocity *= -1;
+            deltaY = -1;
          case SOUTH:
-            for (Player player : Game.getPlayers())
-               if ((player.getLocation().x != x || player.getLocation().y != y)
-                       && Math.abs(player.getLocation().x - x) < 1.0
-                       && Math.abs(player.getLocation().y - y - velocity) < 1.0)
-                  return true;
-            for (Monster monster : Game.getMonsters())
-               if ((monster.getLocation().x != x || monster.getLocation().y != y)
-                       && Math.abs(monster.getLocation().x - x) < 1.0
-                       && Math.abs(monster.getLocation().y - y - velocity) < 1.0)
-                  return true;
+            deltaX = x % 1 > 0.5 ? 1 : -1; // point lies to the right or left of tile's center
+            result |= isLocationIntersect(Game.getActors((int)this.x, (int)this.y + deltaY), this, 0, velocity);
+            result |= isLocationIntersect(Game.getActors((int)this.x + deltaX, (int)this.y + deltaY), this, 0, velocity);
+
             break;
          case WEST:
-            velocity *= -1;
+            deltaX = -1;
          case EAST:
-            for (Player player : Game.getPlayers())
-               if ((player.getLocation().x != x || player.getLocation().y != y)
-                       && Math.abs(player.getLocation().y - y) < 1.0
-                       && Math.abs(player.getLocation().x - x - velocity) < 1.0)
-                  return true;
-            for (Monster monster : Game.getMonsters())
-               if ((monster.getLocation().x != x || monster.getLocation().y != y)
-                       && Math.abs(monster.getLocation().y - y) < 1.0
-                       && Math.abs(monster.getLocation().x - x - velocity) < 1.0)
-                  return true;
+            deltaY = y % 1 > 0.5 ? 1 : -1; //point lies to the above or below of tile's center
+            result |= isLocationIntersect(Game.getActors((int)this.x + deltaX, (int)this.y), this, velocity, 0);
+            result |= isLocationIntersect(Game.getActors((int)this.x + deltaX, (int)this.y + deltaY), this, velocity, 0);
             break;
-      }
-      return false;
+      }  
+      return result;
    }
 
    public Location getNewLocation(Direction direction, double velocity) {
