@@ -29,10 +29,8 @@ public class Monster {
       switch (behavior) {
          case BH_SIMPLE:
             Location newLocation = location.getNewLocation(direction, speed);
-            while (newLocation.equal(location)) {
+            if  (newLocation.equal(location))   
                direction = Dice.getDirection();
-               newLocation = location.getNewLocation(direction, speed);
-            }
             Game.unsetIdInLocation(location);
             Game.setIdInLocation(newLocation);
             location = newLocation;
