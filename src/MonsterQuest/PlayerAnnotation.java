@@ -154,14 +154,8 @@ public class PlayerAnnotation {
                   break;
             }
 
-//            long moveStartTickValue = (long) jsonMsg.get("tick");
-
             Location newLocation = player.getLocation();
-
-//            for (int i = 1; i <= Game.getCurrentTick() - moveStartTickValue; i++) {
             newLocation = newLocation.getNewLocation(newDirection, player.getVelocity());
-//            need to check collisions with walls
-//            }
             player.moveTo(newLocation);
 
             sendBack = false;
