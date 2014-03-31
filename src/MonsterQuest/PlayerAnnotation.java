@@ -176,6 +176,7 @@ public class PlayerAnnotation {
                   jsonAns = getLogout();
                   player.saveStateToBD();
                   player.getSession().close();
+                  Game.unsetIdInLocation(player.getLocation());
                } catch (Throwable e) {
                }
             break;
