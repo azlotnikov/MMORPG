@@ -156,8 +156,9 @@ public class PlayerAnnotation {
 
             Location newLocation = player.getLocation();
             newLocation = newLocation.getNewLocation(newDirection, player.getVelocity());
-            player.moveTo(newLocation);
-
+            if (!newLocation.isActiveObjectInFront(newDirection, 0)){
+               player.moveTo(newLocation);
+            }
             sendBack = false;
             break;
          }

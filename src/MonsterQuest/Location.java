@@ -90,8 +90,6 @@ public class Location {
             vector = -1;
             vFront = top();
          case SOUTH:
-            if (isActiveObjectInFront(direction, velocity))
-               return new Location(x, y);
             if (GameMap.canEnterTile((int) left(), (int) (vFront + velocity * vector))
                     && GameMap.canEnterTile((int) right(), (int) (vFront + velocity * vector)))
                return new Location(x, y + velocity * vector);
@@ -104,8 +102,6 @@ public class Location {
             vector = -1;
             hFront = left();
          case EAST:
-            if (isActiveObjectInFront(direction, velocity))
-               return new Location(x, y);
             if (GameMap.canEnterTile((int) (hFront + velocity * vector), (int) top())
                     && GameMap.canEnterTile((int) (hFront + velocity * vector), (int) bottom()))
                return new Location(x + velocity * vector, y);
