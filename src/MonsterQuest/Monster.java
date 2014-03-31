@@ -29,7 +29,7 @@ public class Monster {
       switch (behavior) {
          case BH_SIMPLE:
             Location newLocation = location.getNewLocation(direction, speed);
-            if (newLocation.equal(location) || newLocation.isActiveObjectInFront(direction, 0)){
+            if (newLocation.equal(location) || location.isActiveObjectInFront(direction, speed)){
                direction = Dice.getDirection();
             } else {
                Game.unsetIdInLocation(location);
