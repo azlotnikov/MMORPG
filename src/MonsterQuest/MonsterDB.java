@@ -13,31 +13,71 @@ public class MonsterDB {
 
    private final String name;
    private final String type;
-   private final double hp;
-   private final BehaviorType behavior;
+   private final int hp;
    private final double speed;
+   private final int armor_class;
+   private final int alertness;
+   private final int depth;
+   private final int rarity;
+   private final int expKill;
+   private final String blows;
+   private ArrayList<Flag> flags = new ArrayList<>();
+   private final String spells;
+   private final String description;
 
-   public MonsterDB(String name, String type, double hp, BehaviorType behavior, double speed) {
+   public MonsterDB(
+         String name,
+         String temp,
+         int depth,
+         int rarity,
+         int expKill,
+         int speed,
+         int hit_points,
+         int armor_class,
+         int alertness,
+         String blows,
+         String flags,
+         String spells,
+         String description
+   ) {
       this.name = name;
-      this.hp = hp;
-      this.type = type;
-      this.behavior = behavior;
-      this.speed = speed;
+      this.type = temp;
+      this.depth = depth;
+      this.rarity = rarity;
+      this.expKill = expKill;
+      this.speed = (double)speed * 5 / 10000;
+      this.hp = hit_points;
+      this.armor_class = armor_class;
+      this.alertness = alertness;
+      this.blows = blows;
+      for(String s : flags.split("\\|")){
+         this.flags.add(Flag.strToFlag(s));
+      }
+      this.spells = spells;
+      this.description = description;
    }
 
    public static ArrayList<MonsterDB> loadMonstersFromDB() {
       ArrayList<MonsterDB> monsters = new ArrayList<>();
       try {
          Connection connector = DBInfo.createConnection();
-         PreparedStatement stmt = connector.prepareStatement("SELECT * FROM monster_types");
+         PreparedStatement stmt = connector.prepareStatement("SELECT * FROM mobs");
          ResultSet rs = stmt.executeQuery();
          while (rs.next()) {
             MonsterDB monster = new MonsterDB(
                     rs.getString("name"),
-                    rs.getString("type"),
-                    rs.getDouble("hit_points"),
-                    BehaviorType.fromInteger(rs.getInt("behavior_type")),
-                    rs.getDouble("speed")
+                    rs.getString("temp"),
+                    rs.getInt("depth"),
+                    rs.getInt("rarity"),
+                    rs.getInt("expKill"),
+                    rs.getInt("speed"),
+                    rs.getInt("hit_points"),
+                    rs.getInt("armor_class"),
+                    rs.getInt("alertness"),
+                    rs.getString("blows"),
+                    rs.getString("flags"),
+                    rs.getString("spells"),
+                    rs.getString("description")
             );
             monsters.add(monster);
          }
@@ -57,7 +97,7 @@ public class MonsterDB {
    }
 
    public BehaviorType getBehavior() {
-      return behavior;
+      return BehaviorType.BH_SIMPLE;
    }
 
    public double getSpeed() {
