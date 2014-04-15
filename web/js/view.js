@@ -53,7 +53,8 @@ View.prototype.updateView = function (playerId) {
         this.drawTile(
             (this.actors[t].x - this.x + SIGHT_RADIUS_X) * TILE_SIZE - TILE_SIZE / 2,
             (this.actors[t].y - this.y + SIGHT_RADIUS_Y) * TILE_SIZE - TILE_SIZE / 2,
-            this.actors[t].type
+            //this.actors[t].type //TODO Make a lot of textures
+            'goblin'
         );
     }
 

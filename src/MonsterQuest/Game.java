@@ -208,6 +208,9 @@ public class Game {
       }, TICK_DELAY, TICK_DELAY);
    }
 
+   public static int GetCountMonsterTypes(){
+      return monsterTypes.size();
+   }
 
    public static void stopTimer() {
       if (gameTimer != null) {
