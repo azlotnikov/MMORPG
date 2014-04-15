@@ -28,14 +28,14 @@ public class Monster {
    public void move() {
       switch (behavior) {
          case BH_SIMPLE:
+            Game.unsetIdInLocation(location);
             Location newLocation = location.getNewLocation(direction, speed);
-            if (newLocation.equal(location) || location.isActiveObjectInFront(direction, speed)){
+            if (newLocation.equal(location) || newLocation.isActiveObjectInFront(direction, 0)){
                direction = Dice.getDirection();
             } else {
-               Game.unsetIdInLocation(location);
-               Game.setIdInLocation(newLocation);
                location = newLocation;
             }
+            Game.setIdInLocation(location);
             break;
          case BH_OTHER:
             break;
