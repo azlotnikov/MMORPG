@@ -19,6 +19,7 @@
     <script src="js/view.js"></script>
 </head>
 <body>
+<div id="examine" style="float:right;"></div>
 <script src="js/game.js"></script>
 </body>
 </html>
