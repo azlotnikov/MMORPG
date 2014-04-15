@@ -155,7 +155,7 @@ class Monster(object):
 		b = '@'.join(self.blows) if self.blows else ''
 
 		#'(id, name, temp, depth, rarity, expKill, speed, hit_points, armor_class, alertness, blows, flags, spells, description)'
-		return '({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})'.format(self.id, self.name, self.temp, self.depth, self.rarity, self.expKill, self.speed, self.hit_points, self.armor_class, self.alertness, b, f, s, self.description)
+		return '\t({}, "{}", "{}", {}, {}, {}, {}, {}, {}, {}, "{}", "{}", "{}", "{}"),'.format(self.id, self.name, self.temp, self.depth, self.rarity, self.expKill, self.speed, self.hit_points, self.armor_class, self.alertness, b, f, s, self.description)
 
 	def setTemplate(self, temp):
 		self.temp = temp.name;
@@ -223,9 +223,11 @@ with open('monster_base.txt', "r") as base:
 			temp.description = line.split(':')[1].strip() + '. '
 		elif line[0] == '\n' and temp != 0:
 			Templates[temp.name] = temp
+			#print(temp.name)
 			temp = 0
 	if temp != 0:
 		Templates[temp.name] = temp
+		#print(temp.name)
 
 monsters = []
 with open('monster.txt', "r") as base:
