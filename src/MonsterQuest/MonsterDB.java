@@ -20,8 +20,8 @@ public class MonsterDB {
    private final int depth;
    private final int rarity;
    private final int expKill;
-   private final String blows;
-   private ArrayList<Flag> flags = new ArrayList<>();
+   private final ArrayList<ArrayList<Blow>> blows = new ArrayList<>();
+   private final ArrayList<Flag> flags = new ArrayList<>();
    private final String spells;
    private final String description;
 
@@ -40,6 +40,7 @@ public class MonsterDB {
          String spells,
          String description
    ) {
+
       this.name = name;
       this.type = temp;
       this.depth = depth;
@@ -49,9 +50,15 @@ public class MonsterDB {
       this.hp = hit_points;
       this.armor_class = armor_class;
       this.alertness = alertness;
-      this.blows = blows;
-      for(String s : flags.split("\\|")){
-         this.flags.add(Flag.strToFlag(s));
+      for (String bb : blows.split("\\@")){
+         ArrayList<Blow> blow = new ArrayList<>();
+         for (String b : bb.split("\\|")){
+            blow.add(Blow.strToBlow(b));
+         }
+         this.blows.add(blow);
+      }
+      for(String f : flags.split("\\|")){
+         this.flags.add(Flag.strToFlag(f));
       }
       this.spells = spells;
       this.description = description;
@@ -92,7 +99,7 @@ public class MonsterDB {
       return name;
    }
 
-   public double getHp() {
+   public int getHp() {
       return hp;
    }
 
@@ -107,4 +114,13 @@ public class MonsterDB {
    public String getType() {
       return type;
    }
+
+   public ArrayList<ArrayList<Blow>> getBlows(){
+      return blows;
+   }
+
+   public ArrayList<Flag> getFlags(){
+      return flags;
+   }
 }
+
