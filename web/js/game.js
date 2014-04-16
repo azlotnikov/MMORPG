@@ -112,11 +112,14 @@ Game.prototype.receiveMsg = function (msg) {
             break;
         case 'examine':
             document.getElementById('examine').innerHTML =
-                'Name: ' + msg.name
-                + "<br> Type: " + msg.type
+                "ID: " + msg.id
+                + "<br>Name: " + msg.name
+                + "<br>Type: " + msg.type
+                + "<br>Speed: " + msg.speed
+                + "<br>HP: " + msg.hp
                 + "<br>X: " + msg.x
-                + "<br>Y: " + msg.y
-                + "<br>ID: " + msg.id;
+                + "<br>Y: " + msg.y;
+
             break;
     }
 };
