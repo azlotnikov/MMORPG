@@ -77,8 +77,17 @@ public class Game {
     protected static Monster createMonster(MonsterDB monsterType, Location location) {
         Location newLocation = location.getFreeLocation();
         Game.setIdInLocation(location);
-        return new Monster(getNextGlobalId(), monsterType.getName(), monsterType.getType(), monsterType.getHp(),
-                monsterType.getBehavior(), monsterType.getSpeed(),newLocation);
+        return new Monster
+              ( getNextGlobalId()
+              , monsterType.getName()
+              , monsterType.getType()
+              , monsterType.getHp()
+              , monsterType.getBehavior()
+              , monsterType.getSpeed()
+              ,newLocation
+              , monsterType.getBlows()
+              , monsterType.getFlags()
+              );
     }
 
    protected static Player findPlayerBySid(String sid) {

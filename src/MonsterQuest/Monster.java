@@ -2,6 +2,8 @@ package MonsterQuest;
 
 import org.json.simple.JSONObject;
 
+import java.util.ArrayList;
+
 /**
  * Created by Alexander on 3/18/14.
  */
@@ -9,13 +11,25 @@ public class Monster {
    protected final long id;
    protected final String name;
    protected final String type;
-   protected final double hp;
+   protected int hp;
    protected final BehaviorType behavior;
-   protected final double speed;
+   protected double speed;
    protected Location location;
    protected Direction direction = Dice.getDirection();
+   private final ArrayList<ArrayList<Blow>> blows;
+   private final ArrayList<Flag> flags;
 
-   public Monster(long id, String name, String type, double hp, BehaviorType behavior, double speed, Location location) {
+   public Monster(
+         long id,
+         String name,
+         String type,
+         int hp,
+         BehaviorType behavior,
+         double speed,
+         Location location,
+         ArrayList<ArrayList<Blow>> blows,
+         ArrayList<Flag> flags
+   ) {
       this.location = location;
       this.name = name;
       this.type = type;
@@ -23,6 +37,8 @@ public class Monster {
       this.hp = hp;
       this.behavior = behavior;
       this.speed = speed;
+      this.blows = blows;
+      this.flags = flags;
    }
 
    public void move() {
@@ -48,6 +64,8 @@ public class Monster {
       result.put("id", id);
       result.put("name", name);
       result.put("type", type);
+      result.put("HP", hp);
+      result.put("speed", speed);
       result.put("x", location.x);
       result.put("y", location.y);
       result.put("result", "ok");
