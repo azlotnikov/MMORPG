@@ -171,6 +171,7 @@ public class PlayerAnnotation {
                   player.saveStateToBD();
                   player.getSession().close();
                   Game.unsetIdInLocation(player.getLocation());
+                  Game.removePlayer(player);
                } catch (Throwable e) {
                }
             break;
