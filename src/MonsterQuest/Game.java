@@ -37,7 +37,7 @@ public class Game {
          actorsMap[i] = line;
       }
    }
-
+   // TODO location -> monster
    public static void setIdInLocation(Location location){
       actorsMap[(int)location.y][(int)location.x] = location;
    }
@@ -50,10 +50,9 @@ public class Game {
       return actorsMap[y][x];
    }
 
-   private static final ConcurrentHashMap<Long, Player> players =
-           new ConcurrentHashMap<>();
-   private static final ConcurrentHashMap<Long, Monster> monsters =
-           new ConcurrentHashMap<>();
+   private static final ConcurrentHashMap<Long, Player> players = new ConcurrentHashMap<>();
+
+   private static final ConcurrentHashMap<Long, Monster> monsters = new ConcurrentHashMap<>();
 
    private static final ArrayList<MonsterDB> monsterTypes = new ArrayList<>();
 
@@ -112,6 +111,7 @@ public class Game {
       return monsterTypes;
    }
 
+   // TODO переделать выборку
    protected static JSONArray getActors(Location location) {
       JSONArray jsonAns = new JSONArray();
       for (Player player : Game.getPlayers()) {

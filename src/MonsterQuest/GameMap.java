@@ -130,6 +130,7 @@ public class GameMap {
    public static boolean canEnterTile(int x, int y) {
        return worldMap[y][x] != '#';
        // TODO в описании карты добавить пропускную способность
+      // TODO перенести огругление сюда, и сделать параметры double
    }
 
 }
