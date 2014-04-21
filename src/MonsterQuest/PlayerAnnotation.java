@@ -135,29 +135,8 @@ public class PlayerAnnotation {
          }
 
          case "move": {
-            Direction newDirection;
-            switch ((String) jsonMsg.get("direction")) {
-               case "west":
-                  newDirection = Direction.WEST;
-                  break;
-               case "north":
-                  newDirection = Direction.NORTH;
-                  break;
-               case "east":
-                  newDirection = Direction.EAST;
-                  break;
-               case "south":
-                  newDirection = Direction.SOUTH;
-                  break;
-               default:
-                  newDirection = Direction.NONE;
-                  break;
-            }
-
-            Location newLocation = player.getLocation().getNewLocation(newDirection, player.getVelocity());
-            if (!player.getLocation().isActiveObjectInFront(newDirection, player.getVelocity())){
-               player.moveTo(newLocation);
-            }
+            player.setDirection(Direction.strToDirection((String) jsonMsg.get("direction")));
+            player.move();
             sendBack = false;
             break;
          }
