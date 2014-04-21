@@ -82,11 +82,12 @@ public class Game {
               , monsterType.getName()
               , monsterType.getType()
               , monsterType.getHp()
-              , monsterType.getBehavior()
+              , monsterType.getAlertness()
               , monsterType.getSpeed()
-              ,newLocation
               , monsterType.getBlows()
               , monsterType.getFlags()
+              , monsterType.getBehavior()
+              , newLocation
               );
     }
 
@@ -96,7 +97,6 @@ public class Game {
             return player;
          }
       }
-
       return null;
    }
 

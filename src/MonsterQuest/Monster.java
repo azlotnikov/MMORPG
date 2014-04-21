@@ -18,17 +18,19 @@ public class Monster {
    protected Direction direction = Dice.getDirection();
    private final ArrayList<ArrayList<Blow>> blows;
    private final ArrayList<Flag> flags;
+   private int alertness;
 
    public Monster(
          long id,
          String name,
          String type,
          int hp,
-         BehaviorType behavior,
+         int alertness,
          double speed,
-         Location location,
          ArrayList<ArrayList<Blow>> blows,
-         ArrayList<Flag> flags
+         ArrayList<Flag> flags,
+         BehaviorType behavior,
+         Location location
    ) {
       this.location = location;
       this.name = name;
@@ -39,6 +41,7 @@ public class Monster {
       this.speed = speed;
       this.blows = blows;
       this.flags = flags;
+      this.alertness = alertness;
    }
 
    public void move() {

@@ -49,7 +49,7 @@ public class MonsterDB {
       this.speed = (double)speed * 5 / 10000;
       this.hp = hit_points;
       this.armor_class = armor_class;
-      this.alertness = alertness;
+      this.alertness = alertness % 10 + 1;
       for (String bb : blows.split("\\@")){
          ArrayList<Blow> blow = new ArrayList<>();
          for (String b : bb.split("\\|")){
@@ -121,6 +121,10 @@ public class MonsterDB {
 
    public ArrayList<Flag> getFlags(){
       return flags;
+   }
+
+   public int getAlertness(){
+      return alertness;
    }
 }
 
