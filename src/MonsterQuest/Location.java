@@ -75,8 +75,10 @@ public class Location {
             break;
       }
       for(int i = -1; i <= 1; i++)
-         for(int j = -1; j <= 1; j++)
-            result |= isLocationIntersect(Game.getActors((int)this.x + i, (int)this.y + j), this, deltaX, deltaY);
+         for(int j = -1; j <= 1; j++){
+            Monster monster = Game.getActors((int)this.x + i, (int)this.y + j);
+            result |= monster != null && isLocationIntersect(monster.getLocation(), this, deltaX, deltaY);
+         }
       return result;
    }
 

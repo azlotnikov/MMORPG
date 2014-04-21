@@ -27,26 +27,26 @@ public class Game {
 
    private static final long TICK_DELAY = 50;
 
-   private static Location[][] actorsMap;
+   private static Monster[][] actorsMap;
 
    private static void initializeActorsMap(int height, int width){
-      actorsMap = new Location[height][];
+      actorsMap = new Monster[height][];
       for(int i = 0; i < height; i++) {
-         Location[] line = new Location[width];
+         Monster[] line = new Monster[width];
          Arrays.fill(line, null);
          actorsMap[i] = line;
       }
    }
-   // TODO location -> monster
-   public static void setIdInLocation(Location location){
-      actorsMap[(int)location.y][(int)location.x] = location;
+   
+   public static void setIdInLocation(Monster monster){
+      actorsMap[(int)monster.getLocation().y][(int)monster.getLocation().x] = monster;
    }
 
    public static void unsetIdInLocation(Location location){
       actorsMap[(int)location.y][(int)location.x] = null;
    }
 
-   public static Location getActors(int x, int y){
+   public static Monster getActors(int x, int y){
       return actorsMap[y][x];
    }
 
@@ -62,7 +62,7 @@ public class Game {
       if (!started) {
          startTimer();
       }
-      Game.setIdInLocation(player.getLocation());
+      Game.setIdInLocation(player);
       players.put(player.getId(), player);
    }
 
@@ -74,20 +74,20 @@ public class Game {
    }
 
     protected static Monster createMonster(MonsterDB monsterType, Location location) {
-        Location newLocation = location.getFreeLocation();
-        Game.setIdInLocation(location);
-        return new Monster
-              ( getNextGlobalId()
-              , monsterType.getName()
-              , monsterType.getType()
-              , monsterType.getHp()
-              , monsterType.getAlertness()
-              , monsterType.getSpeed()
-              , monsterType.getBlows()
-              , monsterType.getFlags()
-              , monsterType.getBehavior()
-              , newLocation
-              );
+       Monster monster = new Monster
+                         ( getNextGlobalId()
+                         , monsterType.getName()
+                         , monsterType.getType()
+                         , monsterType.getHp()
+                         , monsterType.getAlertness()
+                         , monsterType.getSpeed()
+                         , monsterType.getBlows()
+                         , monsterType.getFlags()
+                         , monsterType.getBehavior()
+                         , location.getFreeLocation()
+                         );
+       Game.setIdInLocation(monster);
+       return monster;
     }
 
    protected static Player findPlayerBySid(String sid) {

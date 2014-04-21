@@ -56,7 +56,7 @@ public class Player extends Monster{
       Location newLocation = location.getNewLocation(direction, speed);
       if (!location.isActiveObjectInFront(direction, speed)){
          Game.unsetIdInLocation(location);
-         Game.setIdInLocation(newLocation);
+         Game.setIdInLocation(this);
          location = newLocation;
       }
    }
