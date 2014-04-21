@@ -48,7 +48,7 @@ public enum Flag {
    NO_FEAR,
    NO_STUN,
    NO_CONF,
-   NO_SLEE;
+   NO_SLEEP;
 
    private static final ConcurrentHashMap<String, Flag> flags = new ConcurrentHashMap(){{
       put("INVISIBLE", INVISIBLE);
@@ -95,7 +95,7 @@ public enum Flag {
       put("NO_FEAR", NO_FEAR);
       put("NO_STUN", NO_STUN);
       put("NO_CONF", NO_CONF);
-      put("NO_SLEEP", NO_SLEE);
+      put("NO_SLEEP", NO_SLEEP);
    }};
 
    public static Flag strToFlag(String s){
