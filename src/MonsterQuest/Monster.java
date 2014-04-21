@@ -16,9 +16,10 @@ public class Monster {
    protected double speed;
    protected Location location;
    protected Direction direction = Dice.getDirection();
-   private final ArrayList<ArrayList<Blow>> blows;
-   private final ArrayList<Flag> flags;
-   private int alertness;
+   protected final ArrayList<ArrayList<Blow>> blows;
+   protected final ArrayList<Flag> flags;
+   protected int alertness;
+   protected Monster aim;
 
    public Monster(
          long id,
@@ -89,5 +90,9 @@ public class Monster {
 
    public long getId() {
       return id;
+   }
+
+   public double getSpeed() {
+      return speed;
    }
 }

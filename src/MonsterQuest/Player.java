@@ -3,27 +3,32 @@ package MonsterQuest;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.websocket.CloseReason;
 import javax.websocket.CloseReason.CloseCodes;
 import javax.websocket.Session;
 
-public class Player {
-   private final long id;
+public class Player extends Monster{
    private final String sid;
-   private final String login;
    private final Session session;
-   private Location location;
-
-   private double velocity = 0.021000;
 
    public Player(long id, String sid, String login, Session session, Location location) {
-      this.id = id;
+      super(
+              id
+            , login
+            , "player"
+            , 100 //TODO add HP in database
+            , 0
+            , 0.021000 //TODO add speed in database
+            , null
+            , null
+            , BehaviorType.BH_OTHER
+            , location
+      );
       this.sid = sid;
-      this.login = login;
       this.session = session;
-      this.location = location;
    }
 
    public void saveStateToBD() {
@@ -47,22 +52,13 @@ public class Player {
       }
    }
 
-   public JSONObject examine() {
-      JSONObject result = new JSONObject();
-      result.put("action", "examine");
-      result.put("id", id);
-      result.put("type", "player");
-      result.put("name", login);
-      result.put("x", location.x);
-      result.put("y", location.y);
-      result.put("result", "ok");
-      return result;
-   }
-
-   public synchronized void moveTo(Location location) {
-       Game.unsetIdInLocation(this.location);
-       Game.setIdInLocation(location);
-       this.location = location;
+   public synchronized void move() { // TODO справить проверку
+      Location newLocation = location.getNewLocation(direction, speed);
+      if (!location.isActiveObjectInFront(direction, speed)){
+         Game.unsetIdInLocation(location);
+         Game.setIdInLocation(newLocation);
+         location = newLocation;
+      }
    }
 
 //   public synchronized void update(Collection<Player> players) {
@@ -75,28 +71,16 @@ public class Player {
       return user.doLogout();
    }
 
-   public String getLogin() {
-      return login;
-   }
-
-   public long getId() {
-      return id;
-   }
-
    public String getSid() {
        return sid;
    }
 
-   public double getVelocity() {
-      return velocity;
-   }
-
-   public Location getLocation() {
-      return location;
-   }
-
    public Session getSession() {
       return session;
+   }
+
+   public void setDirection(Direction direction){
+      this.direction = direction;
    }
 
 }
