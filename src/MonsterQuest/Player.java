@@ -24,7 +24,6 @@ public class Player extends Monster{
             , 0.021000 //TODO add speed in database
             , null
             , null
-            , BehaviorType.BH_OTHER
             , location
       );
       this.sid = sid;

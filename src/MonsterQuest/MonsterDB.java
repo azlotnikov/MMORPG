@@ -103,10 +103,6 @@ public class MonsterDB {
       return hp;
    }
 
-   public BehaviorType getBehavior() {
-      return BehaviorType.BH_SIMPLE;
-   }
-
    public double getSpeed() {
       return speed;
    }

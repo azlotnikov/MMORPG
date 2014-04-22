@@ -12,7 +12,6 @@ public class Monster {
    protected final String name;
    protected final String type;
    protected int hp;
-   protected final BehaviorType behavior;
    protected double speed;
    protected Location location;
    protected Direction direction = Dice.getDirection();
@@ -30,7 +29,6 @@ public class Monster {
          double speed,
          ArrayList<ArrayList<Blow>> blows,
          ArrayList<Flag> flags,
-         BehaviorType behavior,
          Location location
    ) {
       this.location = location;
@@ -38,7 +36,6 @@ public class Monster {
       this.type = type;
       this.id = id;
       this.hp = hp;
-      this.behavior = behavior;
       this.speed = speed;
       this.blows = blows;
       this.flags = flags;
@@ -46,20 +43,15 @@ public class Monster {
    }
 
    public void move() {
-      switch (behavior) {
-         case BH_SIMPLE:
-            Game.unsetIdInLocation(location);
-            Location newLocation = location.getNewLocation(direction, speed);
-            if (newLocation.equal(location) || newLocation.isActiveObjectInFront(direction, 0)){
-               direction = Dice.getDirection();
-            } else {
-               location = newLocation;
-            }
-            Game.setIdInLocation(location);
-            break;
-         case BH_OTHER:
-            break;
       }
+      }
+      Location newLocation = location.getNewLocation(direction, speed);
+      if (newLocation.equal(location) || newLocation.isActiveObjectInFront(direction, 0)){
+         direction = Dice.getDirection();
+      } else {
+         location = newLocation;
+      }
+      Game.setIdInLocation(this);
    }
 
    public JSONObject examine() {

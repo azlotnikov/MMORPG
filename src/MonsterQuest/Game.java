@@ -83,7 +83,6 @@ public class Game {
                          , monsterType.getSpeed()
                          , monsterType.getBlows()
                          , monsterType.getFlags()
-                         , monsterType.getBehavior()
                          , location.getFreeLocation()
                          );
        Game.setIdInLocation(monster);
