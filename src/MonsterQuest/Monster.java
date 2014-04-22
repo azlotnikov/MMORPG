@@ -46,7 +46,7 @@ public class Monster {
    }
 
    public void move() {
-      Game.unsetIdInLocation(location);
+      Game.unsetMonsterInLocation(location);
       if (aim == null || !aim.isLive() || timer_refresh == 0){
          timer_refresh = refresh;
          findAim();
@@ -68,7 +68,7 @@ public class Monster {
       } else {
          location = newLocation;
       }
-      Game.setIdInLocation(this);
+      Game.setMonsterInLocation(this);
    }
 
    public void findAim() {

@@ -38,11 +38,11 @@ public class Game {
       }
    }
    
-   public static void setIdInLocation(Monster monster){
+   public static void setMonsterInLocation(Monster monster){
       actorsMap[(int)monster.getLocation().y][(int)monster.getLocation().x] = monster;
    }
 
-   public static void unsetIdInLocation(Location location){
+   public static void unsetMonsterInLocation(Location location){
       actorsMap[(int)location.y][(int)location.x] = null;
    }
 
@@ -65,11 +65,12 @@ public class Game {
       if (!started) {
          startTimer();
       }
-      Game.setIdInLocation(player);
+      Game.setMonsterInLocation(player);
       players.put(player.getId(), player);
    }
 
    protected static synchronized void addMonster(Monster monster) {
+      Game.setMonsterInLocation(monster);
       monsters.put(monster.getId(), monster);
    }
    protected static synchronized void addSpawnPoint(SpawnPoint spawnPoint) {
@@ -77,7 +78,7 @@ public class Game {
    }
 
     protected static Monster createMonster(MonsterDB monsterType, Location location) {
-       Monster monster = new Monster
+       return new Monster
                          ( getNextGlobalId()
                          , monsterType.getName()
                          , monsterType.getType()
@@ -88,8 +89,6 @@ public class Game {
                          , monsterType.getFlags()
                          , location.getFreeLocation()
                          );
-       Game.setIdInLocation(monster);
-       return monster;
     }
 
    protected static Player findPlayerBySid(String sid) {
@@ -155,6 +154,7 @@ public class Game {
    }
 
    protected static synchronized void removeMonster(Monster monster) {
+      unsetMonsterInLocation(monster.location);
       monsters.remove(monster.getId());
    }
 
