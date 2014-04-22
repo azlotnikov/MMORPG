@@ -46,7 +46,6 @@ public class Monster {
    }
 
    public void move() {
-      Game.unsetMonsterInLocation(location);
       if (aim == null || !aim.isLive() || timer_refresh == 0){
          timer_refresh = refresh;
          findAim();
@@ -62,6 +61,7 @@ public class Monster {
                   aim.location.y - location.y < 0 ? Direction.NORTH : Direction.SOUTH ;
          }
       }
+      Game.unsetMonsterInLocation(location);
       Location newLocation = location.getNewLocation(direction, speed);
       if (newLocation.equal(location) || newLocation.isActiveObjectInFront(direction, 0)){
          direction = Dice.getDirection();
