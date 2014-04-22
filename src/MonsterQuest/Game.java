@@ -177,7 +177,10 @@ public class Game {
       }
 
       for (Monster monster : getMonsters()) {
-         monster.move();
+         if (monster.isLive())
+            monster.move();
+         else
+            Game.removeMonster(monster);
       }
       broadcast(jsonAns);
    }
