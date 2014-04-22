@@ -51,13 +51,11 @@ public class Player extends Monster{
       }
    }
 
-   public synchronized void move() { // TODO справить проверку
+   public synchronized void move() {
+      Game.unsetMonsterInLocation(location);
       Location newLocation = location.getNewLocation(direction, speed);
-      if (!location.isActiveObjectInFront(direction, speed)){
-         Game.unsetMonsterInLocation(location);
-         Game.setMonsterInLocation(this);
-         location = newLocation;
-      }
+      location = newLocation.isActiveObjectInFront(direction, 0) ? location : newLocation;
+      Game.setMonsterInLocation(this);
    }
 
 //   public synchronized void update(Collection<Player> players) {
