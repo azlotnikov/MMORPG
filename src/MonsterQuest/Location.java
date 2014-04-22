@@ -51,7 +51,7 @@ public class Location {
 }
 
    private static boolean isLocationIntersect(Location l1, Location l2, double deltaX, double deltaY){
-      return l1 != null && l2 != null && !l1.equal(l2)
+      return l1 != null && l2 != null
             && Math.abs(l1.x - l2.x - deltaX) < 1.0
             && Math.abs(l1.y - l2.y - deltaY) < 1.0;
    }
