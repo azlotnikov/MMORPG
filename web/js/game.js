@@ -170,7 +170,7 @@ function fixPageXY(e) {
         e.pageY = e.clientY + (html.scrollTop || body && body.scrollTop || 0);
         e.pageY -= html.clientTop || 0;
     }
-};
+}
 
 document.onclick = function(e) {
     e = e || window.event;
