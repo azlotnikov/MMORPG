@@ -47,7 +47,10 @@ public class Game {
    }
 
    public static Monster getActors(int x, int y){
-      return actorsMap[y][x];
+
+      return x > 0 && x < GameMap.getWidth()
+          && y > 0 && y < GameMap.getHeight()
+          ? actorsMap[y][x] : null;
    }
 
    private static final ConcurrentHashMap<Long, Player> players = new ConcurrentHashMap<>();
