@@ -101,6 +101,8 @@ public class Monster {
       result.put("type", type);
       result.put("HP", hp);
       result.put("speed", speed);
+      result.put("aim", aim.id);
+      result.put("alertness", alertness);
       result.put("x", location.x);
       result.put("y", location.y);
       result.put("result", "ok");

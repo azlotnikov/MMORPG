@@ -113,10 +113,12 @@ Game.prototype.receiveMsg = function (msg) {
         case 'examine':
             document.getElementById('examine').innerHTML =
                 "ID: " + msg.id
+                + "<br>->: " + msg.aim
+                + "<br>alertness: " + msg.alertness
                 + "<br>Name: " + msg.name
                 + "<br>Type: " + msg.type
                 + "<br>Speed: " + msg.speed
-                + "<br>HP: " + msg.hp
+                + "<br>HP: " + msg.HP
                 + "<br>X: " + msg.x
                 + "<br>Y: " + msg.y;
 
