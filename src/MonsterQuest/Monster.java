@@ -8,7 +8,6 @@ import java.util.ArrayList;
  * Created by Alexander on 3/18/14.
  */
 public class Monster {
-   private static final int count_steps = 100;
    protected final long id;
    protected final String name;
    protected final String type;
@@ -46,9 +45,12 @@ public class Monster {
    }
 
    public void move() {
-      if (aim == null || !aim.isLive() || time_to_refresh == 0){
-         time_to_refresh = count_steps;
+      if (aim == null || !aim.isLive()){
          findAim();
+      }
+      if (time_to_refresh == 0){
+         direction = Dice.getDirection();
+         time_to_refresh = Dice.getInt(2, 250);
       }
       time_to_refresh--;
       if (aim != null){
