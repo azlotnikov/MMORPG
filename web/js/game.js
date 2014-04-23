@@ -118,6 +118,7 @@ Game.prototype.receiveMsg = function (msg) {
             this.view.setMap(msg.map);
             this.view.setActors(msg.actors);
             this.view.setPlayerLocation(msg.x, msg.y);
+            document.getElementById('hp').innerHTML = 'Player HP:' + msg.hp;
             break;
         case 'examine':
             document.getElementById('examine').innerHTML =
@@ -171,7 +172,7 @@ document.onkeyup = function (e) {
 };
 
 function fixPageXY(e) {
-    if (e.pageX == null && e.clientX != null ) {
+    if (e.pageX == null && e.clientX != null) {
         var html = document.documentElement;
         var body = document.body;
         e.pageX = e.clientX + (html.scrollLeft || body && body.scrollLeft || 0);
@@ -181,30 +182,50 @@ function fixPageXY(e) {
     }
 }
 
-document.onclick = function(e) {
+document.onclick = function (e) {
     e = e || window.event;
     fixPageXY(e);
-    var actor = game.GetActor(e.pageX / TILE_SIZE, e.pageY / TILE_SIZE).id;
-    if (actor.id) {
+    var id = game.GetActorID(e.pageX / TILE_SIZE, e.pageY / TILE_SIZE);
+    if (id) {
         e.preventDefault();
-        if (e.which == 3){
-            game.attack(actor.x, actor.y)
-        }
-        if (e.which == 1){
-            game.examine(actor.id);
-        }
+        game.examine(game.GetActorID(e.pageX / TILE_SIZE, e.pageY / TILE_SIZE));
+        game.attack(game.GetActorX(e.pageX / TILE_SIZE, e.pageY / TILE_SIZE), game.GetActorY(e.pageX / TILE_SIZE, e.pageY / TILE_SIZE));
+
+
     }
 };
 
 Game.prototype.GetActorID = function (x, y) {
     var i;
-    for(i in game.view.actors){
+    for (i in game.view.actors) {
         if (Math.abs(x - game.view.actors[i].x + game.view.x - SIGHT_RADIUS_X) < 0.5
-         && Math.abs(y - game.view.actors[i].y + game.view.y - SIGHT_RADIUS_Y) < 0.5){
-            return game.view.actors[i];
+            && Math.abs(y - game.view.actors[i].y + game.view.y - SIGHT_RADIUS_Y) < 0.5) {
+            return game.view.actors[i].id;
         }
     }
 };
+
+Game.prototype.GetActorX = function (x, y) {
+    var i;
+    for (i in game.view.actors) {
+        if (Math.abs(x - game.view.actors[i].x + game.view.x - SIGHT_RADIUS_X) < 0.5
+            && Math.abs(y - game.view.actors[i].y + game.view.y - SIGHT_RADIUS_Y) < 0.5) {
+            return game.view.actors[i].x;
+        }
+    }
+};
+
+
+Game.prototype.GetActorY = function (x, y) {
+    var i;
+    for (i in game.view.actors) {
+        if (Math.abs(x - game.view.actors[i].x + game.view.x - SIGHT_RADIUS_X) < 0.5
+            && Math.abs(y - game.view.actors[i].y + game.view.y - SIGHT_RADIUS_Y) < 0.5) {
+            return game.view.actors[i].y;
+        }
+    }
+};
+
 
 game.initGame();
 

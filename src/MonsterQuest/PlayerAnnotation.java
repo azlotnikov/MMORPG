@@ -114,6 +114,7 @@ public class PlayerAnnotation {
       result.put("actors", Game.getActors(player.getLocation()));
       result.put("x", player.getLocation().x);
       result.put("y", player.getLocation().y);
+      result.put("hp", player.getHP());
       return result;
    }
 
@@ -202,7 +203,7 @@ public class PlayerAnnotation {
          }
 
          case "attack": {
-            Monster monster = Game.getActors((int)jsonMsg.get("y"), (int)jsonMsg.get("x"));
+            Monster monster = Game.getActors(((Double)jsonMsg.get("x")).intValue(), ((Double)jsonMsg.get("y")).intValue());
             if (monster != null && player.canAttack(monster))
                player.attack(monster);
             break;

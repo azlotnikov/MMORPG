@@ -19,5 +19,6 @@
 <body>
 <script src="js/game.js"></script>
 <div id="examine"></div>
+<div id="hp"></div>
 </body>
 </html>

@@ -1,3 +1,9 @@
 #examine {
     float: right;
 }
+
+#hp {
+    float: right;
+    display: block;
+    padding-top: 20px;
+}

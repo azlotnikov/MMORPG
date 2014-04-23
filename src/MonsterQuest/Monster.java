@@ -19,7 +19,7 @@ public class Monster {
    protected final ArrayList<Flag> flags;
    protected int alertness;
    protected Monster aim;
-   protected int time_to_refresh;
+   protected int timeToRefresh;
 
    public Monster(
          long id,
@@ -48,11 +48,11 @@ public class Monster {
       if (aim == null || !aim.isLive()){
          findAim();
       }
-      if (time_to_refresh == 0){
+      if (timeToRefresh == 0){
          direction = Dice.getDirection();
-         time_to_refresh = Dice.getInt(2, 250);
+         timeToRefresh = Dice.getInt(2, 250);
       }
-      time_to_refresh--;
+      timeToRefresh--;
       if (aim != null){
          if (canAttack(aim)){
             this.attack(aim);
@@ -89,16 +89,16 @@ public class Monster {
 
    public void attack(Monster monster){
       int damage = Dice.getInt(2, 10);
-      int i = Dice.getInt(blows.size(), 1);
-      if (blows.get(i - 1).size() == 3){ //TODO Проверить
-         String[] d = Blow.BlowToStr(blows.get(i).get(2)).split("d");
-         damage = Dice.getInt(Integer.parseInt(d[1]), Integer.parseInt(d[0]));
-      }
-      aim.damage(damage);
+//      int i = Dice.getInt(blows.size(), 1);
+//      if (blows.get(i - 1).size() == 3){ //TODO Проверить
+//         String[] d = Blow.BlowToStr(blows.get(i).get(2)).split("d");
+//         damage = Dice.getInt(Integer.parseInt(d[1]), Integer.parseInt(d[0]));
+//      }
+      monster.damage(damage);
    }
 
    public boolean canAttack(Monster monster){
-      return distance(aim.location) < 1.1;     //TODO 1 + расстояние атаки
+      return distance(monster.location) < 1.1;     //TODO 1 + расстояние атаки
    }
 
    private boolean isHate(Monster monster){
@@ -139,6 +139,10 @@ public class Monster {
 
    public long getId() {
       return id;
+   }
+
+   public int getHP() {
+      return hp;
    }
 
    public double getSpeed() {
