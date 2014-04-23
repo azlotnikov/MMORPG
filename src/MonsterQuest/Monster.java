@@ -76,7 +76,7 @@ public class Monster {
       for(int i = -alertness; i <= alertness; i++)
          for(int j = -alertness; j <= alertness; j++){
             Monster monster = Game.getActors((int)location.x + i,(int)location.y + j);
-            if (monster != null && (aim == null || isHate(monster) && distance(monster.location) < distance(aim.location)))
+            if (monster != null && isHate(monster) && (aim == null || distance(monster.location) < distance(aim.location)))
                aim = monster;
          }
    }
@@ -86,7 +86,7 @@ public class Monster {
    }
 
    private boolean isHate(Monster monster){
-      return true;
+      return this.type != monster.type;// && monster.type != "player";
    }
 
    private double distance(Location location){
