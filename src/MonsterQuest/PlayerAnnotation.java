@@ -188,6 +188,13 @@ public class PlayerAnnotation {
             break;
          }
 
+         case "attack": {
+            Monster monster = Game.getActors((int)jsonMsg.get("y"), (int)jsonMsg.get("x"));
+            if (monster != null && player.canAttack(monster))
+               player.attack(monster);
+            break;
+         }
+
          case "look": {
             jsonAns = getLook();
             break;

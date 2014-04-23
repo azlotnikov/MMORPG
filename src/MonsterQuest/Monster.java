@@ -54,8 +54,8 @@ public class Monster {
       }
       time_to_refresh--;
       if (aim != null){
-         if (distance(aim.location) < 1.1){ //TODO 1 + расстояние атаки
-            aim.damage(10);
+         if (canAttack(aim)){
+            this.attack(aim);
             return;
          } else {
             direction = Dice.getBool(1) ?
@@ -85,6 +85,20 @@ public class Monster {
 
    private void damage(int damage){
       hp -= damage;
+   }
+
+   public void attack(Monster monster){
+      int damage = Dice.getInt(2, 10);
+      int i = Dice.getInt(blows.size(), 1);
+      if (blows.get(i - 1).size() == 3){ //TODO Проверить
+         String[] d = Blow.BlowToStr(blows.get(i).get(2)).split("d");
+         damage = Dice.getInt(Integer.parseInt(d[1]), Integer.parseInt(d[0]));
+      }
+      aim.damage(damage);
+   }
+
+   public boolean canAttack(Monster monster){
+      return distance(aim.location) < 1.1;     //TODO 1 + расстояние атаки
    }
 
    private boolean isHate(Monster monster){
