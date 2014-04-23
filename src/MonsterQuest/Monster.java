@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * Created by Alexander on 3/18/14.
  */
 public class Monster {
-   private static final int refresh = 100;
+   private static final int count_steps = 100;
    protected final long id;
    protected final String name;
    protected final String type;
@@ -20,7 +20,7 @@ public class Monster {
    protected final ArrayList<Flag> flags;
    protected int alertness;
    protected Monster aim;
-   protected int timer_refresh;
+   protected int time_to_refresh;
 
    public Monster(
          long id,
@@ -46,11 +46,11 @@ public class Monster {
    }
 
    public void move() {
-      if (aim == null || !aim.isLive() || timer_refresh == 0){
-         timer_refresh = refresh;
+      if (aim == null || !aim.isLive() || time_to_refresh == 0){
+         time_to_refresh = count_steps;
          findAim();
       }
-      timer_refresh--;
+      time_to_refresh--;
       if (aim != null){
          if (distance(aim.location) < 1.1){ //TODO 1 + расстояние атаки
             aim.damage(10);
