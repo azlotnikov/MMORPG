@@ -175,13 +175,14 @@ public class Game {
       }
 
       for (SpawnPoint spawnPoint : spawnPoints) {
-         if (Dice.getBool(7)){
+         boolean f = Dice.getBool(7);
+         if (f){
             spawnPoint.spawnMonster();
          }
       }
 
       for (Monster monster : getMonsters()) {
-         if (monster.isLive())
+          if (monster.isLive())
             monster.move();
          else
             Game.removeMonster(monster);
@@ -213,7 +214,7 @@ public class Game {
 //      addMonster(createMonster(monsterTypes.get(0), new Location(13, 3)));
 //      addMonster(createMonster(monsterTypes.get(1), new Location(13, 6)));
       initializeActorsMap(GameMap.getHeight(), GameMap.getWidth());
-      addSpawnPoint(new SpawnPoint(new Location(13, 6)));
+      addSpawnPoint(new SpawnPoint(new Location(13, 6))); // TODO много точек с разной глубиной
       gameTimer = new Timer(Game.class.getSimpleName() + " Timer");
       gameTimer.scheduleAtFixedRate(new TimerTask() {
          @Override
