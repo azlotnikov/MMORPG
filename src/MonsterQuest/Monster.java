@@ -129,6 +129,10 @@ public class Monster {
       return speed;
    }
 
+   public void setSpeed(double speed) {
+      this.speed = speed;
+   }
+
    public boolean isLive() {
       return hp > 0;
    }

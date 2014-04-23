@@ -14,8 +14,8 @@ import java.sql.*;
 
 public class GameMap {
 
-   public static final int SIGHT_RADIUS_X = 12; //TODO Задокументировать облаcть видимости
-   public static final int SIGHT_RADIUS_Y = 8;
+   public static int SIGHT_RADIUS_X = 12; //TODO Задокументировать облаcть видимости
+   public static int SIGHT_RADIUS_Y = 8;
 
    private static char[][] worldMap;
 
@@ -25,6 +25,22 @@ public class GameMap {
 
    public static int getWidth(){
       return worldMap[0].length;
+   }
+
+   public static void setSightRadiusX(int rad) {
+      SIGHT_RADIUS_X = rad;
+   }
+
+   public static void setSightRadiusY(int rad) {
+      SIGHT_RADIUS_Y = rad;
+   }
+
+   public static int getSightRadiusX() {
+      return SIGHT_RADIUS_X;
+   }
+
+   public static int getSightRadiusY() {
+      return SIGHT_RADIUS_Y;
    }
 
    public static void loadWorldMap() {

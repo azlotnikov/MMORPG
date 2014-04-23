@@ -19,6 +19,7 @@ public class PlayerAnnotation {
 
    private Player player;
    private Session openedSession;
+   private boolean isTesting = false;
 
    public static JSONObject parseJsonString(String str) {
       JSONObject jsonResult = null;
@@ -30,7 +31,7 @@ public class PlayerAnnotation {
       return jsonResult;
    }
 
-   public static JSONObject getDictionary() {
+   public JSONObject getDictionary() {
       JSONObject result = new JSONObject();
       result.put("action", "getDictionary");
       result.put("dictionary", GameDictionary.getJsonDictionary());
@@ -38,28 +39,61 @@ public class PlayerAnnotation {
       return result;
    }
 
-   public static JSONObject getBadId() {
+   public JSONObject getBadId() {
       JSONObject result = new JSONObject();
       result.put("action", "examine");
       result.put("result", "badId");
       return result;
    }
 
-   public static JSONObject getBadSid(String action) {
+   public JSONObject getBadSid(String action) {
       JSONObject result = new JSONObject();
       result.put("action", action);
       result.put("result", "badSid");
       return result;
    }
 
-   public static JSONObject getLogout() {
+   public JSONObject getLogout() {
       JSONObject result = new JSONObject();
       result.put("action", "logout");
       result.put("result", "ok");
       return result;
    }
 
-   public static JSONObject getError() {
+   public JSONObject getStartTesting() {
+      JSONObject result = new JSONObject();
+      result.put("action", "startTesting");
+      result.put("result", "ok");
+      return result;
+   }
+
+   public JSONObject getStopTesting() {
+      JSONObject result = new JSONObject();
+      result.put("action", "stopTesting");
+      result.put("result", "ok");
+      return result;
+   }
+
+   public JSONObject getGetConst() {
+      JSONObject result = new JSONObject();
+      result.put("action", "getConst");
+      result.put("playerVelocity", player.getSpeed());
+      result.put("slideThreshold", "0.1"); //TODO fix this
+      result.put("ticksPerSecond", Game.getTicksPerSecond());
+      result.put("screenRowCount", GameMap.getSightRadiusY());
+      result.put("screenColumnCount", GameMap.getSightRadiusX());
+      result.put("result", "ok");
+      return result;
+   }
+
+   public JSONObject getSetUpConst() {
+      JSONObject result = new JSONObject();
+      result.put("action", "setUpConst");
+      result.put("result", "ok");
+      return result;
+   }
+
+   public JSONObject getError() {
       JSONObject result = new JSONObject();
       result.put("result", "error");
       return result;
@@ -73,7 +107,7 @@ public class PlayerAnnotation {
       result.put("actors", Game.getActors(player.getLocation()));
       result.put("x", player.getLocation().x);
       result.put("y", player.getLocation().y);
-       return result;
+      return result;
    }
 
    public JSONArray getMap(int x, int y) {
@@ -106,11 +140,36 @@ public class PlayerAnnotation {
             }
             return;
          }
-         player = new Player(Game.getPlayerIdBySid(user.getSid()),user.getSid(), user.getLogin(), openedSession, user.getLocation());
+         player = new Player(Game.getPlayerIdBySid(user.getSid()), user.getSid(), user.getLogin(), openedSession, user.getLocation());
          Game.addPlayer(player);
       }
 
       switch (action) {
+         case "startTesting": {
+            isTesting = true;
+            jsonAns = getStartTesting();
+            break;
+         }
+
+         case "stopTesting": {
+            isTesting = false;
+            jsonAns = getStopTesting();
+            break;
+         }
+
+         case "setUpConst": {
+            player.setSpeed((double) jsonMsg.get("playerVelocity"));
+            GameMap.setSightRadiusX((int) jsonMsg.get("screenColumnCount"));
+            GameMap.setSightRadiusY((int) jsonMsg.get("screenRowCount"));
+            jsonAns = getSetUpConst();
+            break;
+         }
+
+         case "getConst": {
+            jsonAns = getGetConst();
+            break;
+         }
+
          case "getDictionary": {
             jsonAns = getDictionary();
             break;

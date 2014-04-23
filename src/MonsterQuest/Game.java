@@ -37,6 +37,10 @@ public class Game {
          actorsMap[i] = line;
       }
    }
+
+   public static long getTicksPerSecond() {
+      return (long) 1000 / TICK_DELAY;
+   }
    
    public static void setMonsterInLocation(Monster monster){
       actorsMap[(int)monster.getLocation().y][(int)monster.getLocation().x] = monster;
