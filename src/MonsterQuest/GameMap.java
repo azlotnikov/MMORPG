@@ -19,11 +19,11 @@ public class GameMap {
 
    private static char[][] worldMap;
 
-   public static int getHeight(){
+   public static int getHeight() {
       return worldMap.length;
    }
 
-   public static int getWidth(){
+   public static int getWidth() {
       return worldMap[0].length;
    }
 
@@ -78,74 +78,79 @@ public class GameMap {
       JSONArray jsonLine;
       for (int i = y - SIGHT_RADIUS_Y; i <= y + SIGHT_RADIUS_Y; i++) {
          jsonLine = new JSONArray();
-          for (int j = x - SIGHT_RADIUS_X; j <= x + SIGHT_RADIUS_X; j++) {
-              String symbol = String.valueOf('#');
-              if (i > 0 && i < getHeight() && j > 0 && j < getWidth()) {
-                  symbol = String.valueOf(worldMap[i][j]);
-              }
-              jsonLine.add(symbol);
+         for (int j = x - SIGHT_RADIUS_X; j <= x + SIGHT_RADIUS_X; j++) {
+            String symbol = String.valueOf('#');
+            if (i > 0 && i < getHeight() && j > 0 && j < getWidth()) {
+               symbol = String.valueOf(worldMap[i][j]);
+            }
+            jsonLine.add(symbol);
          }
          jsonResult.add(jsonLine);
       }
       return jsonResult;
    }
 
+   public static void setUpMapFromJson(JSONArray map) {
+      int i = 0;
+      worldMap = new char[][]{};
+      for (Object objLine : map) {
+         JSONArray line = (JSONArray) objLine;
+         String newLine = "";
+         for (Object symbol : line) {
+            newLine = newLine.concat((String) symbol);
+         }
+         worldMap[i] = newLine.toCharArray();
+         i++;
+      }
+   }
+
    public static void saveToBdDemoMap() {
-//      worldMap = new char[][] {
-//               "#...#..#".toCharArray()
-//              ,"#...##.#".toCharArray()
-//              ,"#....###".toCharArray()
-//              ,"###..###".toCharArray()
-//              ,"#.##...#".toCharArray()
-//              ,"#....#.#".toCharArray()
-//              ,"########".toCharArray()
-//      };
-      worldMap = new char[][] {
-               "##############################".toCharArray()
-              ,"#...#........................#".toCharArray()
-              ,"#...#................###.###.#".toCharArray()
-              ,"#...###.###..........#.....#.#".toCharArray()
-              ,"#.........#..........#.....#.#".toCharArray()
-              ,"#..#.....##..........#.....#.#".toCharArray()
-              ,"#..##.##........#########..#.#".toCharArray()
-              ,"#...............#..........#.#".toCharArray()
-              ,"#..####.........#..........#.#".toCharArray()
-              ,"#..#............#.....######.#".toCharArray()
-              ,"#..#..................#......#".toCharArray()
-              ,"#..##########....######......#".toCharArray()
-              ,"#............................#".toCharArray()
-              ,"#..###...#......#####........#".toCharArray()
-              ,"#...#....#......#...#........#".toCharArray()
-              ,"#...#....#......#...#........#".toCharArray()
-              ,"#...#....#...#..#...#........#".toCharArray()
-              ,"#..###...#####..#####........#".toCharArray()
-              ,"#............................#".toCharArray()
-              ,"#...##......##...####........#".toCharArray()
-              ,"#....##....##....#...........#".toCharArray()
-              ,"#.....##..##.....##..........#".toCharArray()
-              ,"#......####......#...........#".toCharArray()
-              ,"#.......##.......####........#".toCharArray()
-              ,"#............................#".toCharArray()
-              ,"#..####...#.####..####.......#".toCharArray()
-              ,"#..#..#...#.#.....#..#.......#".toCharArray()
-              ,"#..#####..#.##....#####......#".toCharArray()
-              ,"#..#...#..#.#.....#...#......#".toCharArray()
-              ,"#..#####..#.####..#####......#".toCharArray()
-              ,"#............................#".toCharArray()
-              ,"#...####..###................#".toCharArray()
-              ,"#...#.....#..#...............#".toCharArray()
-              ,"#...##....####...............#".toCharArray()
-              ,"#...#.....#..##..............#".toCharArray()
-              ,"#...####..#...##.............#".toCharArray()
-              ,"#............................#".toCharArray()
-              ,"##############################".toCharArray()
-       };
+      worldMap = new char[][]{
+              "##############################".toCharArray()
+              , "#...#........................#".toCharArray()
+              , "#...#................###.###.#".toCharArray()
+              , "#...###.###..........#.....#.#".toCharArray()
+              , "#.........#..........#.....#.#".toCharArray()
+              , "#..#.....##..........#.....#.#".toCharArray()
+              , "#..##.##........#########..#.#".toCharArray()
+              , "#...............#..........#.#".toCharArray()
+              , "#..####.........#..........#.#".toCharArray()
+              , "#..#............#.....######.#".toCharArray()
+              , "#..#..................#......#".toCharArray()
+              , "#..##########....######......#".toCharArray()
+              , "#............................#".toCharArray()
+              , "#..###...#......#####........#".toCharArray()
+              , "#...#....#......#...#........#".toCharArray()
+              , "#...#....#......#...#........#".toCharArray()
+              , "#...#....#...#..#...#........#".toCharArray()
+              , "#..###...#####..#####........#".toCharArray()
+              , "#............................#".toCharArray()
+              , "#...##......##...####........#".toCharArray()
+              , "#....##....##....#...........#".toCharArray()
+              , "#.....##..##.....##..........#".toCharArray()
+              , "#......####......#...........#".toCharArray()
+              , "#.......##.......####........#".toCharArray()
+              , "#............................#".toCharArray()
+              , "#..####...#.####..####.......#".toCharArray()
+              , "#..#..#...#.#.....#..#.......#".toCharArray()
+              , "#..#####..#.##....#####......#".toCharArray()
+              , "#..#...#..#.#.....#...#......#".toCharArray()
+              , "#..#####..#.####..#####......#".toCharArray()
+              , "#............................#".toCharArray()
+              , "#...####..###................#".toCharArray()
+              , "#...#.....#..#...............#".toCharArray()
+              , "#...##....####...............#".toCharArray()
+              , "#...#.....#..##..............#".toCharArray()
+              , "#...####..#...##.............#".toCharArray()
+              , "#............................#".toCharArray()
+              , "##############################".toCharArray()
+      };
       saveWorldMap();
    }
 
    public static boolean canEnterTile(int x, int y) {
-       return worldMap[y][x] != '#';
-       // TODO в описании карты добавить пропускную способность
+      return worldMap[y][x] != '#';
+      // TODO в описании карты добавить пропускную способность
       // TODO перенести огругление сюда, и сделать параметры double
    }
 

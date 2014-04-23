@@ -93,6 +93,13 @@ public class PlayerAnnotation {
       return result;
    }
 
+   public JSONObject getSetUpMap() {
+      JSONObject result = new JSONObject();
+      result.put("action", "setUpMap");
+      result.put("result", "ok");
+      return result;
+   }
+
    public JSONObject getError() {
       JSONObject result = new JSONObject();
       result.put("result", "error");
@@ -162,6 +169,12 @@ public class PlayerAnnotation {
             GameMap.setSightRadiusX((int) jsonMsg.get("screenColumnCount"));
             GameMap.setSightRadiusY((int) jsonMsg.get("screenRowCount"));
             jsonAns = getSetUpConst();
+            break;
+         }
+
+         case "setUpMap": {
+            GameMap.setUpMapFromJson((JSONArray) jsonMsg.get("map"));
+            jsonAns = getSetUpMap();
             break;
          }
 
