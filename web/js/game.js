@@ -66,6 +66,15 @@ Game.prototype.examine = function (id) {
     });
 };
 
+Game.prototype.attack = function (x, y) {
+    this.sendMsg({
+        action: "attack",
+        x: x,
+        y: y,
+        sid: this.sid
+    });
+};
+
 Game.prototype.move = function (direction) {
     this.sendMsg({
         action: "move",
@@ -175,9 +184,15 @@ function fixPageXY(e) {
 document.onclick = function(e) {
     e = e || window.event;
     fixPageXY(e);
-    var id = game.GetActorID(e.pageX / TILE_SIZE, e.pageY / TILE_SIZE);
-    if (id) {
-        game.examine(id);
+    var actor = game.GetActor(e.pageX / TILE_SIZE, e.pageY / TILE_SIZE).id;
+    if (actor.id) {
+        e.preventDefault();
+        if (e.which == 3){
+            game.attack(actor.x, actor.y)
+        }
+        if (e.which == 1){
+            game.examine(actor.id);
+        }
     }
 };
 
@@ -186,7 +201,7 @@ Game.prototype.GetActorID = function (x, y) {
     for(i in game.view.actors){
         if (Math.abs(x - game.view.actors[i].x + game.view.x - SIGHT_RADIUS_X) < 0.5
          && Math.abs(y - game.view.actors[i].y + game.view.y - SIGHT_RADIUS_Y) < 0.5){
-            return game.view.actors[i].id;
+            return game.view.actors[i];
         }
     }
 };
