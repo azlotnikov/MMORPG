@@ -53,24 +53,22 @@ public class Monster {
          timeToRefresh = Dice.getInt(2, 250);
       }
       timeToRefresh--;
-      if (aim != null){
-         if (canAttack(aim)){
-            this.attack(aim);
-            return;
-         } else {
-            direction = Dice.getBool(1) ?
-                  aim.location.x - location.x < 0 ? Direction.WEST : Direction.EAST:
-                  aim.location.y - location.y < 0 ? Direction.NORTH : Direction.SOUTH ;
-         }
-      }
-      Game.unsetMonsterInLocation(location);
-      Location newLocation = location.getNewLocation(direction, speed);
-      if (newLocation.equal(location) || newLocation.isActiveObjectInFront(direction, 0)){
-         direction = Dice.getDirection();
+      if (canAttack(aim)){
+         attack(aim);
       } else {
-         location = newLocation;
+         direction = aim == null ? direction :
+               Dice.getBool(1) ?
+               aim.location.x - location.x < 0 ? Direction.WEST : Direction.EAST:
+               aim.location.y - location.y < 0 ? Direction.NORTH : Direction.SOUTH ;
+         Game.unsetMonsterInLocation(location);
+         Location newLocation = location.getNewLocation(direction, speed);
+         if (newLocation.equal(location) || newLocation.isActiveObjectInFront(direction, 0)){
+            direction = Dice.getDirection();
+         } else {
+            location = newLocation;
+         }
+         Game.setMonsterInLocation(this);
       }
-      Game.setMonsterInLocation(this);
    }
 
    public void findAim() {
@@ -98,7 +96,7 @@ public class Monster {
    }
 
    public boolean canAttack(Monster monster){
-      return distance(monster.location) < 1.1;     //TODO 1 + расстояние атаки
+      return monster!= null && distance(monster.location) < 1.1;     //TODO 1 + расстояние атаки
    }
 
    private boolean isHate(Monster monster){
