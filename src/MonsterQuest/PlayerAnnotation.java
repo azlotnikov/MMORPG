@@ -14,7 +14,7 @@ import javax.websocket.OnError;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-@ServerEndpoint(value = "/game")
+@ServerEndpoint(value = "/game") // TODO Вынести весь JSON в отделтный файл
 public class PlayerAnnotation {
 
    private Player player;
@@ -30,6 +30,7 @@ public class PlayerAnnotation {
       }
       return jsonResult;
    }
+
 
    public JSONObject getDictionary() {
       JSONObject result = new JSONObject();
@@ -129,14 +130,13 @@ public class PlayerAnnotation {
 
    @OnMessage
    public void onMessage(String message) {
-      boolean sendBack = true;
       JSONObject jsonMsg = parseJsonString(message);
       JSONObject jsonAns = new JSONObject();
 
       String sid = (String) jsonMsg.get("sid");
       String action = (String) jsonMsg.get("action");
 
-      player = Game.findPlayerBySid(sid);
+      player = Game.findPlayerBySid(sid); //TODO перенести логику в Game
       if (player == null) {
          UserDB user = new UserDB();
          user.getDataBySid(sid);
@@ -204,8 +204,7 @@ public class PlayerAnnotation {
 
          case "attack": {
             player.setAim(((Double)jsonMsg.get("x")).doubleValue(), ((Double)jsonMsg.get("y")).doubleValue());
-            sendBack = false;
-            break;
+            return;
          }
 
          case "look": {
@@ -215,8 +214,7 @@ public class PlayerAnnotation {
 
          case "move": {
             player.setDirection(Direction.strToDirection((String) jsonMsg.get("direction")));
-            sendBack = false;
-            break;
+            return;
          }
 
          case "logout": {
@@ -239,9 +237,7 @@ public class PlayerAnnotation {
             break;
          }
       }
-      if (sendBack) {
-         player.sendMessage(jsonAns);
-      }
+      player.sendMessage(jsonAns);
    }
 
    @OnClose
