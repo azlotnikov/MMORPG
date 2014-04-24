@@ -96,7 +96,7 @@ public class Monster {
    }
 
    public boolean canAttack(Monster monster){
-      return monster!= null && distance(monster.location) < 1.1;     //TODO 1 + расстояние атаки
+      return monster!= null && id != monster.id && distance(monster.location) < 1.1;     //TODO 1 + расстояние атаки
    }
 
    private boolean isHate(Monster monster){
