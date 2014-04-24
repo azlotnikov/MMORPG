@@ -116,32 +116,20 @@ public class Game {
       return monsterTypes;
    }
 
-   // TODO переделать выборку
    protected static JSONArray getActors(Location location) {
       JSONArray jsonAns = new JSONArray();
-      for (Player player : Game.getPlayers()) {
-         if (Math.abs(player.getLocation().x - location.x) > GameMap.SIGHT_RADIUS_X
-                 && Math.abs(player.getLocation().y - location.y) > GameMap.SIGHT_RADIUS_Y
-             || location.equal(player.getLocation()))
-            continue;
-         JSONObject jsonPlayer = new JSONObject();
-         jsonPlayer.put("type", "player");
-         jsonPlayer.put("id", player.getId());
-         jsonPlayer.put("x", player.getLocation().x);
-         jsonPlayer.put("y", player.getLocation().y);
-         jsonAns.add(jsonPlayer);
-      }
-      for (Monster monster : getMonsters()) {
-         if (Math.abs(monster.getLocation().x - location.x) > GameMap.SIGHT_RADIUS_X
-                 || Math.abs(monster.getLocation().y - location.y) > GameMap.SIGHT_RADIUS_Y)
-            continue;
-         JSONObject jsonPlayer = new JSONObject();
-         jsonPlayer.put("type", monster.getType());
-         jsonPlayer.put("id", monster.getId());
-         jsonPlayer.put("x", monster.getLocation().x);
-         jsonPlayer.put("y", monster.getLocation().y);
-         jsonAns.add(jsonPlayer);
-      }
+      for(int j = -GameMap.SIGHT_RADIUS_Y; j < GameMap.SIGHT_RADIUS_Y; j++)
+         for(int i = -GameMap.SIGHT_RADIUS_X; i < GameMap.SIGHT_RADIUS_X; i++){
+            Monster monster = Game.getActors((int)location.x - i, (int)location.y - j);
+            if (monster != null){
+               JSONObject jsonActor = new JSONObject();
+               jsonActor.put("type", monster.type);
+               jsonActor.put("id", monster.getId());
+               jsonActor.put("x", monster.getLocation().x);
+               jsonActor.put("y", monster.getLocation().y);
+               jsonAns.add(jsonActor);
+            }
+         }
       return jsonAns;
    }
 
