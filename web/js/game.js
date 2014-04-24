@@ -185,47 +185,25 @@ function fixPageXY(e) {
 document.onclick = function (e) {
     e = e || window.event;
     fixPageXY(e);
-    var id = game.GetActorID(e.pageX / TILE_SIZE, e.pageY / TILE_SIZE);
-    if (id) {
+    var actor = game.GetActor(e.pageX / TILE_SIZE, e.pageY / TILE_SIZE);
+    if (actor) {
         e.preventDefault();
-        game.examine(game.GetActorID(e.pageX / TILE_SIZE, e.pageY / TILE_SIZE));
-        game.attack(game.GetActorX(e.pageX / TILE_SIZE, e.pageY / TILE_SIZE), game.GetActorY(e.pageX / TILE_SIZE, e.pageY / TILE_SIZE));
-
-
+        game.examine(actor.id); // TODO Правая кнопка
+        game.attack(actor.x, actor.y);
+    } else {
+        document.getElementById('examine').innerHTML = "";
     }
 };
 
-Game.prototype.GetActorID = function (x, y) {
+Game.prototype.GetActor = function (x, y) {
     var i;
     for (i in game.view.actors) {
         if (Math.abs(x - game.view.actors[i].x + game.view.x - SIGHT_RADIUS_X) < 0.5
             && Math.abs(y - game.view.actors[i].y + game.view.y - SIGHT_RADIUS_Y) < 0.5) {
-            return game.view.actors[i].id;
+            return game.view.actors[i];
         }
     }
 };
-
-Game.prototype.GetActorX = function (x, y) {
-    var i;
-    for (i in game.view.actors) {
-        if (Math.abs(x - game.view.actors[i].x + game.view.x - SIGHT_RADIUS_X) < 0.5
-            && Math.abs(y - game.view.actors[i].y + game.view.y - SIGHT_RADIUS_Y) < 0.5) {
-            return game.view.actors[i].x;
-        }
-    }
-};
-
-
-Game.prototype.GetActorY = function (x, y) {
-    var i;
-    for (i in game.view.actors) {
-        if (Math.abs(x - game.view.actors[i].x + game.view.x - SIGHT_RADIUS_X) < 0.5
-            && Math.abs(y - game.view.actors[i].y + game.view.y - SIGHT_RADIUS_Y) < 0.5) {
-            return game.view.actors[i].y;
-        }
-    }
-};
-
 
 game.initGame();
 

@@ -50,19 +50,15 @@ View.prototype.updateView = function (playerId) {
     }
     var t;
     for (t in this.actors) {
+        if (this.actors[t].type != 'player'){
+            this.actors[t].type = 'goblin';
+        }
         this.drawTile(
             (this.actors[t].x - this.x + SIGHT_RADIUS_X) * TILE_SIZE - TILE_SIZE / 2,
             (this.actors[t].y - this.y + SIGHT_RADIUS_Y) * TILE_SIZE - TILE_SIZE / 2,
-            //this.actors[t].type //TODO Make a lot of textures
-            'goblin'
+            this.actors[t].type //TODO Make a lot of textures
         );
     }
-
-    this.drawTile(
-        SIGHT_RADIUS_X * TILE_SIZE - TILE_SIZE / 2,
-        SIGHT_RADIUS_Y * TILE_SIZE - TILE_SIZE / 2,
-        "player"
-    );
     this.renderer.render(this.stage);
 };
 
