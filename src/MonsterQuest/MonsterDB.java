@@ -49,7 +49,7 @@ public class MonsterDB {
       this.speed = (double)speed * 5 / 10000;
       this.hp = hit_points;
       this.armor_class = armor_class;
-      this.alertness = alertness % 10 + 1;
+      this.alertness = (int)alertness + 1;
       for (String b : blows.split("\\@")){
          String[] args = b.split("\\|");
          if (args.length == 3){
