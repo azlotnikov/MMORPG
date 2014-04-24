@@ -20,7 +20,7 @@ public class MonsterDB {
    private final int depth;
    private final int rarity;
    private final int expKill;
-   private final ArrayList<ArrayList<Blow>> blows = new ArrayList<>();
+   private final ArrayList<Blow> blows = new ArrayList<>();
    private final ArrayList<Flag> flags = new ArrayList<>();
    private final String spells;
    private final String description;
@@ -50,12 +50,14 @@ public class MonsterDB {
       this.hp = hit_points;
       this.armor_class = armor_class;
       this.alertness = alertness % 10 + 1;
-      for (String bb : blows.split("\\@")){
-         ArrayList<Blow> blow = new ArrayList<>();
-         for (String b : bb.split("\\|")){
-            blow.add(Blow.strToBlow(b));
+      for (String b : blows.split("\\@")){
+         String[] args = b.split("\\|");
+         if (args.length == 3){
+            String[] d = args[2].split("d");
+            this.blows.add(new Blow(args[0], args[1], Integer.parseInt(d[0]), Integer.parseInt(d[1])));
+         } else {
+            this.blows.add(new Blow(args[0], args.length == 2 ? args[1] : "", 0, 0));
          }
-         this.blows.add(blow);
       }
       for(String f : flags.split("\\|")){
          this.flags.add(Flag.strToFlag(f));
@@ -111,7 +113,7 @@ public class MonsterDB {
       return type;
    }
 
-   public ArrayList<ArrayList<Blow>> getBlows(){
+   public ArrayList<Blow> getBlows(){
       return blows;
    }
 
