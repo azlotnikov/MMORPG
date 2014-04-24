@@ -181,6 +181,11 @@ public class Game {
          }
       }
 
+      for (Player player: getPlayers()) {
+         player.move();
+      }
+      broadcast(jsonAns);
+
       for (Monster monster : getMonsters()) {
           if (monster.isLive())
             monster.move();

@@ -203,9 +203,8 @@ public class PlayerAnnotation {
          }
 
          case "attack": {
-            Monster monster = Game.getActors(((Double)jsonMsg.get("x")).intValue(), ((Double)jsonMsg.get("y")).intValue());
-            if (monster != null && player.canAttack(monster))
-               player.attack(monster);
+            player.setAim(((Double)jsonMsg.get("x")).doubleValue(), ((Double)jsonMsg.get("y")).doubleValue());
+            sendBack = false;
             break;
          }
 
@@ -216,7 +215,6 @@ public class PlayerAnnotation {
 
          case "move": {
             player.setDirection(Direction.strToDirection((String) jsonMsg.get("direction")));
-            player.move();
             sendBack = false;
             break;
          }

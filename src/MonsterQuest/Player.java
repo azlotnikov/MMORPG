@@ -21,7 +21,7 @@ public class Player extends Monster{
             , "player"
             , 100 //TODO add HP in database
             , 0
-            , 0.021000 //TODO add speed in database
+            , 0.07 //TODO add speed in database
             , null
             , null
             , location
@@ -52,10 +52,16 @@ public class Player extends Monster{
    }
 
    public synchronized void move() {
-      Game.unsetMonsterInLocation(location);
-      Location newLocation = location.getNewLocation(direction, speed);
-      location = newLocation.isActiveObjectInFront(direction, 0) ? location : newLocation;
-      Game.setMonsterInLocation(this);
+      if (canAttack(aim)) {
+         attack(aim);
+         aim = null;
+      } else {
+         Game.unsetMonsterInLocation(location);
+         Location newLocation = location.getNewLocation(direction, speed);
+         location = newLocation.isActiveObjectInFront(direction, 0) ? location : newLocation;
+         this.setDirection(Direction.NONE);
+         Game.setMonsterInLocation(this);
+      }
    }
 
 //   public synchronized void update(Collection<Player> players) {
@@ -78,6 +84,10 @@ public class Player extends Monster{
 
    public void setDirection(Direction direction){
       this.direction = direction;
+   }
+
+   public void setAim(double x, double y){
+      this.aim = Game.getActors((int)x, (int)y);
    }
 
 }
