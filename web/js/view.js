@@ -12,12 +12,17 @@ function View() {
         'wall': new PIXI.Texture(this.atlas, new PIXI.Rectangle(23 * TILE_SIZE, 16 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
         'player': new PIXI.Texture(this.atlas, new PIXI.Rectangle(0 * TILE_SIZE, 2 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
         'goblin': new PIXI.Texture(this.atlas, new PIXI.Rectangle(5 * TILE_SIZE, 3 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
-        'ogr': new PIXI.Texture(this.atlas, new PIXI.Rectangle(6 * TILE_SIZE, 3 * TILE_SIZE, TILE_SIZE, TILE_SIZE))
+        'ogr': new PIXI.Texture(this.atlas, new PIXI.Rectangle(6 * TILE_SIZE, 3 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
+        'armor1': new PIXI.Texture(this.atlas, new PIXI.Rectangle(0 * TILE_SIZE, 6 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
+        'armor2': new PIXI.Texture(this.atlas, new PIXI.Rectangle(1 * TILE_SIZE, 6 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
+        'armor3': new PIXI.Texture(this.atlas, new PIXI.Rectangle(2 * TILE_SIZE, 6 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
+        'armor4': new PIXI.Texture(this.atlas, new PIXI.Rectangle(3 * TILE_SIZE, 6 * TILE_SIZE, TILE_SIZE, TILE_SIZE))
     };
 
     this.map = {};
     this.actors = {};
     this.dictionary = {};
+    this.items = {};
 
     document.body.appendChild(this.renderer.view);
     this.renderer.view.style.position = "absolute";
@@ -49,13 +54,20 @@ View.prototype.updateView = function (playerId) {
         curHeight += TILE_SIZE;
     }
     var t;
+    for (t in this.items) {
+        this.drawTile(
+                (this.items[t].x - this.x + SIGHT_RADIUS_X) * TILE_SIZE - TILE_SIZE / 2,
+                (this.items[t].y - this.y + SIGHT_RADIUS_Y) * TILE_SIZE - TILE_SIZE / 2,
+            this.items[t].type
+        );
+    }
     for (t in this.actors) {
-        if (this.actors[t].type != 'player'){
+        if (this.actors[t].type != 'player') {
             this.actors[t].type = 'goblin';
         }
         this.drawTile(
-            (this.actors[t].x - this.x + SIGHT_RADIUS_X) * TILE_SIZE - TILE_SIZE / 2,
-            (this.actors[t].y - this.y + SIGHT_RADIUS_Y) * TILE_SIZE - TILE_SIZE / 2,
+                (this.actors[t].x - this.x + SIGHT_RADIUS_X) * TILE_SIZE - TILE_SIZE / 2,
+                (this.actors[t].y - this.y + SIGHT_RADIUS_Y) * TILE_SIZE - TILE_SIZE / 2,
             this.actors[t].type //TODO Make a lot of textures
         );
     }
@@ -71,6 +83,10 @@ View.prototype.clearView = function () {
 
 View.prototype.setActors = function (actors) {
     this.actors = actors;
+};
+
+View.prototype.setItems = function (items) {
+    this.items = items;
 };
 
 View.prototype.setDictionary = function (dictionary) {

@@ -57,6 +57,8 @@ public class Inventory {
          JSONObject itemData = new JSONObject();
          itemData.put("name", item.getName());
          itemData.put("type", item.getType());
+         itemData.put("x", item.getLocation().x);
+         itemData.put("y", item.getLocation().y);
          result.add(itemData);
       }
       return result;
