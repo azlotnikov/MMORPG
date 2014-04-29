@@ -11,6 +11,7 @@ public class Monster {
    protected final long id;
    protected final String name;
    protected final String type;
+   protected final Inventory inventory = new Inventory();
    protected int hp;
    protected double speed;
    protected Location location;
@@ -20,7 +21,6 @@ public class Monster {
    protected int alertness;
    protected Monster aim;
    protected int timeToRefresh;
-   protected Inventory inventory;
 
    public Monster(
            long id,
@@ -31,7 +31,8 @@ public class Monster {
            double speed,
            ArrayList<Blow> blows,
            ArrayList<Flag> flags,
-           Location location
+           Location location,
+           boolean generateInventory
    ) {
       this.location = location;
       this.name = name;
@@ -43,6 +44,18 @@ public class Monster {
       this.flags = flags;
       this.alertness = alertness;
       this.aim = null;
+      if (generateInventory) {
+         generateRandomInventory();
+      }
+   }
+
+   public void generateRandomInventory() {
+      for (int i = 0; i < Dice.getInt(2, 2); i++) {
+         int itemTypeIndex;
+         itemTypeIndex = Dice.getInt(Game.GetCountItemTypes(), 1) - 1;
+
+         inventory.addItem(new Item(Game.getItemTypes().get(itemTypeIndex)));
+      }
    }
 
    public Inventory getInventory() {

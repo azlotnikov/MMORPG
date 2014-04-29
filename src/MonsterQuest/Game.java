@@ -109,6 +109,7 @@ public class Game {
                       , monsterType.getBlows()
                       , monsterType.getFlags()
                       , location.getFreeLocation()
+                      , true
               );
    }
 
@@ -131,6 +132,10 @@ public class Game {
 
    protected static ArrayList<MonsterDB> getMonsterTypes() {
       return monsterTypes;
+   }
+
+   protected static ArrayList<ItemDB> getItemTypes() {
+      return itemTypes;
    }
 
    protected static JSONArray getActors(Location location) {
@@ -194,8 +199,10 @@ public class Game {
       for (Monster monster : getMonsters()) {
          if (monster.isLive())
             monster.move();
-         else
+         else {
+            monster.dropInventory();
             Game.removeMonster(monster);
+         }
       }
       broadcast(jsonAns);
    }
@@ -215,14 +222,20 @@ public class Game {
       }
    }
 
+   private static void loadItemTypes() {
+      for (ItemDB itemDB : ItemDB.loadItemFromDB()) {
+         itemTypes.add(itemDB);
+      }
+   }
+
+
    public static void startTimer() {
       started = true;
       GameMap.saveToBdDemoMap();
       GameMap.loadWorldMap();
       GameDictionary.loadDictionary();
       Game.loadMonsterTypes();
-//      addMonster(createMonster(monsterTypes.get(0), new Location(13, 3)));
-//      addMonster(createMonster(monsterTypes.get(1), new Location(13, 6)));
+      Game.loadItemTypes();
       initializeActorsMap(GameMap.getHeight(), GameMap.getWidth());
       addSpawnPoint(new SpawnPoint(new Location(13, 6))); // TODO много точек с разной глубиной
       gameTimer = new Timer(Game.class.getSimpleName() + " Timer");

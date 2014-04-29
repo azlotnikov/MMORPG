@@ -37,4 +37,11 @@ public class ItemDB {
       return items;
    }
 
+   public String getName() {
+      return name;
+   }
+
+   public String getType() {
+      return type;
+   }
 }
