@@ -114,9 +114,11 @@ public class PlayerAnnotation {
       result.put("result", "ok");
       result.put("map", getMap((int) player.getLocation().x, (int) player.getLocation().y));
       result.put("actors", Game.getActors(player.getLocation()));
+      result.put("items", Game.getDroppedItemsJSON());
       result.put("x", player.getLocation().x);
       result.put("y", player.getLocation().y);
       result.put("hp", player.getHP());
+      result.put("inventory", player.getInventory().inventoryToJSON());
       return result;
    }
 
