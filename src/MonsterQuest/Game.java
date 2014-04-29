@@ -15,6 +15,18 @@ public class Game {
 
    private static final HashMap<String, Long> playerIdsBySid = new HashMap<>();
 
+   private static final ConcurrentHashMap<Long, Player> players = new ConcurrentHashMap<>();
+
+   private static final ConcurrentHashMap<Long, Monster> monsters = new ConcurrentHashMap<>();
+
+   private static final ArrayList<MonsterDB> monsterTypes = new ArrayList<>();
+
+   private static final ArrayList<ItemDB> itemTypes = new ArrayList<>();
+
+   private static final ArrayList<SpawnPoint> spawnPoints = new ArrayList<>();
+
+   private static final Inventory droppedItems = new Inventory();
+
    private static Timer gameTimer = null;
 
    private static long tickValue = 1;
@@ -29,9 +41,25 @@ public class Game {
 
    private static Monster[][] actorsMap;
 
-   private static void initializeActorsMap(int height, int width){
+   public static JSONArray getDroppedItemsJSON() {
+      return droppedItems.inventoryToJSON();
+   }
+
+   public static void addDroppedItem(Item item) {
+      droppedItems.addItem(item);
+   }
+
+   public static void deleteDroppedItem(Long itemId) {
+      droppedItems.removeItem(itemId);
+   }
+
+   public static Item getDroppedItem(Long itemId) {
+      return droppedItems.getItem(itemId);
+   }
+
+   private static void initializeActorsMap(int height, int width) {
       actorsMap = new Monster[height][];
-      for(int i = 0; i < height; i++) {
+      for (int i = 0; i < height; i++) {
          Monster[] line = new Monster[width];
          Arrays.fill(line, null);
          actorsMap[i] = line;
@@ -41,29 +69,21 @@ public class Game {
    public static long getTicksPerSecond() {
       return (long) 1000 / TICK_DELAY;
    }
-   
-   public static void setMonsterInLocation(Monster monster){
-      actorsMap[(int)monster.getLocation().y][(int)monster.getLocation().x] = monster;
+
+   public static void setMonsterInLocation(Monster monster) {
+      actorsMap[(int) monster.getLocation().y][(int) monster.getLocation().x] = monster;
    }
 
-   public static void unsetMonsterInLocation(Location location){
-      actorsMap[(int)location.y][(int)location.x] = null;
+   public static void unsetMonsterInLocation(Location location) {
+      actorsMap[(int) location.y][(int) location.x] = null;
    }
 
-   public static Monster getActors(int x, int y){
+   public static Monster getActors(int x, int y) {
 
       return x > 0 && x < GameMap.getWidth()
-          && y > 0 && y < GameMap.getHeight()
-          ? actorsMap[y][x] : null;
+              && y > 0 && y < GameMap.getHeight()
+              ? actorsMap[y][x] : null;
    }
-
-   private static final ConcurrentHashMap<Long, Player> players = new ConcurrentHashMap<>();
-
-   private static final ConcurrentHashMap<Long, Monster> monsters = new ConcurrentHashMap<>();
-
-   private static final ArrayList<MonsterDB> monsterTypes = new ArrayList<>();
-
-   private static final ArrayList<SpawnPoint> spawnPoints = new ArrayList<>();
 
    protected static synchronized void addPlayer(Player player) {
       if (!started) {
@@ -77,23 +97,25 @@ public class Game {
       Game.setMonsterInLocation(monster);
       monsters.put(monster.getId(), monster);
    }
+
    protected static synchronized void addSpawnPoint(SpawnPoint spawnPoint) {
       spawnPoints.add(spawnPoint);
    }
 
-    protected static Monster createMonster(MonsterDB monsterType, Location location) {
-       return new Monster
-                         ( getNextGlobalId()
-                         , monsterType.getName()
-                         , monsterType.getType()
-                         , monsterType.getHp()
-                         , monsterType.getAlertness()
-                         , monsterType.getSpeed()
-                         , monsterType.getBlows()
-                         , monsterType.getFlags()
-                         , location.getFreeLocation()
-                         );
-    }
+   protected static Monster createMonster(MonsterDB monsterType, Location location) {
+      return new Monster
+              (getNextGlobalId()
+                      , monsterType.getName()
+                      , monsterType.getType()
+                      , monsterType.getHp()
+                      , monsterType.getAlertness()
+                      , monsterType.getSpeed()
+                      , monsterType.getBlows()
+                      , monsterType.getFlags()
+                      , location.getFreeLocation()
+                      , true
+              );
+   }
 
    protected static Player findPlayerBySid(String sid) {
       for (Player player : getPlayers()) {
@@ -116,12 +138,16 @@ public class Game {
       return monsterTypes;
    }
 
+   protected static ArrayList<ItemDB> getItemTypes() {
+      return itemTypes;
+   }
+
    protected static JSONArray getActors(Location location) {
       JSONArray jsonAns = new JSONArray();
-      for(int j = -GameMap.SIGHT_RADIUS_Y; j < GameMap.SIGHT_RADIUS_Y; j++)
-         for(int i = -GameMap.SIGHT_RADIUS_X; i < GameMap.SIGHT_RADIUS_X; i++){
-            Monster monster = Game.getActors((int)location.x - i, (int)location.y - j);
-            if (monster != null){
+      for (int j = -GameMap.SIGHT_RADIUS_Y; j < GameMap.SIGHT_RADIUS_Y; j++)
+         for (int i = -GameMap.SIGHT_RADIUS_X; i < GameMap.SIGHT_RADIUS_X; i++) {
+            Monster monster = Game.getActors((int) location.x - i, (int) location.y - j);
+            if (monster != null) {
                JSONObject jsonActor = new JSONObject();
                jsonActor.put("type", monster.type);
                jsonActor.put("id", monster.getId());
@@ -164,21 +190,23 @@ public class Game {
 
       for (SpawnPoint spawnPoint : spawnPoints) {
          boolean f = Dice.getBool(7);
-         if (f){
+         if (f) {
             spawnPoint.spawnMonster();
          }
       }
 
-      for (Player player: getPlayers()) {
+      for (Player player : getPlayers()) {
          player.move();
       }
       broadcast(jsonAns);
 
       for (Monster monster : getMonsters()) {
-          if (monster.isLive())
+         if (monster.isLive())
             monster.move();
-         else
+         else {
+            monster.dropInventory();
             Game.removeMonster(monster);
+         }
       }
       broadcast(jsonAns);
    }
@@ -198,14 +226,20 @@ public class Game {
       }
    }
 
+   private static void loadItemTypes() {
+      for (ItemDB itemDB : ItemDB.loadItemFromDB()) {
+         itemTypes.add(itemDB);
+      }
+   }
+
+
    public static void startTimer() {
       started = true;
       GameMap.saveToBdDemoMap();
       GameMap.loadWorldMap();
       GameDictionary.loadDictionary();
       Game.loadMonsterTypes();
-//      addMonster(createMonster(monsterTypes.get(0), new Location(13, 3)));
-//      addMonster(createMonster(monsterTypes.get(1), new Location(13, 6)));
+      Game.loadItemTypes();
       initializeActorsMap(GameMap.getHeight(), GameMap.getWidth());
       addSpawnPoint(new SpawnPoint(new Location(13, 6))); // TODO много точек с разной глубиной
       gameTimer = new Timer(Game.class.getSimpleName() + " Timer");
@@ -220,7 +254,11 @@ public class Game {
       }, TICK_DELAY, TICK_DELAY);
    }
 
-   public static int GetCountMonsterTypes(){
+   public static int GetCountItemTypes() {
+      return itemTypes.size();
+   }
+
+   public static int GetCountMonsterTypes() {
       return monsterTypes.size();
    }
 

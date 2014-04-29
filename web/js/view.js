@@ -11,13 +11,33 @@ function View() {
         'grass': new PIXI.Texture(this.atlas, new PIXI.Rectangle(22 * TILE_SIZE, 16 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
         'wall': new PIXI.Texture(this.atlas, new PIXI.Rectangle(23 * TILE_SIZE, 16 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
         'player': new PIXI.Texture(this.atlas, new PIXI.Rectangle(0 * TILE_SIZE, 2 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
-        'goblin': new PIXI.Texture(this.atlas, new PIXI.Rectangle(5 * TILE_SIZE, 3 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
-        'ogr': new PIXI.Texture(this.atlas, new PIXI.Rectangle(6 * TILE_SIZE, 3 * TILE_SIZE, TILE_SIZE, TILE_SIZE))
+        'icky thing': new PIXI.Texture(this.atlas, new PIXI.Rectangle(5 * TILE_SIZE, 3 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
+        'jelly': new PIXI.Texture(this.atlas, new PIXI.Rectangle(3 * TILE_SIZE, 2 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
+        'yeek': new PIXI.Texture(this.atlas, new PIXI.Rectangle(6 * TILE_SIZE, 3 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
+        'ghost': new PIXI.Texture(this.atlas, new PIXI.Rectangle(0 * TILE_SIZE, 3 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
+        'bat': new PIXI.Texture(this.atlas, new PIXI.Rectangle(1 * TILE_SIZE, 5 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
+        'minor demon': new PIXI.Texture(this.atlas, new PIXI.Rectangle(0 * TILE_SIZE, 5 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
+        'worm': new PIXI.Texture(this.atlas, new PIXI.Rectangle(7 * TILE_SIZE, 2 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
+        'mold': new PIXI.Texture(this.atlas, new PIXI.Rectangle(10 * TILE_SIZE, 5 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
+        'armor1': new PIXI.Texture(this.atlas, new PIXI.Rectangle(0 * TILE_SIZE, 6 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
+        'armor2': new PIXI.Texture(this.atlas, new PIXI.Rectangle(1 * TILE_SIZE, 6 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
+        'armor3': new PIXI.Texture(this.atlas, new PIXI.Rectangle(2 * TILE_SIZE, 6 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
+        'armor4': new PIXI.Texture(this.atlas, new PIXI.Rectangle(3 * TILE_SIZE, 6 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
+        'axe1': new PIXI.Texture(this.atlas, new PIXI.Rectangle(3 * TILE_SIZE, 29 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
+        'axe2': new PIXI.Texture(this.atlas, new PIXI.Rectangle(1 * TILE_SIZE, 29 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
+        'ring1': new PIXI.Texture(this.atlas, new PIXI.Rectangle(6 * TILE_SIZE, 25 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
+        'ring2': new PIXI.Texture(this.atlas, new PIXI.Rectangle(17 * TILE_SIZE, 25 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
+        'ring3': new PIXI.Texture(this.atlas, new PIXI.Rectangle(18 * TILE_SIZE, 25 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
+        'staff1': new PIXI.Texture(this.atlas, new PIXI.Rectangle(0 * TILE_SIZE, 27 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
+        'staff2': new PIXI.Texture(this.atlas, new PIXI.Rectangle(1 * TILE_SIZE, 27 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
+        'staff3': new PIXI.Texture(this.atlas, new PIXI.Rectangle(3 * TILE_SIZE, 27 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
+        'gloves1': new PIXI.Texture(this.atlas, new PIXI.Rectangle(13 * TILE_SIZE, 21 * TILE_SIZE, TILE_SIZE, TILE_SIZE))
     };
 
     this.map = {};
     this.actors = {};
     this.dictionary = {};
+    this.items = {};
 
     document.body.appendChild(this.renderer.view);
     this.renderer.view.style.position = "absolute";
@@ -49,13 +69,20 @@ View.prototype.updateView = function (playerId) {
         curHeight += TILE_SIZE;
     }
     var t;
+    for (t in this.items) {
+        this.drawTile(
+                (this.items[t].x - this.x + SIGHT_RADIUS_X) * TILE_SIZE - TILE_SIZE / 2,
+                (this.items[t].y - this.y + SIGHT_RADIUS_Y) * TILE_SIZE - TILE_SIZE / 2,
+            this.items[t].type
+        );
+    }
     for (t in this.actors) {
-        if (this.actors[t].type != 'player'){
-            this.actors[t].type = 'goblin';
+        if (this.textures[this.actors[t].type] == undefined ) {
+            this.actors[t].type = 'icky thing';
         }
         this.drawTile(
-            (this.actors[t].x - this.x + SIGHT_RADIUS_X) * TILE_SIZE - TILE_SIZE / 2,
-            (this.actors[t].y - this.y + SIGHT_RADIUS_Y) * TILE_SIZE - TILE_SIZE / 2,
+                (this.actors[t].x - this.x + SIGHT_RADIUS_X) * TILE_SIZE - TILE_SIZE / 2,
+                (this.actors[t].y - this.y + SIGHT_RADIUS_Y) * TILE_SIZE - TILE_SIZE / 2,
             this.actors[t].type //TODO Make a lot of textures
         );
     }
@@ -71,6 +98,10 @@ View.prototype.clearView = function () {
 
 View.prototype.setActors = function (actors) {
     this.actors = actors;
+};
+
+View.prototype.setItems = function (items) {
+    this.items = items;
 };
 
 View.prototype.setDictionary = function (dictionary) {

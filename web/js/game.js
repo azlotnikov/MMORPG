@@ -116,6 +116,7 @@ Game.prototype.receiveMsg = function (msg) {
             break;
         case 'look':
             this.view.setMap(msg.map);
+            this.view.setItems(msg.items);
             this.view.setActors(msg.actors);
             this.view.setPlayerLocation(msg.x, msg.y);
             document.getElementById('hp').innerHTML = 'Player HP:' + msg.hp;

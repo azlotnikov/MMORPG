@@ -26,6 +26,7 @@ public class Player extends Monster{
             , null
             , null
             , location
+            , false
       );
       this.sid = sid;
       this.session = session;

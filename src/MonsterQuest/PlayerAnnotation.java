@@ -14,7 +14,8 @@ import javax.websocket.OnError;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-@ServerEndpoint(value = "/game") // TODO Вынести весь JSON в отделтный файл
+@ServerEndpoint(value = "/game") // TODO Вынести весь JSON в отдельный файл
+                                 // TODO  думал об этом, но туда надо будет передавать player'а и мб что то еще
 public class PlayerAnnotation {
 
    private Player player;
@@ -113,9 +114,11 @@ public class PlayerAnnotation {
       result.put("result", "ok");
       result.put("map", getMap((int) player.getLocation().x, (int) player.getLocation().y));
       result.put("actors", Game.getActors(player.getLocation()));
+      result.put("items", Game.getDroppedItemsJSON());
       result.put("x", player.getLocation().x);
       result.put("y", player.getLocation().y);
       result.put("hp", player.getHP());
+      result.put("inventory", player.getInventory().inventoryToJSON());
       return result;
    }
 

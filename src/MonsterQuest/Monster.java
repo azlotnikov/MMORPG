@@ -10,7 +10,12 @@ import java.util.ArrayList;
 public class Monster {
    protected final long id;
    protected final String name;
+<<<<<<< HEAD
    protected final String type; //TODO enum
+=======
+   protected final String type;
+   protected final Inventory inventory = new Inventory();
+>>>>>>> 6f975cce4ac82edcd612ff7e297cec501c3356d2
    protected int hp;
    protected double speed;
    protected Location location;
@@ -22,15 +27,16 @@ public class Monster {
    protected int timeToRefresh;
 
    public Monster(
-         long id,
-         String name,
-         String type,
-         int hp,
-         int alertness,
-         double speed,
-         ArrayList<Blow> blows,
-         ArrayList<Flag> flags,
-         Location location
+           long id,
+           String name,
+           String type,
+           int hp,
+           int alertness,
+           double speed,
+           ArrayList<Blow> blows,
+           ArrayList<Flag> flags,
+           Location location,
+           boolean generateInventory
    ) {
       this.location = location;
       this.name = name;
@@ -42,27 +48,48 @@ public class Monster {
       this.flags = flags;
       this.alertness = alertness;
       this.aim = null;
+      if (generateInventory) {
+         generateRandomInventory();
+      }
+   }
+
+   public void generateRandomInventory() {
+      //TODO сколько раз бросать?
+      for (int i = 0; i < Dice.getInt(1, 1); i++) {
+         int itemTypeIndex;
+         itemTypeIndex = Dice.getInt(Game.GetCountItemTypes(), 1) - 1;
+
+         inventory.addItem(new Item(Game.getItemTypes().get(itemTypeIndex)));
+      }
+   }
+
+   public Inventory getInventory() {
+      return inventory;
+   }
+
+   public void dropInventory() {
+      inventory.dropAllItems(location);
    }
 
    public void move() {
-      if (aim == null || !aim.isLive()){
+      if (aim == null || !aim.isLive()) {
          findAim();
       }
-      if (timeToRefresh == 0){
+      if (timeToRefresh == 0) {
          direction = Dice.getDirection();
          timeToRefresh = Dice.getInt(2, 250);
       }
       timeToRefresh--;
-      if (canAttack(aim)){
+      if (canAttack(aim)) {
          attack(aim);
       } else {
          direction = aim == null ? direction :
-               Dice.getBool(1) ?
-               aim.location.x - location.x < 0 ? Direction.WEST : Direction.EAST:
-               aim.location.y - location.y < 0 ? Direction.NORTH : Direction.SOUTH ;
+                 Dice.getBool(1) ?
+                         aim.location.x - location.x < 0 ? Direction.WEST : Direction.EAST :
+                         aim.location.y - location.y < 0 ? Direction.NORTH : Direction.SOUTH;
          Game.unsetMonsterInLocation(location);
          Location newLocation = location.getNewLocation(direction, speed);
-         if (newLocation.equal(location) || newLocation.isActiveObjectInFront(direction, 0)){
+         if (newLocation.equal(location) || newLocation.isActiveObjectInFront(direction, 0)) {
             direction = Dice.getDirection();
          } else {
             location = newLocation;
@@ -73,14 +100,15 @@ public class Monster {
 
    public void findAim() {
       aim = null;
-      for(int i = -alertness; i <= alertness; i++)
-         for(int j = -alertness; j <= alertness; j++){
-            Monster monster = Game.getActors((int)location.x + i,(int)location.y + j);
+      for (int i = -alertness; i <= alertness; i++)
+         for (int j = -alertness; j <= alertness; j++) {
+            Monster monster = Game.getActors((int) location.x + i, (int) location.y + j);
             if (monster != null && isHate(monster) && (aim == null || distance(monster.location) < distance(aim.location)))
                aim = monster;
          }
    }
 
+<<<<<<< HEAD
    private void gotHit(int damage){
       hp -= damage;
    }
@@ -95,17 +123,31 @@ public class Monster {
          damage += blow.getDamage();
       }
       return damage;
+=======
+   private void damage(int damage) {
+      hp -= damage;
    }
 
-   public boolean canAttack(Monster monster){
-      return monster!= null && id != monster.id && distance(monster.location) < 1.1;     //TODO 1 + расстояние атаки
+   public void attack(Monster monster) {
+      int damage = Dice.getInt(2, 10);
+//      int i = Dice.getInt(blows.size(), 1);
+//      if (blows.get(i - 1).size() == 3){ //TODO Проверить
+//         String[] d = Blow.BlowToStr(blows.get(i).get(2)).split("d");
+//         damage = Dice.getInt(Integer.parseInt(d[1]), Integer.parseInt(d[0]));
+//      }
+      monster.damage(damage);
+>>>>>>> 6f975cce4ac82edcd612ff7e297cec501c3356d2
    }
 
-   private boolean isHate(Monster monster){
+   public boolean canAttack(Monster monster) {
+      return monster != null && id != monster.id && distance(monster.location) < 1.1;     //TODO 1 + расстояние атаки
+   }
+
+   private boolean isHate(Monster monster) {
       return this.type != monster.type;// && monster.type != "player";
    }
 
-   private double distance(Location location){
+   private double distance(Location location) {
       return Math.sqrt(Math.pow(location.x - this.location.x, 2) + Math.pow(location.y - this.location.y, 2));
    }
 
