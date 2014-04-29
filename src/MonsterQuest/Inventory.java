@@ -33,6 +33,24 @@ public class Inventory {
       items.put(item.getId(), item);
    }
 
+   public void dropItem(Long itemId, Location newLocation) {
+      //TODO проверять куда падает
+      Item item = items.get(itemId);
+      item.setLocation(newLocation);
+      Game.addDroppedItem(item);
+   }
+
+   public void dropAllItems(Location newLocation) {
+      for (Item item:getItems()) {
+         item.setLocation(newLocation);
+         Game.addDroppedItem(item);
+      }
+   }
+
+   public void pickUpItem(Long itemId) {
+      Game.deleteDroppedItem(itemId);
+   }
+
    public JSONArray inventoryToJSON() {
       JSONArray result = new JSONArray();
       for (Item item : getItems()) {

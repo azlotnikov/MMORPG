@@ -45,29 +45,12 @@ public class Monster {
       this.aim = null;
    }
 
-//   public Inventory getInventory() {
-//      return inventory;
-//   }
-
-   public void dropItem(Long itemId) {
-      inventory.getItem(itemId).drop(location);
-      inventory.removeItem(itemId);
-   }
-
-   public void pickUpItem(Long itemId) {
-      inventory.addItem(Game.getDroppedItem(itemId));
-      Game.deleteDroppedItem(id);
-   }
-
-   public void addItemToInventory(Item item) {
-      inventory.addItem(item);
+   public Inventory getInventory() {
+      return inventory;
    }
 
    public void dropInventory() {
-      for (Item item : inventory.getItems()) {
-         item.drop(location);
-         inventory.removeItem(item);
-      }
+      inventory.dropAllItems(location);
    }
 
    public void move() {

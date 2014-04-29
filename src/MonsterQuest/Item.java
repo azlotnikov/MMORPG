@@ -9,12 +9,6 @@ public class Item {
    private String name;
    private String type;
 
-   public void drop(Location newLocation) {
-      //TODO проверять куда падает
-      location = newLocation;
-      Game.addDroppedItem(this); //TODO спорное решение ??
-   }
-
    public Location getLocation() {
       return location;
    }
