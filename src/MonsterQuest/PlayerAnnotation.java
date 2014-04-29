@@ -14,7 +14,8 @@ import javax.websocket.OnError;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-@ServerEndpoint(value = "/game") // TODO Вынести весь JSON в отделтный файл
+@ServerEndpoint(value = "/game") // TODO Вынести весь JSON в отдельный файл
+                                 // TODO  думал об этом, но туда надо будет передавать player'а и мб что то еще
 public class PlayerAnnotation {
 
    private Player player;

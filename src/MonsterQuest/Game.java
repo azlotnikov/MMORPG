@@ -23,6 +23,8 @@ public class Game {
 
    private static final ArrayList<SpawnPoint> spawnPoints = new ArrayList<>();
 
+   private static final Inventory droppedItems = new Inventory();
+
    private static Timer gameTimer = null;
 
    private static long tickValue = 1;
@@ -36,6 +38,18 @@ public class Game {
    private static final long TICK_DELAY = 50;
 
    private static Monster[][] actorsMap;
+
+   public static void addDroppedItem(Item item) {
+      droppedItems.addItem(item);
+   }
+
+   public static void deleteDroppedItem(Long itemId) {
+      droppedItems.removeItem(itemId);
+   }
+
+   public static Item getDroppedItem(Long itemId) {
+      return droppedItems.getItem(itemId);
+   }
 
    private static void initializeActorsMap(int height, int width){
       actorsMap = new Monster[height][];

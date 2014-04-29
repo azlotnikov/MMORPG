@@ -50,12 +50,13 @@ public class Monster {
 //   }
 
    public void dropItem(Long itemId) {
-      for (Item item : inventory.getItems()) {
-         if (item.getId() == itemId) {
-            item.drop(location);
-            inventory.removeItem(item);
-         }
-      }
+      inventory.getItem(itemId).drop(location);
+      inventory.removeItem(itemId);
+   }
+
+   public void pickUpItem(Long itemId) {
+      inventory.addItem(Game.getDroppedItem(itemId));
+      Game.deleteDroppedItem(id);
    }
 
    public void addItemToInventory(Item item) {

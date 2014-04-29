@@ -6,10 +6,13 @@ package MonsterQuest;
 public class Item {
    private Location location;
    private Long id;
+   private String name;
+   private String type;
 
    public void drop(Location newLocation) {
-      //TODO check location for drop
+      //TODO проверять куда падает
       location = newLocation;
+      Game.addDroppedItem(this); //TODO спорное решение ??
    }
 
    public Location getLocation() {
@@ -26,5 +29,21 @@ public class Item {
 
    public void setId(Long id) {
       this.id = id;
+   }
+
+   public String getName() {
+      return name;
+   }
+
+   public void setName(String name) {
+      this.name = name;
+   }
+
+   public String getType() {
+      return type;
+   }
+
+   public void setType(String type) {
+      this.type = type;
    }
 }
