@@ -11,6 +11,7 @@ import javax.websocket.CloseReason.CloseCodes;
 import javax.websocket.Session;
 
 public class Player extends Monster{
+   private int damage = 50;
    private final String sid;
    private final Session session;
 
@@ -74,6 +75,9 @@ public class Player extends Monster{
       return user.doLogout();
    }
 
+   public int getDamage(){
+      return damage;
+   }
    public String getSid() {
        return sid;
    }
