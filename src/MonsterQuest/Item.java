@@ -9,7 +9,7 @@ public class Item {
    private final String type;
    private final String description;
 
-   private Location location;
+   private Location location = new Location(0.0, 0.0);
 
    public Item(Long id, String name, String type, String description) {
       this.description = description;

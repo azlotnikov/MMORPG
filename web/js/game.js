@@ -117,6 +117,12 @@ Game.prototype.receiveMsg = function (msg) {
         case 'look':
             this.view.setMap(msg.map);
             this.view.setItems(msg.items);
+            if (JSON.stringify(msg.inventory) != JSON.stringify(this.view.inventory)) {
+//                console.log(JSON.stringify(msg.inventory));
+                this.view.setInventory(msg.inventory);
+                this.view.setUpdateInventory();
+//                console.log('!');
+            }
             this.view.setActors(msg.actors);
             this.view.setPlayerLocation(msg.x, msg.y);
             document.getElementById('hp').innerHTML = 'Player HP:' + msg.hp;

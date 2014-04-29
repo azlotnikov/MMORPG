@@ -153,6 +153,8 @@ public class PlayerAnnotation {
          }
          player = new Player(Game.getPlayerIdBySid(user.getSid()), user.getSid(), user.getLogin(), openedSession, user.getLocation());
          Game.addPlayer(player);
+         player.generateRandomInventory(); //TODO this is for test
+         player.generateRandomInventory(); //TODO this is for test
       }
 
       switch (action) {
