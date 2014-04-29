@@ -10,12 +10,8 @@ import java.util.ArrayList;
 public class Monster {
    protected final long id;
    protected final String name;
-<<<<<<< HEAD
    protected final String type; //TODO enum
-=======
-   protected final String type;
    protected final Inventory inventory = new Inventory();
->>>>>>> 6f975cce4ac82edcd612ff7e297cec501c3356d2
    protected int hp;
    protected double speed;
    protected Location location;
@@ -108,7 +104,6 @@ public class Monster {
          }
    }
 
-<<<<<<< HEAD
    private void gotHit(int damage){
       hp -= damage;
    }
@@ -123,20 +118,6 @@ public class Monster {
          damage += blow.getDamage();
       }
       return damage;
-=======
-   private void damage(int damage) {
-      hp -= damage;
-   }
-
-   public void attack(Monster monster) {
-      int damage = Dice.getInt(2, 10);
-//      int i = Dice.getInt(blows.size(), 1);
-//      if (blows.get(i - 1).size() == 3){ //TODO Проверить
-//         String[] d = Blow.BlowToStr(blows.get(i).get(2)).split("d");
-//         damage = Dice.getInt(Integer.parseInt(d[1]), Integer.parseInt(d[0]));
-//      }
-      monster.damage(damage);
->>>>>>> 6f975cce4ac82edcd612ff7e297cec501c3356d2
    }
 
    public boolean canAttack(Monster monster) {
