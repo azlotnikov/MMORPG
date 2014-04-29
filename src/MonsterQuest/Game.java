@@ -15,6 +15,14 @@ public class Game {
 
    private static final HashMap<String, Long> playerIdsBySid = new HashMap<>();
 
+   private static final ConcurrentHashMap<Long, Player> players = new ConcurrentHashMap<>();
+
+   private static final ConcurrentHashMap<Long, Monster> monsters = new ConcurrentHashMap<>();
+
+   private static final ArrayList<MonsterDB> monsterTypes = new ArrayList<>();
+
+   private static final ArrayList<SpawnPoint> spawnPoints = new ArrayList<>();
+
    private static Timer gameTimer = null;
 
    private static long tickValue = 1;
@@ -56,14 +64,6 @@ public class Game {
           && y > 0 && y < GameMap.getHeight()
           ? actorsMap[y][x] : null;
    }
-
-   private static final ConcurrentHashMap<Long, Player> players = new ConcurrentHashMap<>();
-
-   private static final ConcurrentHashMap<Long, Monster> monsters = new ConcurrentHashMap<>();
-
-   private static final ArrayList<MonsterDB> monsterTypes = new ArrayList<>();
-
-   private static final ArrayList<SpawnPoint> spawnPoints = new ArrayList<>();
 
    protected static synchronized void addPlayer(Player player) {
       if (!started) {
