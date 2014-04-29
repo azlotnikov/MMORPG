@@ -50,7 +50,8 @@ public class Monster {
    }
 
    public void generateRandomInventory() {
-      for (int i = 0; i < Dice.getInt(2, 2); i++) {
+      //TODO сколько раз бросать?
+      for (int i = 0; i < Dice.getInt(1, 1); i++) {
          int itemTypeIndex;
          itemTypeIndex = Dice.getInt(Game.GetCountItemTypes(), 1) - 1;
 

@@ -16,7 +16,16 @@ function View() {
         'armor1': new PIXI.Texture(this.atlas, new PIXI.Rectangle(0 * TILE_SIZE, 6 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
         'armor2': new PIXI.Texture(this.atlas, new PIXI.Rectangle(1 * TILE_SIZE, 6 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
         'armor3': new PIXI.Texture(this.atlas, new PIXI.Rectangle(2 * TILE_SIZE, 6 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
-        'armor4': new PIXI.Texture(this.atlas, new PIXI.Rectangle(3 * TILE_SIZE, 6 * TILE_SIZE, TILE_SIZE, TILE_SIZE))
+        'armor4': new PIXI.Texture(this.atlas, new PIXI.Rectangle(3 * TILE_SIZE, 6 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
+        'axe1': new PIXI.Texture(this.atlas, new PIXI.Rectangle(3 * TILE_SIZE, 29 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
+        'axe2': new PIXI.Texture(this.atlas, new PIXI.Rectangle(1 * TILE_SIZE, 29 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
+        'ring1': new PIXI.Texture(this.atlas, new PIXI.Rectangle(6 * TILE_SIZE, 25 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
+        'ring2': new PIXI.Texture(this.atlas, new PIXI.Rectangle(17 * TILE_SIZE, 25 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
+        'ring3': new PIXI.Texture(this.atlas, new PIXI.Rectangle(18 * TILE_SIZE, 25 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
+        'staff1': new PIXI.Texture(this.atlas, new PIXI.Rectangle(0 * TILE_SIZE, 27 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
+        'staff2': new PIXI.Texture(this.atlas, new PIXI.Rectangle(1 * TILE_SIZE, 27 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
+        'staff3': new PIXI.Texture(this.atlas, new PIXI.Rectangle(3 * TILE_SIZE, 27 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
+        'gloves1': new PIXI.Texture(this.atlas, new PIXI.Rectangle(13 * TILE_SIZE, 21 * TILE_SIZE, TILE_SIZE, TILE_SIZE))
     };
 
     this.map = {};
