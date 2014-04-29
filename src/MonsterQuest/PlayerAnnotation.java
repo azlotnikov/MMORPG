@@ -155,6 +155,19 @@ public class PlayerAnnotation {
          Game.addPlayer(player);
          player.generateRandomInventory(); //TODO this is for test
          player.generateRandomInventory(); //TODO this is for test
+         player.generateRandomInventory(); //TODO this is for test
+         player.generateRandomInventory(); //TODO this is for test
+         player.generateRandomInventory(); //TODO this is for test
+         player.generateRandomInventory(); //TODO this is for test
+         player.generateRandomInventory(); //TODO this is for test
+         player.generateRandomInventory(); //TODO this is for test
+         player.generateRandomInventory(); //TODO this is for test
+         player.generateRandomInventory(); //TODO this is for test
+         player.generateRandomInventory(); //TODO this is for test
+         player.generateRandomInventory(); //TODO this is for test
+         player.generateRandomInventory(); //TODO this is for test
+         player.generateRandomInventory(); //TODO this is for test
+         player.generateRandomInventory(); //TODO this is for test
       }
 
       switch (action) {

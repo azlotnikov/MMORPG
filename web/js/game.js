@@ -151,7 +151,7 @@ function animate() {
     if (game.tick != game.prevTick) {
         game.prevTick = game.tick;
 //        alert(game.prevTick);
-        game.view.updateView(game.playerId);
+        game.view.updateView();
     }
 
     requestAnimFrame(animate);

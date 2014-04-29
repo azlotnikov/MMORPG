@@ -1,7 +1,7 @@
 var SIGHT_RADIUS_X = 12;
 var SIGHT_RADIUS_Y = 8;
 var INVENTORY_SIZE_X = 8;
-var INVENTORY_SIZE_Y = 5;
+var INVENTORY_SIZE_Y = 16;
 var TILE_SIZE = 32;
 
 function View() {
@@ -14,6 +14,7 @@ function View() {
     this.textures = {
         'grass': new PIXI.Texture(this.atlas, new PIXI.Rectangle(22 * TILE_SIZE, 16 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
         'wall': new PIXI.Texture(this.atlas, new PIXI.Rectangle(23 * TILE_SIZE, 16 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
+        'inventory': new PIXI.Texture(this.atlas, new PIXI.Rectangle(26 * TILE_SIZE, 14 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
         'player': new PIXI.Texture(this.atlas, new PIXI.Rectangle(0 * TILE_SIZE, 2 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
         'icky thing': new PIXI.Texture(this.atlas, new PIXI.Rectangle(5 * TILE_SIZE, 3 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
         'jelly': new PIXI.Texture(this.atlas, new PIXI.Rectangle(3 * TILE_SIZE, 2 * TILE_SIZE, TILE_SIZE, TILE_SIZE)),
@@ -74,7 +75,7 @@ View.prototype.drawInventoryItem = function (x, y, textureName) {
     this.inventoryStage.addChild(tile);
 };
 
-View.prototype.updateView = function (playerId) {
+View.prototype.updateView = function () {
     this.clearView();
     var curHeight = -(this.y % 1) * TILE_SIZE;
     var curWidth;
@@ -106,16 +107,27 @@ View.prototype.updateView = function (playerId) {
             this.actors[t].type //TODO Make a lot of textures
         );
     }
-    var h = 0;
-    var w = 0;
     this.renderer.render(this.stage);
+    //TODO need to rewrite this shit
     if (this.updateInventory) {
-        h = 0;
+        for (var c = this.inventoryStage.children.length - 1; c >= 0; c--) {
+            this.inventoryStage.removeChild(this.inventoryStage.children[c]);
+        }
+        this.inventoryStage = new PIXI.Stage(0x000000, true);
+        var h = 0;
+        var w = 0;
+        var x = 0;
+        var y = 0;
+        for (x = 0; x <= INVENTORY_SIZE_X; x++) {
+            for (y = 0; y <= INVENTORY_SIZE_Y; y++) {
+                this.drawInventoryItem(x * TILE_SIZE, y * TILE_SIZE, 'inventory');
+            }
+        }
         for (i in this.inventory) {
-            console.log(JSON.stringify(this.inventory[i]));
-            this.drawInventoryItem(h * TILE_SIZE, w * TILE_SIZE, this.inventory[i].type);
+//            console.log(JSON.stringify(this.inventory[i]));
+            this.drawInventoryItem(w * TILE_SIZE, h * TILE_SIZE, this.inventory[i].type);
             w++;
-            if (curWidth > INVENTORY_SIZE_Y) {
+            if (w > INVENTORY_SIZE_X) {
                 w = 0;
                 h++;
             }
