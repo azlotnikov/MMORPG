@@ -176,11 +176,11 @@ public class Monster {
    }
 
    public int getHP() {
-      return bonus.getHP();
+      return hp + bonus.getHP();
    }
 
    public int getBonusHP() {
-      return hp + bonus.getHP();
+      return bonus.getHP();
    }
 
    public double getBonusSpeed() {
