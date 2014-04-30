@@ -53,7 +53,7 @@ function View() {
 
     document.body.appendChild(this.inventoryRenderer.view);
     this.inventoryRenderer.view.style.position = "absolute";
-    this.inventoryRenderer.view.style.top = "0px";
+    this.inventoryRenderer.view.style.top = "0";
     this.inventoryRenderer.view.style.left = this.renderer.width + "px";
 }
 

@@ -117,27 +117,41 @@ Game.prototype.receiveMsg = function (msg) {
         case 'look':
             this.view.setMap(msg.map);
             this.view.setItems(msg.items);
-            if (JSON.stringify(msg.inventory) != JSON.stringify(this.view.inventory)) {
+            if (JSON.stringify(msg.player.inventory) != JSON.stringify(this.view.inventory)) {
 //                console.log(JSON.stringify(msg.inventory));
-                this.view.setInventory(msg.inventory);
+                this.view.setInventory(msg.player.inventory);
                 this.view.setUpdateInventory();
 //                console.log('!');
             }
             this.view.setActors(msg.actors);
             this.view.setPlayerLocation(msg.x, msg.y);
-            document.getElementById('hp').innerHTML = 'Player HP:' + msg.hp;
+            document.getElementById('player_x').innerHTML = msg.x;
+            document.getElementById('player_y').innerHTML = msg.y;
+            document.getElementById('player_hp').innerHTML = msg.player.hp;
+            document.getElementById('player_hp_bonus').innerHTML = msg.player.hpBonus;
+            document.getElementById('player_damage').innerHTML = msg.player.damage;
+            document.getElementById('player_damage_bonus').innerHTML = msg.player.damageBonus;
+            document.getElementById('player_speed').innerHTML = msg.player.speed;
+            document.getElementById('player_speed_bonus').innerHTML = msg.player.speedBonus;
             break;
         case 'examine':
-            document.getElementById('examine').innerHTML =
-                "ID: " + msg.id
-                + "<br>->: " + msg.aim
-                + "<br>alertness: " + msg.alertness
-                + "<br>Name: " + msg.name
-                + "<br>Type: " + msg.type
-                + "<br>Speed: " + msg.speed
-                + "<br>HP: " + msg.HP
-                + "<br>X: " + msg.x
-                + "<br>Y: " + msg.y;
+            if (msg.examineType == 'monster') {
+                document.getElementById('examine').innerHTML =
+                    '<div>ID: <span class="value">' + msg.id + '</span></div>' +
+                    '<div>Имя: <span class="value">' + msg.name + '</span></div>' +
+                    '<div>Тип: <span class="value">' + msg.type + '</span></div>' +
+                    '<div>Опасность: <span class="value red">' + msg.alertness + '</span></div>' +
+                    '<div>Скорость: <span class="value red">' + msg.speed + '</span></div>' +
+                    '<div>Аттака: <span class="value red">' + msg.damage + '</span></div>' +
+                    '<div>Здоровье: <span class="value red">' + msg.hp + '</span></div>' +
+                    '<div>X: <span class="value">' + msg.x + '</span></div>' +
+                    '<div>Y: <span class="value">' + msg.y + '</span></div>';
+            }
+
+            if (msg.examineType == 'item') {
+                document.getElementById('examine').innerHTML = '';
+
+            }
 
             break;
     }

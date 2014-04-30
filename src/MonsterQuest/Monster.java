@@ -135,12 +135,14 @@ public class Monster {
    public JSONObject examine() {
       JSONObject result = new JSONObject();
       result.put("action", "examine");
+      result.put("examineType", "monster");
       result.put("id", id);
       result.put("name", name);
       result.put("type", type);
-      result.put("HP", hp);
+      result.put("hp", hp);
       result.put("speed", speed);
-      result.put("aim", aim.id);
+      result.put("damage", getDamage());
+//      result.put("aim", aim.id);
       result.put("alertness", alertness);
       result.put("x", location.x);
       result.put("y", location.y);

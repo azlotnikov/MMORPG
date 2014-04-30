@@ -117,8 +117,15 @@ public class PlayerAnnotation {
       result.put("items", Game.getDroppedItemsJSON());
       result.put("x", player.getLocation().x);
       result.put("y", player.getLocation().y);
-      result.put("hp", player.getHP());
-      result.put("inventory", player.getInventory().inventoryToJSON());
+      JSONObject playerData = new JSONObject();
+      playerData.put("hp", player.getHP());
+      playerData.put("hpBonus", 0);
+      playerData.put("damage", player.getDamage());
+      playerData.put("damageBonus", 0);
+      playerData.put("speed", player.getSpeed());
+      playerData.put("speedBonus", 0);
+      playerData.put("inventory", player.getInventory().inventoryToJSON());
+      result.put("player", playerData);
       return result;
    }
 
