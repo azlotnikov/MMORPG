@@ -49,6 +49,7 @@ public class Monster {
       if (generateInventory) {
          generateRandomInventory();
       }
+      this.bonus = inventory.calcBonus();
    }
 
    public void generateRandomInventory() {
@@ -67,10 +68,12 @@ public class Monster {
 
    public void dropInventory() {
       inventory.dropAllItems(location);
+      this.bonus = inventory.calcBonus();
    }
 
    public void pickUpInventory(){
       inventory.pickUpItem(inventoryID);
+      this.bonus = inventory.calcBonus();
    }
 
    public void move() {

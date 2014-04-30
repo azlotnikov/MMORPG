@@ -32,7 +32,7 @@ public class Inventory {
 
    protected void addItem(Item item) {
       items.put(item.getId(), item);
-      new Bonus();
+      calcBonus();
    }
 
    public void dropItem(Long itemId, Location newLocation) {
@@ -55,13 +55,14 @@ public class Inventory {
       addItem(item);
    }
 
-   public void calcBonus(){
+   public Bonus calcBonus(){
       bonus = new Bonus();
       for (Item item : getItems()){
          if (item.isEquipped()){
             bonus.addBonus(item.getBonus());
          }
       }
+      return bonus;
    }
 
    public JSONArray inventoryToJSON() {
