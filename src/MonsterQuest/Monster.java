@@ -68,6 +68,10 @@ public class Monster {
       inventory.dropAllItems(location);
    }
 
+   public void dropItem(Long itemID) {
+      inventory.dropItem(itemID, location);
+   }
+
    public void pickUpInventory(){
       inventory.pickUpItem(inventoryID);
    }

@@ -37,6 +37,7 @@ public class Inventory {
       //TODO проверять куда падает
       Item item = items.get(itemId);
       item.setLocation(newLocation);
+      removeItem(item);
       Game.addDroppedItem(item);
    }
 

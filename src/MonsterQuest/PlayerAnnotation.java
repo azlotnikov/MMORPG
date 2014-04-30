@@ -238,6 +238,11 @@ public class PlayerAnnotation {
             return;
          }
 
+         case "drop": {
+            player.dropItem((long) jsonMsg.get("itemId"));
+            return;
+         }
+
          case "attack": {
             player.setAim(((Double) jsonMsg.get("x")).doubleValue(), ((Double) jsonMsg.get("y")).doubleValue());
             return;

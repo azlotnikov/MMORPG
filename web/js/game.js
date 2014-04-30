@@ -86,7 +86,7 @@ Game.prototype.pickUp = function (itemID) {
 Game.prototype.dropItem = function (itemID) {
     this.sendMsg({
         action: "drop",
-        inventoryID: itemID,
+        itemId: itemID,
         sid: this.sid
     });
 };
