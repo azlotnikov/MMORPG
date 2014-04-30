@@ -211,22 +211,6 @@ function fixPageXY(e) {
     }
 }
 
-document.onclick = function (e) {
-    e = e || window.event;
-    fixPageXY(e);
-    var actor = game.GetActor(e.pageX / TILE_SIZE, e.pageY / TILE_SIZE);
-    var item = game.GetItem(e.pageX / TILE_SIZE, e.pageY / TILE_SIZE);
-    if (actor) {
-        e.preventDefault();
-        game.examine(actor.id); // TODO Правая кнопка
-        game.attack(actor.x, actor.y);
-    } else if (item){
-        game.pickUp(item.id);
-    } else {
-        document.getElementById('examine').innerHTML = "";
-    }
-};
-
 Game.prototype.GetActor = function (x, y) {
     var i;
     for (i in game.view.actors) {
@@ -251,3 +235,26 @@ Game.prototype.GetItem = function (x, y) {
 
 game.initGame();
 
+
+document.onclick = function (e) {
+    e = e || window.event;
+    fixPageXY(e);
+    var actor = game.GetActor(e.pageX / TILE_SIZE, e.pageY / TILE_SIZE);
+    var item = game.GetItem(e.pageX / TILE_SIZE, e.pageY / TILE_SIZE);
+    if (actor) {
+        e.preventDefault();
+        if (e.which == 3) {
+            game.examine(actor.id); // TODO Правая кнопка
+        } else {
+            game.attack(actor.x, actor.y);
+        }
+    } else if (item) {
+        game.pickUp(item.id);
+    } else {
+        document.getElementById('examine').innerHTML = "";
+    }
+};
+
+document.oncontextmenu = function (e) {
+    e.preventDefault();
+};
