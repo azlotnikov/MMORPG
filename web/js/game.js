@@ -75,6 +75,14 @@ Game.prototype.attack = function (x, y) {
     });
 };
 
+Game.prototype.pickUp = function (itemID) {
+    this.sendMsg({
+        action: "pickUp",
+        inventoryID: itemID,
+        sid: this.sid
+    });
+};
+
 Game.prototype.move = function (direction) {
     this.sendMsg({
         action: "move",
@@ -207,10 +215,13 @@ document.onclick = function (e) {
     e = e || window.event;
     fixPageXY(e);
     var actor = game.GetActor(e.pageX / TILE_SIZE, e.pageY / TILE_SIZE);
+    var item = game.GetItem(e.pageX / TILE_SIZE, e.pageY / TILE_SIZE);
     if (actor) {
         e.preventDefault();
         game.examine(actor.id); // TODO Правая кнопка
         game.attack(actor.x, actor.y);
+    } else if (item){
+        game.pickUp(item.id);
     } else {
         document.getElementById('examine').innerHTML = "";
     }
@@ -224,6 +235,18 @@ Game.prototype.GetActor = function (x, y) {
             return game.view.actors[i];
         }
     }
+};
+
+Game.prototype.GetItem = function (x, y) {
+    var i;
+    var item;
+    for (i in game.view.items) {
+        if (Math.abs(x - game.view.items[i].x + game.view.x - SIGHT_RADIUS_X) < 0.5
+            && Math.abs(y - game.view.items[i].y + game.view.y - SIGHT_RADIUS_Y) < 0.5) {
+            item = game.view.items[i];
+        }
+    }
+    return item;
 };
 
 game.initGame();

@@ -227,6 +227,11 @@ public class PlayerAnnotation {
             break;
          }
 
+         case "pickUp": {
+            player.setInventoryID((long) jsonMsg.get("inventoryID"));
+            return;
+         }
+
          case "attack": {
             player.setAim(((Double)jsonMsg.get("x")).doubleValue(), ((Double)jsonMsg.get("y")).doubleValue());
             return;

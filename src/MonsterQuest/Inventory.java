@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by razoriii on 29.04.14.
- */
+ */ //TODO объект бонус
 public class Inventory {
    private final ConcurrentHashMap<Long, Item> items = new ConcurrentHashMap<>();
 
@@ -40,7 +40,7 @@ public class Inventory {
       Game.addDroppedItem(item);
    }
 
-   public void dropAllItems(Location newLocation) {
+   public void dropAllItems(Location newLocation) { //TODO убрать класс из game
       for (Item item:getItems()) {
          item.setLocation(newLocation);
          Game.addDroppedItem(item);
@@ -48,7 +48,9 @@ public class Inventory {
    }
 
    public void pickUpItem(Long itemId) {
+      Item item = Game.getDroppedItem(itemId);
       Game.deleteDroppedItem(itemId);
+      addItem(item);
    }
 
    public JSONArray inventoryToJSON() {
@@ -56,6 +58,7 @@ public class Inventory {
       for (Item item : getItems()) {
          JSONObject itemData = new JSONObject();
          itemData.put("name", item.getName());
+         itemData.put("id", item.getId());
          itemData.put("type", item.getType());
          itemData.put("description", item.getDescription());
          itemData.put("x", item.getLocation().x);

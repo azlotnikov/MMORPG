@@ -54,6 +54,10 @@ public class Player extends Monster{
    }
 
    public synchronized void move() {
+      if (getInventoryID() != -1){
+         pickUpInventory();
+         setInventoryID(-1);
+      }
       if (canAttack(aim)) {
          attack(aim);
          aim = null;
@@ -79,6 +83,7 @@ public class Player extends Monster{
    public int getDamage(){
       return damage;
    }
+
    public String getSid() {
        return sid;
    }
@@ -94,5 +99,4 @@ public class Player extends Monster{
    public void setAim(double x, double y){
       this.aim = Game.getActors((int)x, (int)y);
    }
-
 }

@@ -12,6 +12,7 @@ public class Monster {
    protected final String name;
    protected final String type; //TODO enum
    protected final Inventory inventory = new Inventory();
+   private long inventoryID = -1;
    protected int hp;
    protected double speed;
    protected Location location;
@@ -65,6 +66,10 @@ public class Monster {
 
    public void dropInventory() {
       inventory.dropAllItems(location);
+   }
+
+   public void pickUpInventory(){
+      inventory.pickUpItem(inventoryID);
    }
 
    public void move() {
@@ -181,4 +186,13 @@ public class Monster {
    public boolean isLive() {
       return hp > 0;
    }
+
+   public void setInventoryID(long inventoryID){
+      this.inventoryID = inventoryID;
+   }
+
+   public long getInventoryID(){
+      return inventoryID;
+   }
 }
+
