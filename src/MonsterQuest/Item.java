@@ -1,5 +1,7 @@
 package MonsterQuest;
 
+import org.json.simple.JSONObject;
+
 /**
  * Created by razoriii on 29.04.14.
  */
@@ -27,6 +29,18 @@ public class Item {
 
    public Location getLocation() {
       return location;
+   }
+
+   public JSONObject examine() {
+      JSONObject result = new JSONObject();
+      result.put("action", "examine");
+      result.put("examineType", "item");
+      result.put("id", id);
+      result.put("name", name);
+      result.put("type", type);
+      result.put("description", description);
+      result.put("result", "ok");
+      return result;
    }
 
    public void setLocation(Location location) {

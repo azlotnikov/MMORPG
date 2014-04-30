@@ -159,12 +159,16 @@ public class Game {
       return jsonAns;
    }
 
-   protected static Player ExaminePlayer(long playerId) {
+   protected static Player examinePlayer(long playerId) {
       return players.get(playerId);
    }
 
-   protected static Monster ExamineMonster(long monsterId) {
+   protected static Monster examineMonster(long monsterId) {
       return monsters.get(monsterId);
+   }
+
+   protected static Item examineItem(long itemId) {
+      return droppedItems.getItem(itemId);
    }
 
    protected static synchronized void removePlayer(Player player) {

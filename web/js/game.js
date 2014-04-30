@@ -165,7 +165,11 @@ Game.prototype.receiveMsg = function (msg) {
             }
 
             if (msg.examineType == 'item') {
-                document.getElementById('examine').innerHTML = '';
+                document.getElementById('examine').innerHTML =
+                    '<div>ID: <span class="value">' + msg.id + '</span></div>' +
+                    '<div>Имя: <span class="value">' + msg.name + '</span></div>' +
+                    '<div>Тип: <span class="value">' + msg.type + '</span></div>' +
+                    '<div>Описание: <span class="value">' + msg.description + '</span></div>';
 
             }
 
@@ -244,6 +248,9 @@ Game.prototype.getItem = function (x, y) {
 Game.prototype.getInventoryItem = function (x, y) {
     x = Math.floor(x);
     y = Math.floor(y);
+    if (y > 0) {
+        x++;
+    }
     x -= SIGHT_RADIUS_X * 2;
     if (game.view.inventory[y * INVENTORY_SIZE_X + x]) {
         return game.view.inventory[y * INVENTORY_SIZE_X + x];
@@ -262,7 +269,7 @@ document.onclick = function (e) {
         if (actor) {
             e.preventDefault();
             if (e.which == 3) {
-                game.examine(actor.id); // TODO Правая кнопка
+                game.examine(actor.id);
             } else {
                 game.attack(actor.x, actor.y);
             }
@@ -277,10 +284,12 @@ document.onclick = function (e) {
         }
     } else {
         var item = game.getInventoryItem(e.pageX / TILE_SIZE, e.pageY / TILE_SIZE);
-        if (e.which == 3) {
-            game.examine(item.id);
-        } else {
-            game.dropItem(item.id);
+        if (item) {
+            if (e.which == 3) {
+                game.examine(item.id);
+            } else {
+                game.dropItem(item.id);
+            }
         }
     }
 

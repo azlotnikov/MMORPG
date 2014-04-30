@@ -15,7 +15,7 @@ import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
 @ServerEndpoint(value = "/game") // TODO Вынести весь JSON в отдельный файл
-                                 // TODO  думал об этом, но туда надо будет передавать player'а и мб что то еще
+// TODO  думал об этом, но туда надо будет передавать player'а и мб что то еще
 public class PlayerAnnotation {
 
    private Player player;
@@ -215,12 +215,18 @@ public class PlayerAnnotation {
          }
 
          case "examine": {
-            Player examPlayer = Game.ExaminePlayer((long) jsonMsg.get("id"));
-            Monster examMonster = Game.ExamineMonster((long) jsonMsg.get("id"));
+            Player examPlayer = Game.examinePlayer((long) jsonMsg.get("id"));
+            Monster examMonster = Game.examineMonster((long) jsonMsg.get("id"));
+            Item examItem = Game.examineItem((long) jsonMsg.get("id"));
+            if (examItem == null) {
+               examItem = player.getInventory().getItem((long) jsonMsg.get("id"));
+            }
             if (examPlayer != null) {
                jsonAns = examPlayer.examine();
             } else if (examMonster != null) {
                jsonAns = examMonster.examine();
+            } else if (examItem != null) {
+               jsonAns = examItem.examine();
             } else {
                jsonAns = getBadId();
             }
@@ -233,7 +239,7 @@ public class PlayerAnnotation {
          }
 
          case "attack": {
-            player.setAim(((Double)jsonMsg.get("x")).doubleValue(), ((Double)jsonMsg.get("y")).doubleValue());
+            player.setAim(((Double) jsonMsg.get("x")).doubleValue(), ((Double) jsonMsg.get("y")).doubleValue());
             return;
          }
 

@@ -142,7 +142,7 @@ View.prototype.clearView = function () {
     for (var c = this.stage.children.length - 1; c >= 0; c--) {
         this.stage.removeChild(this.stage.children[c]);
     }
-    this.stage = new PIXI.Stage(0x000000, true);
+//    this.stage = new PIXI.Stage(0x000000, true);
 };
 
 View.prototype.setActors = function (actors) {
