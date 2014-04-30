@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class Bonus {
    private int hp;
    private double speed;
+   private double damage;
    private ArrayList<Flag> flags;
 
    public Bonus(int hp, double speed, ArrayList<Flag> flags) {
@@ -25,6 +26,7 @@ public class Bonus {
    public void addBonus(Bonus bonus){
       this.hp += bonus.hp;
       this.speed += bonus.speed;
+      this.damage += bonus.damage;
       this.flags.addAll(bonus.flags);
    }
 
@@ -33,6 +35,10 @@ public class Bonus {
    }
 
    public double getSpeed(){
+      return this.speed;
+   }
+
+   public double getDamage(){
       return this.speed;
    }
 

@@ -55,11 +55,11 @@ public class Item {
       return id;
    }
 
-   public void equipped(){
+   public void equip(){
       this.isEquipped = true;
    }
 
-   public void unEquipped(){
+   public void unEquip(){
       this.isEquipped = false;
    }
 

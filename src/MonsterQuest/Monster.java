@@ -12,7 +12,7 @@ public class Monster {
    protected final String name;
    protected final String type; //TODO enum
    protected final Inventory inventory = new Inventory();
-   private long inventoryID = -1;
+   private long inventoryId = -1;
    protected int hp;
    protected double speed;
    protected Location location;
@@ -67,16 +67,16 @@ public class Monster {
    }
 
    public void dropInventory() {
-      inventory.dropAllItems(location);
+      inventory.dropAllItems(location, Game.getDroppedItems());
       this.bonus = inventory.calcBonus();
    }
 
    public void dropItem(Long itemID) {
-      inventory.dropItem(itemID, location);
+      inventory.dropItem(itemID, location, Game.getDroppedItems());
    }
 
    public void pickUpInventory(){
-      inventory.pickUpItem(inventoryID);
+      inventory.pickUpItem(inventoryId, Game.getDroppedItems());
       this.bonus = inventory.calcBonus();
    }
 
@@ -203,12 +203,12 @@ public class Monster {
       return getHP() > 0;
    }
 
-   public void setInventoryID(long inventoryID){
-      this.inventoryID = inventoryID;
+   public void setInventoryId(long inventoryId){
+      this.inventoryId = inventoryId;
    }
 
-   public long getInventoryID(){
-      return inventoryID;
+   public long getInventoryId(){
+      return inventoryId;
    }
 }
 

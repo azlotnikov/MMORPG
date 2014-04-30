@@ -41,20 +41,8 @@ public class Game {
 
    private static Monster[][] actorsMap;
 
-   public static JSONArray getDroppedItemsJSON() {
-      return droppedItems.inventoryToJSON();
-   }
-
-   public static void addDroppedItem(Item item) {
-      droppedItems.addItem(item);
-   }
-
-   public static void deleteDroppedItem(Long itemId) {
-      droppedItems.removeItem(itemId);
-   }
-
-   public static Item getDroppedItem(Long itemId) {
-      return droppedItems.getItem(itemId);
+   public static Inventory getDroppedItems() {
+      return droppedItems;
    }
 
    private static void initializeActorsMap(int height, int width) {

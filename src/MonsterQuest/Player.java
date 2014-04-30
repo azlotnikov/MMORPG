@@ -3,8 +3,6 @@ package MonsterQuest;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
 
 import javax.websocket.CloseReason;
 import javax.websocket.CloseReason.CloseCodes;
@@ -18,15 +16,15 @@ public class Player extends Monster{
    public Player(long id, String sid, String login, Session session, Location location) {
       super(
               id
-            , login
-            , "player"
-            , 100 //TODO add HP in database
-            , 0
-            , 0.07 //TODO add speed in database
-            , null
-            , null
-            , location
-            , false
+              , login
+              , "player"
+              , 100 //TODO add HP in database
+              , 0
+              , 0.07 //TODO add speed in database
+              , null
+              , null
+              , location
+              , false
       );
       this.sid = sid;
       this.session = session;
@@ -54,9 +52,9 @@ public class Player extends Monster{
    }
 
    public synchronized void move() {
-      if (getInventoryID() != -1){
+      if (getInventoryId() != -1){
          pickUpInventory();
-         setInventoryID(-1);
+         setInventoryId(-1);
       }
       if (canAttack(aim)) {
          attack(aim);

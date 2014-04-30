@@ -20,10 +20,12 @@ public class Inventory {
 
    protected void removeItem(Item item) {
       items.remove(item.getId());
+      calcBonus();
    }
 
    protected void removeItem(Long itemId) {
       items.remove(itemId);
+      calcBonus();
    }
 
    protected Item getItem(Long itemId) {
@@ -35,24 +37,24 @@ public class Inventory {
       calcBonus();
    }
 
-   public void dropItem(Long itemId, Location newLocation) {
+   public void dropItem(Long itemId, Location newLocation, Inventory destInventory) {
       //TODO проверять куда падает
       Item item = items.get(itemId);
       item.setLocation(newLocation);
       removeItem(item);
-      Game.addDroppedItem(item);
+      destInventory.addItem(item);
    }
 
-   public void dropAllItems(Location newLocation) { //TODO убрать класс из game
+   public void dropAllItems(Location newLocation , Inventory destInventory) { //TODO убрать класс из game
       for (Item item:getItems()) {
          item.setLocation(newLocation);
-         Game.addDroppedItem(item);
+         destInventory.addItem(item);
       }
    }
 
-   public void pickUpItem(Long itemId) {
-      Item item = Game.getDroppedItem(itemId);
-      Game.deleteDroppedItem(itemId);
+   public void pickUpItem(Long itemId, Inventory sourceInventory) {
+      Item item = Game.getDroppedItems().getItem(itemId);
+      sourceInventory.removeItem(itemId);
       addItem(item);
    }
 

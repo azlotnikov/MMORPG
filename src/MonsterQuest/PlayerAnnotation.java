@@ -114,7 +114,7 @@ public class PlayerAnnotation {
       result.put("result", "ok");
       result.put("map", getMap((int) player.getLocation().x, (int) player.getLocation().y));
       result.put("actors", Game.getActors(player.getLocation()));
-      result.put("items", Game.getDroppedItemsJSON());
+      result.put("items", Game.getDroppedItems().inventoryToJSON());
       result.put("x", player.getLocation().x);
       result.put("y", player.getLocation().y);
       JSONObject playerData = new JSONObject();
@@ -160,19 +160,6 @@ public class PlayerAnnotation {
          }
          player = new Player(Game.getPlayerIdBySid(user.getSid()), user.getSid(), user.getLogin(), openedSession, user.getLocation());
          Game.addPlayer(player);
-         player.generateRandomInventory(); //TODO this is for test
-         player.generateRandomInventory(); //TODO this is for test
-         player.generateRandomInventory(); //TODO this is for test
-         player.generateRandomInventory(); //TODO this is for test
-         player.generateRandomInventory(); //TODO this is for test
-         player.generateRandomInventory(); //TODO this is for test
-         player.generateRandomInventory(); //TODO this is for test
-         player.generateRandomInventory(); //TODO this is for test
-         player.generateRandomInventory(); //TODO this is for test
-         player.generateRandomInventory(); //TODO this is for test
-         player.generateRandomInventory(); //TODO this is for test
-         player.generateRandomInventory(); //TODO this is for test
-         player.generateRandomInventory(); //TODO this is for test
          player.generateRandomInventory(); //TODO this is for test
          player.generateRandomInventory(); //TODO this is for test
       }
@@ -234,7 +221,7 @@ public class PlayerAnnotation {
          }
 
          case "pickUp": {
-            player.setInventoryID((long) jsonMsg.get("inventoryID"));
+            player.setInventoryId((long) jsonMsg.get("inventoryID"));
             return;
          }
 
