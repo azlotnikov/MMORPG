@@ -119,11 +119,11 @@ public class PlayerAnnotation {
       result.put("y", player.getLocation().y);
       JSONObject playerData = new JSONObject();
       playerData.put("hp", player.getHP());
-      playerData.put("hpBonus", 0);
+      playerData.put("hpBonus", player.getBonusHP());
       playerData.put("damage", player.getDamage());
       playerData.put("damageBonus", 0);
       playerData.put("speed", player.getSpeed());
-      playerData.put("speedBonus", 0);
+      playerData.put("speedBonus", player.getBonusSpeed());
       playerData.put("inventory", player.getInventory().inventoryToJSON());
       result.put("player", playerData);
       return result;

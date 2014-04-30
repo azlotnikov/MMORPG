@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */ //TODO объект бонус
 public class Inventory {
    private final ConcurrentHashMap<Long, Item> items = new ConcurrentHashMap<>();
+   private Bonus bonus;
 
    protected Collection<Item> getItems() {
       return Collections.unmodifiableCollection(items.values());
@@ -31,6 +32,7 @@ public class Inventory {
 
    protected void addItem(Item item) {
       items.put(item.getId(), item);
+      calcBonus();
    }
 
    public void dropItem(Long itemId, Location newLocation) {
@@ -52,6 +54,16 @@ public class Inventory {
       Item item = Game.getDroppedItem(itemId);
       Game.deleteDroppedItem(itemId);
       addItem(item);
+   }
+
+   public Bonus calcBonus(){
+      bonus = new Bonus();
+      for (Item item : getItems()){
+         if (item.isEquipped()){
+            bonus.addBonus(item.getBonus());
+         }
+      }
+      return bonus;
    }
 
    public JSONArray inventoryToJSON() {

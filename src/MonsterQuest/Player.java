@@ -63,7 +63,7 @@ public class Player extends Monster{
          aim = null;
       } else {
          Game.unsetMonsterInLocation(location);
-         Location newLocation = location.getNewLocation(direction, speed);
+         Location newLocation = location.getNewLocation(direction, getSpeed());
          location = newLocation.isActiveObjectInFront(direction, 0) ? location : newLocation;
          this.setDirection(Direction.NONE);
          Game.setMonsterInLocation(this);

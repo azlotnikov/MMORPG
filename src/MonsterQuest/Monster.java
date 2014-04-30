@@ -22,6 +22,7 @@ public class Monster {
    protected int alertness;
    protected Monster aim;
    protected int timeToRefresh;
+   protected Bonus bonus;
 
    public Monster(
            long id,
@@ -48,6 +49,7 @@ public class Monster {
       if (generateInventory) {
          generateRandomInventory();
       }
+      this.bonus = inventory.calcBonus();
    }
 
    public void generateRandomInventory() {
@@ -66,6 +68,7 @@ public class Monster {
 
    public void dropInventory() {
       inventory.dropAllItems(location);
+      this.bonus = inventory.calcBonus();
    }
 
    public void dropItem(Long itemID) {
@@ -74,6 +77,7 @@ public class Monster {
 
    public void pickUpInventory(){
       inventory.pickUpItem(inventoryID);
+      this.bonus = inventory.calcBonus();
    }
 
    public void move() {
@@ -93,7 +97,7 @@ public class Monster {
                          aim.location.x - location.x < 0 ? Direction.WEST : Direction.EAST :
                          aim.location.y - location.y < 0 ? Direction.NORTH : Direction.SOUTH;
          Game.unsetMonsterInLocation(location);
-         Location newLocation = location.getNewLocation(direction, speed);
+         Location newLocation = location.getNewLocation(direction, getSpeed());
          if (newLocation.equal(location) || newLocation.isActiveObjectInFront(direction, 0)) {
             direction = Dice.getDirection();
          } else {
@@ -148,8 +152,8 @@ public class Monster {
       result.put("id", id);
       result.put("name", name);
       result.put("type", type);
-      result.put("hp", hp);
-      result.put("speed", speed);
+      result.put("hp", getHP());
+      result.put("speed", getSpeed());
       result.put("damage", getDamage());
 //      result.put("aim", aim.id);
       result.put("alertness", alertness);
@@ -176,11 +180,19 @@ public class Monster {
    }
 
    public int getHP() {
-      return hp;
+      return hp + bonus.getHP();
+   }
+
+   public int getBonusHP() {
+      return bonus.getHP();
+   }
+
+   public double getBonusSpeed() {
+      return bonus.getSpeed();
    }
 
    public double getSpeed() {
-      return speed;
+      return speed + bonus.getSpeed();
    }
 
    public void setSpeed(double speed) {
@@ -188,7 +200,7 @@ public class Monster {
    }
 
    public boolean isLive() {
-      return hp > 0;
+      return getHP() > 0;
    }
 
    public void setInventoryID(long inventoryID){
