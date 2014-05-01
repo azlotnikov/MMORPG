@@ -121,7 +121,7 @@ public class PlayerAnnotation {
       playerData.put("hp", player.getHP());
       playerData.put("hpBonus", player.getBonusHP());
       playerData.put("damage", player.getDamage());
-      playerData.put("damageBonus", 0);
+      playerData.put("damageBonus", player.getBonusDamage());
       playerData.put("speed", player.getSpeed());
       playerData.put("speedBonus", player.getBonusSpeed());
       playerData.put("inventory", player.getInventory().inventoryToJSON());

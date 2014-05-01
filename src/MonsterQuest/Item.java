@@ -12,6 +12,7 @@ public class Item {
    private final String description;
    private int hp = 40;
    private double speed = 0.001;
+   private double damage = 10;
    private ArrayList<Flag> flags = new ArrayList<>();
    private boolean isEquipped = true;
 
@@ -69,7 +70,7 @@ public class Item {
 
 
    public Bonus getBonus(){
-      return new Bonus(hp, speed, flags);
+      return new Bonus(hp, speed, damage, flags);
    }
 
    public String getName() {

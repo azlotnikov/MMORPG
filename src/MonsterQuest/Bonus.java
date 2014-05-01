@@ -11,15 +11,17 @@ public class Bonus {
    private double damage;
    private ArrayList<Flag> flags;
 
-   public Bonus(int hp, double speed, ArrayList<Flag> flags) {
+   public Bonus(int hp, double speed, double damage, ArrayList<Flag> flags) {
       this.hp = hp;
       this.speed = speed;
+      this.damage = damage;
       this.flags = flags;
    }
 
    public Bonus() {
       this.hp = 0;
       this.speed = 0;
+      this.damage = 0;
       this.flags = new ArrayList<>();
    }
 
@@ -39,7 +41,7 @@ public class Bonus {
    }
 
    public double getDamage(){
-      return this.speed;
+      return this.damage;
    }
 
    public ArrayList<Flag> getFlags(){

@@ -187,6 +187,9 @@ public class Monster {
       return bonus.getHP();
    }
 
+   public double getBonusDamage() {
+      return bonus.getDamage();
+   }
    public double getBonusSpeed() {
       return bonus.getSpeed();
    }
