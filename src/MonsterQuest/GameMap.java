@@ -148,10 +148,9 @@ public class GameMap {
       saveWorldMap();
    }
 
-   public static boolean canEnterTile(int x, int y) {
-      return worldMap[y][x] != '#';
+   public static boolean canEnterTile(double x, double y) {
+      return worldMap[(int)y][(int)x] != '#';
       // TODO в описании карты добавить пропускную способность
-      // TODO перенести огругление сюда, и сделать параметры double
    }
 
 }
