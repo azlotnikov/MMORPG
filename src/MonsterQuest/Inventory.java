@@ -40,7 +40,7 @@ public class Inventory {
    public void dropItem(Long itemId, Location newLocation, Inventory destInventory) {
       //TODO проверять куда падает
       Item item = items.get(itemId);
-      item.setLocation(newLocation);
+      item.setLocation(new Location(newLocation));
       removeItem(item);
       destInventory.addItem(item);
    }
