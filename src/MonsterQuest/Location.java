@@ -6,9 +6,13 @@ package MonsterQuest;
 public class Location {
 
    public static double actorSize = 1.0 - 0.001;
-
    public double x;
    public double y;
+
+   public Location(Location location) {
+      this.x = location.x;
+      this.y = location.y;
+   }
 
    private double left(){
        return x - actorSize / 2;
@@ -26,23 +30,82 @@ public class Location {
        return y + actorSize / 2;
    }
 
+   public boolean equal(Location location) {
+      return (location.x == this.x && location.y == this.y);
+   }
+
     public Location(double x, double y) {
       this.x = x;
       this.y = y;
    }
 
+   public boolean move(Direction direction, double length) {
+      double min_lenght = 0.02;
+      boolean moveForward = false;
+      boolean result = false;
+      while(length > min_lenght){
+         double oldX = x;
+         double oldY = y;
+         double len = length > 1.0 ? 1.0 : length;
+         switch (direction) {
+            case NORTH:
+               y -= len;
+               break;
+            case SOUTH:
+               y += len;
+               break;
+            case WEST:
+               x -= len;
+               break;
+            case EAST:
+               x += len;
+               break;
+         }
+         boolean canMove = GameMap.canEnterTile(left(), top())
+                        && GameMap.canEnterTile(right(),top())
+                        && GameMap.canEnterTile(left(), bottom())
+                        && GameMap.canEnterTile(right(),bottom());
+         if (!canMove){
+            double eps = 0.15;
+            double vFront = bottom();
+            double hFront = right();
+            switch (direction) {
+               case NORTH:
+                  vFront = top();
+               case SOUTH:
+                  canMove = GameMap.canEnterTile(left() + eps, vFront)
+                         && GameMap.canEnterTile(right() - eps, vFront);
+                  x = canMove ? (int)((x + eps) / 0.5) * 0.5 : x;
+                  break;
+               case WEST:
+                  hFront = left();
+               case EAST:
+                  canMove = GameMap.canEnterTile(hFront, top() + eps)
+                         && GameMap.canEnterTile(hFront, bottom() - eps);
+                  y = canMove ? (int)((y + eps) / 0.5) * 0.5 : y;
+            }
+         }
+         canMove &= !isActiveObjectsIntersect();
 
-
-   public boolean equal(Location location) {
-      return (location.x == this.x && location.y == this.y);
+         if (canMove)
+            length = moveForward ? len / 2 : length - len;
+         else {
+            x = oldX;
+            y = oldY;
+            moveForward = true;
+            length = len / 2;
+         }
+         result |= canMove;
+      }
+      return result;
    }
 
    public Location getFreeLocation(){
-       while (!GameMap.canEnterTile((int)left(), (int)top())
-           || !GameMap.canEnterTile((int)right(), (int)top())
-           || !GameMap.canEnterTile((int)left(), (int)bottom())
-           || !GameMap.canEnterTile((int)right(), (int)bottom())
-           || isActiveObjectInFront(Direction.NORTH, 0)){
+       while (!GameMap.canEnterTile(left(), top())
+           || !GameMap.canEnterTile(right(), top())
+           || !GameMap.canEnterTile(left(), bottom())
+           || !GameMap.canEnterTile(right(), bottom())
+           || isActiveObjectsIntersect()){
 
            x += (Dice.getInt(2, 2) - 2) * (int)Math.pow(-1, Dice.getInt(2, 1));
            y += (Dice.getInt(2, 2) - 2) * (int)Math.pow(-1, Dice.getInt(2, 1));
@@ -50,71 +113,19 @@ public class Location {
        return this;
 }
 
-   private static boolean isLocationIntersect(Location l1, Location l2, double deltaX, double deltaY){
+   private static boolean isLocationIntersect(Location l1, Location l2){
       return l1 != null && l2 != null
-            && Math.abs(l1.x - l2.x - deltaX) < 1.0
-            && Math.abs(l1.y - l2.y - deltaY) < 1.0;
+            && Math.abs(l1.x - l2.x) < 1.0
+            && Math.abs(l1.y - l2.y) < 1.0;
    }
 
-   public boolean isActiveObjectInFront(Direction direction, double velocity) {
+   public boolean isActiveObjectsIntersect() {
       boolean result = false;
-      double deltaX = 0;
-      double deltaY = 0;
-      switch (direction) {
-         case NORTH:
-            deltaY = -velocity;
-            break;
-         case SOUTH:
-            deltaY = velocity;
-            break;
-         case WEST:
-            deltaX = -velocity;
-            break;
-         case EAST:
-            deltaX = velocity;
-            break;
-      }
       for(int i = -1; i <= 1; i++)
          for(int j = -1; j <= 1; j++){
             Monster monster = Game.getActors((int)this.x + i, (int)this.y + j);
-            result |= monster != null && isLocationIntersect(monster.getLocation(), this, deltaX, deltaY);
+            result |= monster != null && isLocationIntersect(monster.getLocation(), this);
          }
       return result;
-   }
-
-   public Location getNewLocation(Direction direction, double velocity) {
-      double eps = 0.15;
-      double vFront = bottom();
-      double hFront = right();
-      switch (direction) {
-         case NORTH:
-            velocity *= -1;
-            vFront = top();
-         case SOUTH:
-            if (GameMap.canEnterTile((int) left(), (int) (vFront + velocity))
-                  && GameMap.canEnterTile((int) right(), (int) (vFront + velocity)))
-               return new Location(x, y + velocity);
-            else if (GameMap.canEnterTile((int) (left() + eps), (int) (vFront + velocity))
-                  && GameMap.canEnterTile((int) (right() - eps), (int) (vFront + velocity)))
-               return new Location((int) ((x + eps) / 0.5) * 0.5, y + velocity);
-            else
-               return new Location(x, y);
-         case WEST:
-            velocity *= -1;
-            hFront = left();
-         case EAST:
-            if (GameMap.canEnterTile((int) (hFront + velocity), (int) top())
-                  && GameMap.canEnterTile((int) (hFront + velocity), (int) bottom()))
-               return new Location(x + velocity, y);
-            else if (GameMap.canEnterTile((int) (hFront + velocity), (int) (top() + eps))
-                  && GameMap.canEnterTile((int) (hFront + velocity), (int) (bottom() - eps)))
-               return new Location(x + velocity, (int) ((y + eps) / 0.5) * 0.5);
-            else
-               return new Location(x, y);
-         case NONE:
-            return new Location(x, y);
-         default:
-            return this;
-      }
    }
 }

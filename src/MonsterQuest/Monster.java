@@ -97,11 +97,9 @@ public class Monster {
                          aim.location.x - location.x < 0 ? Direction.WEST : Direction.EAST :
                          aim.location.y - location.y < 0 ? Direction.NORTH : Direction.SOUTH;
          Game.unsetMonsterInLocation(location);
-         Location newLocation = location.getNewLocation(direction, getSpeed());
-         if (newLocation.equal(location) || newLocation.isActiveObjectInFront(direction, 0)) {
+
+         if (!this.location.move(direction, getSpeed())) {
             direction = Dice.getDirection();
-         } else {
-            location = newLocation;
          }
          Game.setMonsterInLocation(this);
       }

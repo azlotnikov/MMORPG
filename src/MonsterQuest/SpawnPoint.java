@@ -14,7 +14,7 @@ public class SpawnPoint {
       int monsterTypeIndex = 0;
       //if (Dice.getInt(4, 4) > 12)
       monsterTypeIndex = Dice.getInt(Game.GetCountMonsterTypes(), 1) - 1;
-      Game.addMonster(Game.createMonster(Game.getMonsterTypes().get(monsterTypeIndex), location));
+      Game.addMonster(Game.createMonster(Game.getMonsterTypes().get(monsterTypeIndex), new Location(location)));
    }
 
    public Location getLocation() {
