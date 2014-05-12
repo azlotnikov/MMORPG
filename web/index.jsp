@@ -13,7 +13,7 @@
 
 <link rel="stylesheet" type="text/css" href="styles/style.css"/>
 <link rel="stylesheet" type="text/css" href="styles/login.css"/>
-<script src="js/jquery.js"></script>
+<script src="js/lib/jquery.js"></script>
 
 <!DOCTYPE html>
 <head>

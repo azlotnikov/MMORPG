@@ -12,12 +12,13 @@
     <title>Monster Quest</title>
     <link rel="stylesheet" type="text/css" href="styles/style.css"/>
     <link rel="stylesheet" type="text/css" href="styles/game.css"/>
-    <script src="js/pixi.dev.js"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/view.js"></script>
+    <script src="js/lib/pixi.dev.js"></script>
+    <script src="js/game/utils.js"></script>
+    <script src="js/game/textures.js"></script>
+    <script src="js/game/view.js"></script>
 </head>
 <body>
-<script src="js/game.js"></script>
+<script src="js/game/game.js"></script>
 <div id="examine">
 
 </div>

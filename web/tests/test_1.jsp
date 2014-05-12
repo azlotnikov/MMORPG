@@ -15,7 +15,7 @@
 <head>
     <title>TEST</title>
 </head>
-<script src="../js/jquery.js"></script>
+<script src="../js/utils/jquery.js"></script>
 <script type="text/javascript">
     function sendRequest(login, password, action, expected_result) {
         var jsonObj = JSON.stringify({
