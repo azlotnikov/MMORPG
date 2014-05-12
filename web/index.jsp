@@ -89,7 +89,7 @@
     <input id="password" type="password" value="123456"/><br/>
     <button class="button red" onclick="registerButtonClick();">Регистрация</button>
     <button class="button green" onclick="loginButtonClick();">Вход</button>
-    <button class="button" onclick="javascript:location.assign('tests/test_1.jsp');">Тесты</button>
+    <button class="button" onclick="location.assign('tests/test_1.jsp');">Тесты</button>
 </div>
 </body>
 </html>

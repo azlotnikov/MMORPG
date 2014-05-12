@@ -248,9 +248,6 @@ Game.prototype.getItem = function (x, y) {
 Game.prototype.getInventoryItem = function (x, y) {
     x = Math.floor(x);
     y = Math.floor(y);
-    if (y > 0) {
-        x++;
-    }
     x -= SIGHT_RADIUS_X * 2;
     if (game.view.inventory[y * INVENTORY_SIZE_X + x]) {
         return game.view.inventory[y * INVENTORY_SIZE_X + x];
