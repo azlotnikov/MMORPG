@@ -21,12 +21,83 @@ function View() {
     this.gameRenderer.view.style.position = "absolute";
     this.gameRenderer.view.style.top = "0px";
     this.gameRenderer.view.style.left = "0px";
+    this.gameRenderer.view.onclick = this.gameRendererClick;
+    this.gameRenderer.view.oncontextmenu = this.gameRendererClick;
 
     document.body.appendChild(this.inventoryRenderer.view);
     this.inventoryRenderer.view.style.position = "absolute";
     this.inventoryRenderer.view.style.top = "0";
     this.inventoryRenderer.view.style.left = this.gameRenderer.width + "px";
+    this.inventoryRenderer.view.onclick = this.inventoryRendererClick;
+    this.inventoryRenderer.view.oncontextmenu = this.inventoryRendererClick;
 }
+
+View.prototype.getActor = function (x, y) {
+    var i;
+    for (i in this.actors) {
+        if (Math.abs(x - this.actors[i].x + this.x - SIGHT_RADIUS_X) < 0.5
+            && Math.abs(y - this.actors[i].y + this.y - SIGHT_RADIUS_Y) < 0.5) {
+            return this.actors[i];
+        }
+    }
+};
+
+View.prototype.getItem = function (x, y) {
+    var i;
+    var item;
+    for (i in this.items) {
+        if (Math.abs(x - this.items[i].x + this.x - SIGHT_RADIUS_X) < 0.5
+            && Math.abs(y - this.items[i].y + this.y - SIGHT_RADIUS_Y) < 0.5) {
+            item = this.items[i];
+        }
+    }
+    return item;
+};
+
+View.prototype.getInventoryItem = function (x, y) {
+    x = Math.floor(x);
+    y = Math.floor(y);
+    x -= SIGHT_RADIUS_X * 2;
+    if (this.inventory[y * INVENTORY_SIZE_X + x]) {
+        return this.inventory[y * INVENTORY_SIZE_X + x];
+    }
+};
+
+View.prototype.gameRendererClick = function (e) {
+    e = e || window.event;
+    e.preventDefault();
+    var actor = game.view.getActor(e.clientX / TILE_SIZE, e.clientY / TILE_SIZE);
+    var item = game.view.getItem(e.clientX / TILE_SIZE, e.clientY / TILE_SIZE);
+    if (actor) {
+        e.preventDefault();
+        if (e.which == 3) {
+            game.examine(actor.id);
+        } else {
+            game.attack(actor.x, actor.y);
+        }
+    } else if (item) {
+        if (e.which == 3) {
+            game.examine(item.id);
+        } else {
+            game.pickUp(item.id);
+        }
+    } else {
+        document.getElementById('examine').innerHTML = "";
+    }
+};
+
+View.prototype.inventoryRendererClick = function (e) {
+    e = e || window.event;
+    e.preventDefault();
+    var item = game.view.getInventoryItem(e.clientX / TILE_SIZE, e.clientY / TILE_SIZE);
+    if (item) {
+        if (e.which == 3) {
+            game.examine(item.id);
+        } else {
+            game.dropItem(item.id);
+        }
+    }
+};
 
 View.prototype.drawGameTile = function (x, y, textureName) {
     var tile = new PIXI.Sprite(this.textures.data[textureName]);
@@ -117,7 +188,7 @@ View.prototype.clearInventoryStage = function () {
     for (var c = this.inventoryStage.children.length - 1; c >= 0; c--) {
         this.inventoryStage.removeChild(this.inventoryStage.children[c]);
     }
-   // this.inventoryStage = new PIXI.Stage(0x000000, true);
+    // this.inventoryStage = new PIXI.Stage(0x000000, true);
 };
 
 View.prototype.setActors = function (actors) {

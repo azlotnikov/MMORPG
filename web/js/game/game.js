@@ -184,7 +184,6 @@ function animate() {
 
     if (game.tick != game.prevTick) {
         game.prevTick = game.tick;
-//        alert(game.prevTick);
         game.view.updateView();
     }
 
@@ -212,86 +211,4 @@ document.onkeyup = function (e) {
     }
 };
 
-function fixPageXY(e) {
-    if (e.pageX == null && e.clientX != null) {
-        var html = document.documentElement;
-        var body = document.body;
-        e.pageX = e.clientX + (html.scrollLeft || body && body.scrollLeft || 0);
-        e.pageX -= html.clientLeft || 0;
-        e.pageY = e.clientY + (html.scrollTop || body && body.scrollTop || 0);
-        e.pageY -= html.clientTop || 0;
-    }
-}
-
-Game.prototype.getActor = function (x, y) {
-    var i;
-    for (i in game.view.actors) {
-        if (Math.abs(x - game.view.actors[i].x + game.view.x - SIGHT_RADIUS_X) < 0.5
-            && Math.abs(y - game.view.actors[i].y + game.view.y - SIGHT_RADIUS_Y) < 0.5) {
-            return game.view.actors[i];
-        }
-    }
-};
-
-Game.prototype.getItem = function (x, y) {
-    var i;
-    var item;
-    for (i in game.view.items) {
-        if (Math.abs(x - game.view.items[i].x + game.view.x - SIGHT_RADIUS_X) < 0.5
-            && Math.abs(y - game.view.items[i].y + game.view.y - SIGHT_RADIUS_Y) < 0.5) {
-            item = game.view.items[i];
-        }
-    }
-    return item;
-};
-
-Game.prototype.getInventoryItem = function (x, y) {
-    x = Math.floor(x);
-    y = Math.floor(y);
-    x -= SIGHT_RADIUS_X * 2;
-    if (game.view.inventory[y * INVENTORY_SIZE_X + x]) {
-        return game.view.inventory[y * INVENTORY_SIZE_X + x];
-    }
-};
-
 game.initGame();
-
-
-document.onclick = function (e) {
-    e = e || window.event;
-    fixPageXY(e);
-    if (e.pageX / TILE_SIZE <= SIGHT_RADIUS_X * 2) {
-        var actor = game.getActor(e.pageX / TILE_SIZE, e.pageY / TILE_SIZE);
-        var item = game.getItem(e.pageX / TILE_SIZE, e.pageY / TILE_SIZE);
-        if (actor) {
-            e.preventDefault();
-            if (e.which == 3) {
-                game.examine(actor.id);
-            } else {
-                game.attack(actor.x, actor.y);
-            }
-        } else if (item) {
-            if (e.which == 3) {
-                game.examine(item.id);
-            } else {
-                game.pickUp(item.id);
-            }
-        } else {
-            document.getElementById('examine').innerHTML = "";
-        }
-    } else {
-        var item = game.getInventoryItem(e.pageX / TILE_SIZE, e.pageY / TILE_SIZE);
-        if (item) {
-            if (e.which == 3) {
-                game.examine(item.id);
-            } else {
-                game.dropItem(item.id);
-            }
-        }
-    }
-
-};
-
-document.oncontextmenu = function (e) {
-    e.preventDefault();
-};
