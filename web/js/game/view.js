@@ -118,7 +118,7 @@ View.prototype.drawInventoryTile = function (x, y, textureName) {
 };
 
 View.prototype.updateView = function () {
-    this.clearGameStage();
+    this.clearStage(this.gameStage);
     var curHeight = -(this.y % 1) * TILE_SIZE;
     var curWidth;
     var i;
@@ -152,7 +152,7 @@ View.prototype.updateView = function () {
     this.gameRenderer.render(this.gameStage);
     //TODO need to rewrite this shit
     if (this.updateInventory) {
-        this.clearInventoryStage();
+        this.clearStage(this.inventoryStage);
         var h = 0;
         var w = 0;
         var x = 0;
@@ -177,18 +177,11 @@ View.prototype.updateView = function () {
     }
 };
 
-View.prototype.clearGameStage = function () {
-    for (var c = this.gameStage.children.length - 1; c >= 0; c--) {
-        this.gameStage.removeChild(this.gameStage.children[c]);
+View.prototype.clearStage = function (stage) {
+    for (var c = stage.children.length - 1; c >= 0; c--) {
+        stage.removeChild(stage.children[c]);
     }
 //    this.gameStage = new PIXI.Stage(0x000000, true);
-};
-
-View.prototype.clearInventoryStage = function () {
-    for (var c = this.inventoryStage.children.length - 1; c >= 0; c--) {
-        this.inventoryStage.removeChild(this.inventoryStage.children[c]);
-    }
-    // this.inventoryStage = new PIXI.Stage(0x000000, true);
 };
 
 View.prototype.setActors = function (actors) {
