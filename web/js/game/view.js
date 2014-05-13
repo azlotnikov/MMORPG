@@ -23,15 +23,15 @@ function View() {
     this.gameRenderer.view.style.position = "absolute";
     this.gameRenderer.view.style.top = "0px";
     this.gameRenderer.view.style.left = "0px";
-    this.gameRenderer.view.onclick = this.gameRendererClick;
-    this.gameRenderer.view.oncontextmenu = this.gameRendererClick;
+    this.gameRenderer.view.onclick = gameRendererClick;
+    this.gameRenderer.view.oncontextmenu = gameRendererClick;
 
     document.body.appendChild(this.inventoryRenderer.view);
     this.inventoryRenderer.view.style.position = "absolute";
     this.inventoryRenderer.view.style.top = "0";
     this.inventoryRenderer.view.style.left = this.gameRenderer.width + "px";
-    this.inventoryRenderer.view.onclick = this.inventoryRendererClick;
-    this.inventoryRenderer.view.oncontextmenu = this.inventoryRendererClick;
+    this.inventoryRenderer.view.onclick = inventoryRendererClick;
+    this.inventoryRenderer.view.oncontextmenu = inventoryRendererClick;
 }
 
 View.prototype.getActor = function (x, y) {
@@ -65,7 +65,7 @@ View.prototype.getInventoryItem = function (x, y) {
     }
 };
 
-View.prototype.gameRendererClick = function (e) {
+function gameRendererClick (e) {
     e = e || window.event;
     e.preventDefault();
     var actor = game.view.getActor(e.clientX / TILE_SIZE, e.clientY / TILE_SIZE);
@@ -86,9 +86,9 @@ View.prototype.gameRendererClick = function (e) {
     } else {
         document.getElementById('examine').innerHTML = "";
     }
-};
+}
 
-View.prototype.inventoryRendererClick = function (e) {
+function inventoryRendererClick (e) {
     e = e || window.event;
     e.preventDefault();
     var item = game.view.getInventoryItem(e.clientX / TILE_SIZE, e.clientY / TILE_SIZE);
@@ -99,7 +99,7 @@ View.prototype.inventoryRendererClick = function (e) {
             game.dropItem(item.id);
         }
     }
-};
+}
 
 View.prototype.drawGameTile = function (x, y, textureName) {
     var tile = new PIXI.Sprite(this.textures.data[textureName]);
