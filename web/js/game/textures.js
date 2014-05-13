@@ -27,7 +27,9 @@ function Textures() {
         .loadTexture(0, 27, 'staff1')
         .loadTexture(1, 27, 'staff2')
         .loadTexture(3, 27, 'staff3')
-        .loadTexture(13, 21, 'gloves1');
+        .loadTexture(13, 21, 'gloves1')
+        .loadTexture(9, 43, 'fireball')
+        .loadTexture(2, 47, 'fists');
 
 }
 
