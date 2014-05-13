@@ -221,12 +221,12 @@ public class PlayerAnnotation {
          }
 
          case "pickUp": {
-            player.setInventoryId((long) jsonMsg.get("inventoryID"));
+            player.setInventoryId((long) jsonMsg.get("id"));
             return;
          }
 
          case "drop": {
-            player.dropItem((long) jsonMsg.get("itemId"));
+            player.dropItem((long) jsonMsg.get("id"));
             return;
          }
 

@@ -78,7 +78,7 @@ Game.prototype.attack = function (x, y) {
 Game.prototype.pickUp = function (itemID) {
     this.sendMsg({
         action: "pickUp",
-        inventoryID: itemID,
+        id: itemID,
         sid: this.sid
     });
 };
@@ -86,7 +86,7 @@ Game.prototype.pickUp = function (itemID) {
 Game.prototype.dropItem = function (itemID) {
     this.sendMsg({
         action: "drop",
-        itemId: itemID,
+        id: itemID,
         sid: this.sid
     });
 };
