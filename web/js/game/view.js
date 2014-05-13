@@ -16,6 +16,8 @@ function View() {
     this.items = {};
     this.inventory = {};
     this.updateInventory = true;
+    this.x = 0.0;
+    this.y = 0.0;
 
     document.body.appendChild(this.gameRenderer.view);
     this.gameRenderer.view.style.position = "absolute";
