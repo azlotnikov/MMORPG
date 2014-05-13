@@ -5,9 +5,7 @@ import java.util.ArrayList;
 /**
  * Created by razoriii on 29.04.14.
  */
-public class Item {
-   private final Long id;
-   private final String name;
+public class Item extends ActiveObj{
    private final String type;
    private final String description;
    private int hp = 40;
@@ -16,24 +14,16 @@ public class Item {
    private ArrayList<Flag> flags = new ArrayList<>();
    private boolean isEquipped = true;
 
-   private Location location = new Location(0.0, 0.0);
-
    public Item(Long id, String name, String type, String description) {
+      super(Game.getNextGlobalId(), name, new Location(0, 0));
       this.description = description;
-      this.id = Game.getNextGlobalId();
-      this.name = name;
       this.type = type;
    }
 
    public Item(ItemDB itemDB) {
-      this.id = Game.getNextGlobalId();
-      this.name = itemDB.getName();
+      super(Game.getNextGlobalId(), itemDB.getName(), new Location(0, 0));
       this.type = itemDB.getType();
       this.description = itemDB.getDescription();
-   }
-
-   public Location getLocation() {
-      return location;
    }
 
    public JSONObject examine() {
@@ -46,14 +36,6 @@ public class Item {
       result.put("description", description);
       result.put("result", "ok");
       return result;
-   }
-
-   public void setLocation(Location location) {
-      this.location = location;
-   }
-
-   public Long getId() {
-      return id;
    }
 
    public void equip(){
@@ -71,10 +53,6 @@ public class Item {
 
    public Bonus getBonus(){
       return new Bonus(hp, speed, damage, flags);
-   }
-
-   public String getName() {
-      return name;
    }
 
    public String getType() {

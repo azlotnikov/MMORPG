@@ -7,15 +7,12 @@ import java.util.ArrayList;
 /**
  * Created by Alexander on 3/18/14.
  */
-public class Monster {
-   protected final long id;
-   protected final String name;
+public class Monster extends ActiveObj{
    protected final String type; //TODO enum
    protected final Inventory inventory = new Inventory();
    private long inventoryId = -1;
    protected int hp;
    protected double speed;
-   protected Location location;
    protected Direction direction = Dice.getDirection();
    protected final ArrayList<Blow> blows;
    protected final ArrayList<Flag> flags;
@@ -36,10 +33,8 @@ public class Monster {
            Location location,
            boolean generateInventory
    ) {
-      this.location = location;
-      this.name = name;
+      super(id, name, location);
       this.type = type;
-      this.id = id;
       this.hp = hp;
       this.speed = speed;
       this.blows = blows;
@@ -49,7 +44,7 @@ public class Monster {
       if (generateInventory) {
          generateRandomInventory();
       }
-      this.bonus = inventory.calcBonus();
+      this.bonus = inventory.calcBonus(); 
    }
 
    public void generateRandomInventory() {
@@ -161,20 +156,8 @@ public class Monster {
       return result;
    }
 
-   public Location getLocation() {
-      return location;
-   }
-
-   public String getName() {
-      return name;
-   }
-
    public String getType() {
       return type;
-   }
-
-   public long getId() {
-      return id;
    }
 
    public int getHP() {
