@@ -11,4 +11,8 @@ INSERT INTO items(id, name, type, description) VALUES
 (10, 'Staff 1', 'staff1', ''),
 (11, 'Staff 2', 'staff2', ''),
 (12, 'Staff 3', 'staff3', ''),
-(13, 'Gloves 1', 'gloves1', '');
+(13, 'Gloves 1', 'gloves1', ''),
+(14, 'Claw', 'claw', ''),
+(15, 'Bow', 'bow', ''),
+(16, 'Stones', 'stones', ''),
+(17, 'Flamethrower', 'flamethrower', '');
