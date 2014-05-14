@@ -4,6 +4,7 @@ package MonsterQuest;
  * Created by razoriii on 04.03.14.
  */
 
+import javax.websocket.Session;
 import java.sql.*;
 import java.util.UUID;
 
@@ -11,13 +12,6 @@ public class UserDB {
 
    private static final double defaultPosX = 5;
    private static final double defaultPosY = 5;
-
-   private String login = "";
-   private String sid = "-1";
-   private String passwordHash = "";
-   private double posX = defaultPosX;
-   private double posY = defaultPosY;
-   private boolean badSid = true;
 
    public static String getMD5(String md5) {
       try {
@@ -33,24 +27,25 @@ public class UserDB {
       return null;
    }
 
-   public void doInsert() {
-      sid = "-1";
+   public static String doInsert(String login, String password) {
+      String sid = "-1";
       try {
          Connection connector = DBInfo.createConnection();
          // TODO need to generate game_id field
          PreparedStatement stmt = connector.prepareStatement("INSERT INTO users (login, password, sid, pos_x, pos_y) " +
                  "VALUES (?,?,?,?,?)");
          stmt.setString(1, login);
-         stmt.setString(2, passwordHash);
+         stmt.setString(2, getMD5(password));
          sid = UUID.randomUUID().toString();
          stmt.setString(3, sid);
-         stmt.setDouble(4, posX);
-         stmt.setDouble(5, posY);
+         stmt.setDouble(4, defaultPosX);
+         stmt.setDouble(5, defaultPosY);
          stmt.executeUpdate();
          connector.close();
       } catch (Throwable e) {
 
       }
+      return sid;
    }
 
    private static int getResultSetRowCount(ResultSet rs) {
@@ -65,7 +60,7 @@ public class UserDB {
       return rowNum;
    }
 
-   public boolean checkLoginExists(String newLogin) {
+   public static boolean checkLoginExists(String newLogin) {
       boolean result = false;
       try {
          Connection connector = DBInfo.createConnection();
@@ -80,16 +75,15 @@ public class UserDB {
       return result;
    }
 
-   public boolean doLogin() {
-      boolean result = false;
+   public static String doLogin(String login, String password) {
+      String sid = "-1";
       try {
          Connection connector = DBInfo.createConnection();
          PreparedStatement stmt = connector.prepareStatement("SELECT * FROM users WHERE LOWER(login) = ? AND password = ?");
          stmt.setString(1, login.toLowerCase());
-         stmt.setString(2, passwordHash);
+         stmt.setString(2, getMD5(password));
          ResultSet rs = stmt.executeQuery();
-         result = rs.next();
-         if (result) {
+         if (rs.next()) {
             stmt = connector.prepareStatement("UPDATE users SET sid = ? WHERE LOWER(login) = ?");
             sid = UUID.randomUUID().toString();
             stmt.setString(1, sid);
@@ -100,10 +94,47 @@ public class UserDB {
       } catch (Throwable e) {
 
       }
+      return sid;
+   }
+
+   public static Player getPlayerBySid(String sid, Session session) {
+      Player result = null;
+      try {
+         Connection connector = DBInfo.createConnection();
+         PreparedStatement stmt = connector.prepareStatement("SELECT login, pos_x, pos_y  FROM users WHERE sid = ?");
+         stmt.setString(1, sid);
+         ResultSet rs = stmt.executeQuery();
+         if (rs.next()) {
+            result = new Player(
+                    Game.getPlayerIdBySid(sid),
+                    sid,
+                    rs.getString("login"),
+                    session,
+                    new Location(rs.getDouble("pos_x"), rs.getDouble("pos_y"))
+            );
+         }
+         connector.close();
+      } catch (Throwable e) {
+
+      }
       return result;
    }
 
-   public boolean doLogout() {
+   public static void saveGameData(Player player) {
+      try {
+         Connection connector = DBInfo.createConnection();
+         PreparedStatement stmt = connector.prepareStatement("UPDATE users SET pos_x = ?, pos_y = ? WHERE sid = ?");
+         stmt.setDouble(1, player.getLocation().x);
+         stmt.setDouble(2, player.getLocation().y);
+         stmt.setString(3, player.getSid());
+         stmt.executeUpdate();
+         connector.close();
+      } catch (Throwable e) {
+
+      }
+   }
+
+   public static boolean doLogout(String sid) {
       boolean result = false;
       try {
          Connection connector = DBInfo.createConnection();
@@ -125,78 +156,4 @@ public class UserDB {
       return result;
    }
 
-   public void getDataBySid(String newSid) {
-      sid = newSid;
-      badSid = true;
-      try {
-         Connection connector = DBInfo.createConnection();
-         PreparedStatement stmt = connector.prepareStatement("SELECT login, pos_x, pos_y  FROM users WHERE sid = ?");
-         stmt.setString(1, sid);
-         ResultSet rs = stmt.executeQuery();
-         if (rs.next()) {
-            login = rs.getString("login");
-            posX = rs.getDouble("pos_x");
-            posY = rs.getDouble("pos_y");
-            badSid = false;
-         }
-         connector.close();
-      } catch (Throwable e) {
-
-      }
-   }
-
-   public void saveGameData() {
-      try {
-         Connection connector = DBInfo.createConnection();
-         PreparedStatement stmt = connector.prepareStatement("UPDATE users SET pos_x = ?, pos_y = ? WHERE sid = ?");
-         stmt.setDouble(1, posX);
-         stmt.setDouble(2, posY);
-         stmt.setString(3, sid);
-         stmt.executeUpdate();
-         connector.close();
-      } catch (Throwable e) {
-
-      }
-   }
-
-   public void setPasswordMD5(String plainPassword) {
-      passwordHash = getMD5(plainPassword);
-   }
-
-   public void setLogin(String login) {
-      this.login = login;
-   }
-
-   public void setSid(String sid) {
-      this.sid = sid;
-   }
-
-   public void setPosX(long posX) {
-      this.posX = posX;
-   }
-
-   public void setPosY(long posY) {
-      this.posY = posY;
-   }
-
-   public String getLogin() {
-      return login;
-   }
-
-   public String getSid() {
-      return sid;
-   }
-
-   public boolean isBadSid() {
-      return badSid;
-   }
-
-   public Location getLocation() {
-      return new Location(posX, posY);
-   }
-
-   public void setLocation(Location location) {
-      this.posX = location.x;
-      this.posY = location.y;
-   }
 }

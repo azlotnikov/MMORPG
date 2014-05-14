@@ -148,9 +148,8 @@ public class PlayerAnnotation {
 
       player = Game.findPlayerBySid(sid); //TODO перенести логику в Game
       if (player == null) {
-         UserDB user = new UserDB();
-         user.getDataBySid(sid);
-         if (user.isBadSid()) {
+         player = UserDB.getPlayerBySid(sid, openedSession);
+         if (player == null) {
             jsonAns = getBadSid(action);
             try {
                openedSession.getBasicRemote().sendText(jsonAns.toJSONString());
@@ -158,7 +157,6 @@ public class PlayerAnnotation {
             }
             return;
          }
-         player = new Player(Game.getPlayerIdBySid(user.getSid()), user.getSid(), user.getLogin(), openedSession, user.getLocation());
          Game.addPlayer(player);
          player.generateRandomInventory(); //TODO this is for test
          player.generateRandomInventory(); //TODO this is for test

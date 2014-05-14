@@ -32,10 +32,7 @@ public class Player extends Monster{
    }
 
    public void saveStateToBD() {
-      UserDB user = new UserDB();
-      user.setLocation(location);
-      user.setSid(sid);
-      user.saveGameData();
+      UserDB.saveGameData(this);
    }
 
    protected void sendMessage(JSONObject msg) {
@@ -73,9 +70,7 @@ public class Player extends Monster{
 //   }
 
    public synchronized boolean logout() {
-      UserDB user = new UserDB();
-      user.setSid(sid);
-      return user.doLogout();
+      return UserDB.doLogout(sid);
    }
 
    public int getDamage(){

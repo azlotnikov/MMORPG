@@ -65,8 +65,6 @@ public class Auth {
 
       jsonResponse.put("action", action);
 
-      UserDB user = new UserDB();
-
       switch (action) {
          case "register": {
             String message = "ok";
@@ -78,9 +76,7 @@ public class Auth {
             } else if (loginExists(login)) {
                message = "loginExists";
             } else {
-               user.setLogin(login);
-               user.setPasswordMD5(password);
-               user.doInsert();
+               UserDB.doInsert(login, password);
 //               jsonResponse.put("sid", user.getSid());
 //               jsonResponse.put("webSocket", webSocketUrl);
 //               jsonResponse.put("id", user.getId());
@@ -91,13 +87,12 @@ public class Auth {
          }
          case "login": {
             if (!login.isEmpty() && !password.isEmpty()) {
-               user.setLogin(login);
-               user.setPasswordMD5(password);
-               if (user.doLogin()) {
+               String sid = UserDB.doLogin(login, password);
+               if (!sid.equals("-1")) {
                   long newId = Game.getNextGlobalId();
-                  Game.setPlayerIdBySid(user.getSid(), newId);
+                  Game.setPlayerIdBySid(sid, newId);
                   jsonResponse.put("result", "ok");
-                  jsonResponse.put("sid", user.getSid());
+                  jsonResponse.put("sid", sid);
                   jsonResponse.put("webSocket", "ws://" + InetAddress.getLocalHost().getHostAddress() + ":8080/MMORPG_war_exploded/game");
                   jsonResponse.put("id", newId);
                } else {
@@ -111,8 +106,7 @@ public class Auth {
 
          case "logout": {
             jsonResponse.put("result", "badSid");
-            user.setSid(logout_sid);
-            if (user.doLogout()) {
+            if (UserDB.doLogout(logout_sid)) {
                jsonResponse.put("result", "ok");
             }
             break;
