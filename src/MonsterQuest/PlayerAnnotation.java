@@ -123,7 +123,7 @@ public class PlayerAnnotation {
       playerData.put("expLevel", player.getLevel().calcExpLevel());
       playerData.put("expNextLevel", player.getLevel().calcExpNextLevel());
       playerData.put("level", player.getLevel().calcLevel());
-      playerData.put("hpBonus", player.getBonusHP());
+      playerData.put("hpBonus", player.getBonusHp());
       playerData.put("damage", player.getDamage());
       playerData.put("damageBonus", player.getBonusDamage());
       playerData.put("speed", player.getSpeed());

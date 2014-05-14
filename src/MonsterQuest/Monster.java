@@ -183,7 +183,7 @@ public class Monster extends ActiveObj{
       return expKill;
    }
 
-   public int getBonusHP() {
+   public int getBonusHp() {
       return bonus.getHp();
    }
 
