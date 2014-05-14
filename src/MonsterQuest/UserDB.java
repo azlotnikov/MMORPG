@@ -131,9 +131,9 @@ public class UserDB {
          PreparedStatement stmt = connector.prepareStatement("UPDATE users SET pos_x = ?, pos_y = ?, hp = ?, exp = ? WHERE sid = ?");
          stmt.setDouble(1, player.getLocation().x);
          stmt.setDouble(2, player.getLocation().y);
-         stmt.setString(3, player.getSid());
-         stmt.setInt(4, player.getHp());
-         stmt.setInt(5, player.getLevel().getExp());
+         stmt.setInt(3, player.getHp());
+         stmt.setInt(4, player.getLevel().getExp());
+         stmt.setString(5, player.getSid());
          stmt.executeUpdate();
          connector.close();
       } catch (Throwable e) {
