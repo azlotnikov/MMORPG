@@ -233,7 +233,7 @@ public class PlayerAnnotation {
          }
 
          case "attack": {
-            player.setAim(((Double) jsonMsg.get("x")).doubleValue(), ((Double) jsonMsg.get("y")).doubleValue());
+            player.setAim((Double) jsonMsg.get("x"), (Double) jsonMsg.get("y"));
             return;
          }
 
