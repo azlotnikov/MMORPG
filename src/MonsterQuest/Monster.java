@@ -10,9 +10,11 @@ import java.util.ArrayList;
 public class Monster extends ActiveObj{
    protected final String type; //TODO enum
    protected final Inventory inventory = new Inventory();
+   protected final Level level = new Level();
    private long inventoryId = -1;
    protected int maxHp;
    protected int hp;
+   protected int expKill;
    protected double speed;
    protected Direction direction = Dice.getDirection();
    protected final ArrayList<Blow> blows;
@@ -28,6 +30,7 @@ public class Monster extends ActiveObj{
            String type,
            int hp,
            int maxHp,
+           int expKill,
            int alertness,
            double speed,
            ArrayList<Blow> blows,
@@ -39,6 +42,7 @@ public class Monster extends ActiveObj{
       this.type = type;
       this.hp = hp;
       this.maxHp = maxHp;
+      this.expKill = expKill;
       this.speed = speed;
       this.blows = blows;
       this.flags = flags;
@@ -119,6 +123,9 @@ public class Monster extends ActiveObj{
 
    public void attack(Monster monster){
       monster.gotHit(this.getDamage());
+      if (!monster.isLive()) {
+         level.addExp(monster.getExpKill());
+      }
    }
 
    public int getDamage(){
@@ -170,6 +177,10 @@ public class Monster extends ActiveObj{
 
    public int getMaxHp() {
       return maxHp;
+   }
+
+   public int getExpKill() {
+      return expKill;
    }
 
    public int getBonusHP() {

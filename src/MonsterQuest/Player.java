@@ -10,7 +10,6 @@ import javax.websocket.Session;
 
 public class Player extends Monster{
    private int damage = 50;
-   private final Level level = new Level();
    private final String sid;
    private final Session session;
 
@@ -21,6 +20,7 @@ public class Player extends Monster{
               , "player"
               , hp
               , maxHp
+              , 400
               , 0
               , 0.07 //TODO add speed in database
               , null

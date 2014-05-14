@@ -97,6 +97,7 @@ public class Game {
                       , monsterType.getType()
                       , monsterType.getHp()
                       , monsterType.getHp()
+                      , monsterType.getExpKill()
                       , monsterType.getAlertness()
                       , monsterType.getSpeed()
                       , monsterType.getBlows()

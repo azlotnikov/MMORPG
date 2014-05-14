@@ -124,5 +124,9 @@ public class MonsterDB {
    public int getAlertness(){
       return alertness;
    }
+
+   public int getExpKill() {
+      return expKill;
+   }
 }
 
