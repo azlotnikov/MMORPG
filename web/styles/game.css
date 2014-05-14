@@ -1,3 +1,10 @@
+progress {
+    background-color: #f3f3f3;
+    border: 0;
+    height: 18px;
+    border-radius: 9px;
+}
+
 #examine {
     position: absolute;
     top: 512px;

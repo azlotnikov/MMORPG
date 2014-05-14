@@ -118,7 +118,11 @@ public class PlayerAnnotation {
       result.put("x", player.getLocation().x);
       result.put("y", player.getLocation().y);
       JSONObject playerData = new JSONObject();
-      playerData.put("hp", player.getHP());
+      playerData.put("hp", player.getHp());
+      playerData.put("maxHp", player.getMaxHp());
+      playerData.put("expLevel", player.getLevel().calcExpLevel());
+      playerData.put("expNextLevel", player.getLevel().calcExpNextLevel());
+      playerData.put("level", player.getLevel().calcLevel());
       playerData.put("hpBonus", player.getBonusHP());
       playerData.put("damage", player.getDamage());
       playerData.put("damageBonus", player.getBonusDamage());

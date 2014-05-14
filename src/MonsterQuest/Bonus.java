@@ -32,7 +32,7 @@ public class Bonus {
       this.flags.addAll(bonus.flags);
    }
 
-   public int getHP(){
+   public int getHp(){
       return this.hp;
    }
 

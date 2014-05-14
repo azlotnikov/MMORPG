@@ -11,6 +11,7 @@ public class Monster extends ActiveObj{
    protected final String type; //TODO enum
    protected final Inventory inventory = new Inventory();
    private long inventoryId = -1;
+   protected int maxHp;
    protected int hp;
    protected double speed;
    protected Direction direction = Dice.getDirection();
@@ -26,6 +27,7 @@ public class Monster extends ActiveObj{
            String name,
            String type,
            int hp,
+           int maxHp,
            int alertness,
            double speed,
            ArrayList<Blow> blows,
@@ -36,6 +38,7 @@ public class Monster extends ActiveObj{
       super(id, name, location);
       this.type = type;
       this.hp = hp;
+      this.maxHp = maxHp;
       this.speed = speed;
       this.blows = blows;
       this.flags = flags;
@@ -145,7 +148,8 @@ public class Monster extends ActiveObj{
       result.put("id", id);
       result.put("name", name);
       result.put("type", type);
-      result.put("hp", getHP());
+      result.put("hp", getHp());
+      result.put("maxHp", getMaxHp());
       result.put("speed", getSpeed());
       result.put("damage", getDamage());
 //      result.put("aim", aim.id);
@@ -160,12 +164,16 @@ public class Monster extends ActiveObj{
       return type;
    }
 
-   public int getHP() {
-      return hp + bonus.getHP();
+   public int getHp() {
+      return hp + bonus.getHp();
+   }
+
+   public int getMaxHp() {
+      return maxHp;
    }
 
    public int getBonusHP() {
-      return bonus.getHP();
+      return bonus.getHp();
    }
 
    public double getBonusDamage() {
@@ -184,7 +192,7 @@ public class Monster extends ActiveObj{
    }
 
    public boolean isLive() {
-      return getHP() > 0;
+      return getHp() > 0;
    }
 
    public void setInventoryId(long inventoryId){

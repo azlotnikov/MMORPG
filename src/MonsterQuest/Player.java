@@ -10,16 +10,17 @@ import javax.websocket.Session;
 
 public class Player extends Monster{
    private int damage = 50;
-   private Level level = new Level();
+   private final Level level = new Level();
    private final String sid;
    private final Session session;
 
-   public Player(long id, String sid, String login, Session session, Location location) {
+   public Player(long id, String sid, String login, int hp, int maxHp, int exp, Session session, Location location) {
       super(
               id
               , login
               , "player"
-              , 1000 //TODO add HP in database
+              , hp
+              , maxHp
               , 0
               , 0.07 //TODO add speed in database
               , null
@@ -29,6 +30,7 @@ public class Player extends Monster{
       );
       this.sid = sid;
       this.session = session;
+      this.level.setExp(exp);
    }
 
    public void saveStateToBD() {
@@ -79,6 +81,10 @@ public class Player extends Monster{
 
    public String getSid() {
        return sid;
+   }
+
+   public Level getLevel() {
+      return level;
    }
 
    public Session getSession() {

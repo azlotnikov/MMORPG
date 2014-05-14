@@ -10,6 +10,14 @@ public class Level {
       return exp/1000 + 1;
    }
 
+   public int calcExpNextLevel() {
+      return 1000;
+   }
+
+   public int calcExpLevel() {
+      return exp % 1000;
+   }
+
    public void addExp(int aExp) {
       exp += aExp;
    }

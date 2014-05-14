@@ -141,6 +141,9 @@ Game.prototype.receiveMsg = function (msg) {
             }
             this.view.setActors(msg.actors);
             this.view.setPlayerLocation(msg.x, msg.y);
+            document.getElementById('exp_progress').max = msg.player.expNextLevel;
+            document.getElementById('exp_progress').value = msg.player.expLevel;
+            document.getElementById('level').innerHTML = msg.player.level;
             document.getElementById('player_x').innerHTML = msg.x;
             document.getElementById('player_y').innerHTML = msg.y;
             document.getElementById('player_hp').innerHTML = msg.player.hp;

@@ -23,6 +23,8 @@
 
 </div>
 <div id="stats">
+    <div><progress id="exp_progress" value="10" max="100"></progress></div>
+    <div>Уровень: <span id="level" class="value"></span></div>
     <div>X: <span id="player_x" class="value"></span></div>
     <div>Y: <span id="player_y" class="value"></span></div>
     <div>Здоровье: <span id="player_hp" class="value"></span> + <span id="player_hp_bonus" class="value green"></span></div>
