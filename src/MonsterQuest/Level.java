@@ -4,18 +4,19 @@ package MonsterQuest;
  * Created by razoriii on 13.05.14.
  */
 public class Level {
+   private static int expPerLevel = 1000;
    private int exp;
 
    public int calcLevel() {
-      return exp/1000 + 1;
+      return exp/expPerLevel + 1;
    }
 
    public int calcExpNextLevel() {
-      return 1000;
+      return expPerLevel;
    }
 
    public int calcExpLevel() {
-      return exp % 1000;
+      return exp % expPerLevel;
    }
 
    public void addExp(int aExp) {
