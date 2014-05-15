@@ -41,7 +41,7 @@ public class UserDB {
          stmt.setString(3, sid);
          stmt.setDouble(4, defaultPosX);
          stmt.setDouble(5, defaultPosY);
-         stmt.setDouble(5, defaultMaxHp);
+         stmt.setDouble(6, defaultMaxHp);
          stmt.executeUpdate();
          connector.close();
       } catch (Throwable e) {
