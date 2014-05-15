@@ -115,6 +115,7 @@ public class PlayerAnnotation {
       result.put("map", getMap((int) player.getLocation().x, (int) player.getLocation().y));
       result.put("actors", Game.getActors(player.getLocation()));
       result.put("items", Game.getDroppedItems().inventoryToJSON());
+      result.put("projectiles", Game.getProjectiles(player.getLocation()));
       result.put("x", player.getLocation().x);
       result.put("y", player.getLocation().y);
       JSONObject playerData = new JSONObject();

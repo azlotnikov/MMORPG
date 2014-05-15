@@ -133,6 +133,7 @@ Game.prototype.receiveMsg = function (msg) {
         case 'look':
             this.view.setMap(msg.map);
             this.view.setItems(msg.items);
+            this.view.setProjectiles(msg.projectiles);
             if (JSON.stringify(msg.player.inventory) != JSON.stringify(this.view.inventory)) {
 //                console.log(JSON.stringify(msg.inventory));
                 this.view.setInventory(msg.player.inventory);

@@ -85,6 +85,8 @@ function gameRendererClick (e) {
         }
     } else {
         document.getElementById('examine').innerHTML = "";
+        game.attack(e.clientX / TILE_SIZE + game.view.x - SIGHT_RADIUS_X
+            , e.clientY / TILE_SIZE + game.view.y - SIGHT_RADIUS_Y);
     }
 }
 
@@ -141,13 +143,22 @@ View.prototype.updateView = function () {
             this.items[t].type
         );
     }
+
+    for (t in this.projectiles) {
+        this.drawGameTile(
+            (this.projectiles[t].x - this.x + SIGHT_RADIUS_X) * TILE_SIZE - TILE_SIZE / 2,
+            (this.projectiles[t].y - this.y + SIGHT_RADIUS_Y) * TILE_SIZE - TILE_SIZE / 2,
+            'fireball'
+        );
+    }
+
     for (t in this.actors) {
         if (this.textures.data[this.actors[t].type] == undefined) {
             this.actors[t].type = 'icky thing';
         }
         this.drawGameTile(
-                (this.actors[t].x - this.x + SIGHT_RADIUS_X) * TILE_SIZE - TILE_SIZE / 2,
-                (this.actors[t].y - this.y + SIGHT_RADIUS_Y) * TILE_SIZE - TILE_SIZE / 2,
+            (this.actors[t].x - this.x + SIGHT_RADIUS_X) * TILE_SIZE - TILE_SIZE / 2,
+            (this.actors[t].y - this.y + SIGHT_RADIUS_Y) * TILE_SIZE - TILE_SIZE / 2,
             this.actors[t].type //TODO Make a lot of textures
         );
     }
@@ -192,6 +203,10 @@ View.prototype.setActors = function (actors) {
 
 View.prototype.setItems = function (items) {
     this.items = items;
+};
+
+View.prototype.setProjectiles = function (projectiles) {
+    this.projectiles = projectiles;
 };
 
 View.prototype.setDictionary = function (dictionary) {
