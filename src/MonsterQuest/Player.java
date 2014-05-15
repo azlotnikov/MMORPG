@@ -12,6 +12,8 @@ public class Player extends Monster{
    private int damage = 50;
    private final String sid;
    private final Session session;
+   private double aimX;
+   private double aimY;
 
    public Player(long id, String sid, String login, int hp, int maxHp, int exp, Session session, Location location) {
       super(
@@ -59,6 +61,20 @@ public class Player extends Monster{
       if (canAttack(aim)) {
          attack(aim);
          aim = null;
+      } else if(aimX != 0 || aimY != 0){
+         double a = aimX - location.x;
+         double b = aimY - location.y;
+         Game.addProjectiles(new Projectiles(AttackMethod.FIREBALL
+                                ,location
+                                ,0.5
+                                ,aimX - location.x
+                                ,aimY - location.y
+                                ,0.2
+                                ,2.0
+                                ,this
+         ));
+         aimX = 0;
+         aimY = 0;
       } else {
          Game.unsetMonsterInLocation(location);
          location.move(direction, getSpeed());
@@ -97,5 +113,7 @@ public class Player extends Monster{
 
    public void setAim(double x, double y){
       this.aim = Game.getActors((int)x, (int)y);
+      this.aimX = x;
+      this.aimY = y;
    }
 }
