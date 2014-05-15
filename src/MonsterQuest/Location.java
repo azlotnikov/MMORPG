@@ -158,5 +158,5 @@ public class Location {
 //                  return true;
 //               } // TODO исправить пересечение projectile'ов и игроков
       return result;
-   }
- 
+   } 
+}
