@@ -29,8 +29,11 @@ function Textures() {
         .loadTexture(3, 27, 'staff3')
         .loadTexture(13, 21, 'gloves1')
         .loadTexture(9, 43, 'fireball')
-        .loadTexture(2, 47, 'fists');
-
+        .loadTexture(2, 47, 'fists')
+        .loadTexture(2, 47, 'bow')
+        .loadTexture(2, 47, 'stones')
+        .loadTexture(2, 47, 'flamethrower')
+        .loadTexture(2, 47, 'claw');
 }
 
 Textures.prototype.loadTexture = function (x, y, name) {
