@@ -19,6 +19,7 @@ public class Game {
 
    private static final ConcurrentHashMap<Long, Monster> monsters = new ConcurrentHashMap<>();
 
+   private static final ConcurrentHashMap<Long, Projectiles> projectiles = new ConcurrentHashMap<>();
    private static final ArrayList<MonsterDB> monsterTypes = new ArrayList<>();
 
    private static final ArrayList<ItemDB> itemTypes = new ArrayList<>();
@@ -41,6 +42,7 @@ public class Game {
 
    private static Monster[][] actorsMap;
 
+   private static List<List<List<Projectiles>>> projectilesMap;
    public static Inventory getDroppedItems() {
       return droppedItems;
    }
@@ -54,10 +56,6 @@ public class Game {
       }
    }
 
-   public static long getTicksPerSecond() {
-      return (long) 1000 / TICK_DELAY;
-   }
-
    public static void setMonsterInLocation(Monster monster) {
       actorsMap[(int) monster.getLocation().y][(int) monster.getLocation().x] = monster;
    }
@@ -67,10 +65,72 @@ public class Game {
    }
 
    public static Monster getActors(int x, int y) {
-
       return x > 0 && x < GameMap.getWidth()
-              && y > 0 && y < GameMap.getHeight()
-              ? actorsMap[y][x] : null;
+            && y > 0 && y < GameMap.getHeight()
+            ? actorsMap[y][x] : null;
+   }
+
+
+   //__________________Projectiles_map___________________//
+
+   private static void initializeProjectilesMap(int height, int width) {
+      projectilesMap = new ArrayList<List<List<Projectiles>>>();
+      for (int i = 0; i < height; i++){
+         projectilesMap.add(new ArrayList<List<Projectiles>>());
+         for (int j = 0; j < width; j++)
+            projectilesMap.get(i).add(new ArrayList<Projectiles>());
+      }
+   }
+
+   public static void setProjectilesInLocation(Projectiles projectiles) {
+      projectilesMap.get((int) projectiles.getLocation().y).get((int) projectiles.getLocation().x).add(projectiles);
+   }
+
+   public static void unsetProjectilesInLocation(Projectiles projectiles) {
+      for (Projectiles s : projectilesMap.get((int) projectiles.getLocation().y).get((int) projectiles.getLocation().x))
+         if (s.getId() == projectiles.getId()){
+            projectilesMap.get((int) projectiles.getLocation().y).get((int) projectiles.getLocation().x).remove(s);
+            break;
+         }
+   }
+
+   public static List<Projectiles> getProjectiles(int x, int y) {
+      return x > 0 && x < GameMap.getWidth()
+            && y > 0 && y < GameMap.getHeight()
+            ? projectilesMap.get(y).get(x) : new ArrayList<Projectiles>(0);
+   }
+
+   public static void addProjectiles(Projectiles projectile) {
+      Game.setProjectilesInLocation(projectile);
+      projectiles.put(projectile.getId(), projectile);
+   }
+
+   private static void removeProjectiles(Projectiles projectile) {
+      unsetProjectilesInLocation(projectile);
+      projectiles.remove(projectile.getId());
+   }
+
+   protected static Collection<Projectiles> getProjectiles() {
+      return Collections.unmodifiableCollection(projectiles.values());
+   }
+
+   protected static JSONArray getProjectiles(Location location) {
+      JSONArray jsonAns = new JSONArray();
+      for (int j = -GameMap.SIGHT_RADIUS_Y; j < GameMap.SIGHT_RADIUS_Y; j++)
+         for (int i = -GameMap.SIGHT_RADIUS_X; i < GameMap.SIGHT_RADIUS_X; i++)
+            for(Projectiles projectiles : Game.getProjectiles((int) location.x - i, (int) location.y - j)){
+               JSONObject jsonActor = new JSONObject();
+               jsonActor.put("type", projectiles.getType().toString());
+               jsonActor.put("id", projectiles.getId());
+               jsonActor.put("x", projectiles.getLocation().x);
+               jsonActor.put("y", projectiles.getLocation().y);
+               jsonAns.add(jsonActor);
+            }
+      return jsonAns;
+   }
+
+   public static long getTicksPerSecond() {
+      return (long) 1000 / TICK_DELAY;
    }
 
    protected static synchronized void addPlayer(Player player) {
@@ -233,6 +293,7 @@ public class Game {
       Game.loadMonsterTypes();
       Game.loadItemTypes();
       initializeActorsMap(GameMap.getHeight(), GameMap.getWidth());
+      initializeProjectilesMap(GameMap.getHeight(), GameMap.getWidth());
       addSpawnPoint(new SpawnPoint(new Location(13, 6))); // TODO много точек с разной глубиной
       gameTimer = new Timer(Game.class.getSimpleName() + " Timer");
       gameTimer.scheduleAtFixedRate(new TimerTask() {
