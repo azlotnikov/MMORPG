@@ -117,7 +117,7 @@ public class Monster extends ActiveObj{
          }
    }
 
-   private void gotHit(int damage){
+   public void gotHit(int damage){
       hp -= damage;
    }
 
