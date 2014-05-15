@@ -260,6 +260,18 @@ public class Game {
             Game.removeMonster(monster);
          }
       }
+
+      for (Projectiles projectiles : getProjectiles()) {
+         projectiles.move();
+      }
+
+      for (Projectiles projectiles : getProjectiles()) {
+         if (projectiles.mustBang()){
+            removeProjectiles(projectiles);
+            projectiles.bang();
+         }
+      }
+
       broadcast(jsonAns);
    }
 
