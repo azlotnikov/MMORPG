@@ -54,7 +54,7 @@ public class Location {
       while(length > min_lenght){
          double oldX = x;
          double oldY = y;
-         double len = length > 1.0 ? 1.0 : length;
+         double len = Math.min(1.0, length);
          switch (direction) {
             case NORTH:
                y -= len;
