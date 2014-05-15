@@ -108,6 +108,22 @@ public class Location {
       return result;
    }
 
+   public boolean moveProjectiles(double dx, double dy, double length) {
+      int maxCountStep = (int)(length / 0.05);
+      boolean canMove = true;
+      for (int i = 0; i < maxCountStep && canMove; i++){
+         x += dx / maxCountStep;
+         y += dy / maxCountStep;
+
+         canMove = GameMap.canEnterTile(left(), top())
+               && GameMap.canEnterTile(right(),top())
+               && GameMap.canEnterTile(left(), bottom())
+               && GameMap.canEnterTile(right(),bottom())
+               && !isActiveObjectsIntersect();
+      }
+      return canMove;
+   }
+
    public Location getFreeLocation(){
        while (!GameMap.canEnterTile(left(), top())
            || !GameMap.canEnterTile(right(), top())
@@ -134,6 +150,13 @@ public class Location {
             Monster monster = Game.getActors((int)this.x + i, (int)this.y + j);
             result |= monster != null && isLocationIntersect(monster.getLocation(), this);
          }
+//      for(int i = -1; i <= 1 && !result; i++)
+//         for(int j = -1; j <= 1 && !result; j++)
+//            for(Projectiles projectiles : Game.getProjectiles((int)this.x + i, (int)this.y + j))
+//               if (isLocationIntersect(projectiles.getLocation(), this)){
+//                  projectiles.setMustBang();
+//                  return true;
+//               } // TODO исправить пересечение projectile'ов и игроков
       return result;
    }
-}
+ 
