@@ -5,13 +5,26 @@ package MonsterQuest;
  */
 public class Location {
 
-   public static double actorSize = 1.0 - 0.001;
+   public double actorSize;
    public double x;
    public double y;
 
    public Location(Location location) {
       this.x = location.x;
       this.y = location.y;
+      this.actorSize = 1.0 - 0.001;
+   }
+
+   public Location(double x, double y) {
+      this.x = x;
+      this.y = y;
+      this.actorSize = 1.0 - 0.001;
+   }
+
+   public Location(Location location, double actorSize) {
+      this.x = location.x;
+      this.y = location.y;
+      this.actorSize = actorSize;
    }
 
    private double left(){
@@ -32,11 +45,6 @@ public class Location {
 
    public boolean equal(Location location) {
       return (location.x == this.x && location.y == this.y);
-   }
-
-    public Location(double x, double y) {
-      this.x = x;
-      this.y = y;
    }
 
    public boolean move(Direction direction, double length) {
@@ -115,8 +123,8 @@ public class Location {
 
    private static boolean isLocationIntersect(Location l1, Location l2){
       return l1 != null && l2 != null
-            && Math.abs(l1.x - l2.x) < 1.0
-            && Math.abs(l1.y - l2.y) < 1.0;
+            && Math.abs(l1.x - l2.x) < (l1.actorSize / 2 + l2.actorSize / 2)
+            && Math.abs(l1.y - l2.y) < (l1.actorSize / 2 + l2.actorSize / 2);
    }
 
    public boolean isActiveObjectsIntersect() {
