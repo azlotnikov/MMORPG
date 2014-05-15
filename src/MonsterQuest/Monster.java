@@ -117,15 +117,15 @@ public class Monster extends ActiveObj{
          }
    }
 
-   public void gotHit(int damage){
+   public void gotHit(int damage, Monster attacker){
       hp -= damage;
+      if (attacker != null && !isLive()) {
+         attacker.getLevel().addExp(getExpKill());
+      }
    }
 
    public void attack(Monster monster){
-      monster.gotHit(this.getDamage());
-      if (!monster.isLive()) {
-         level.addExp(monster.getExpKill());
-      }
+      monster.gotHit(this.getDamage(), this);
    }
 
    public int getDamage(){
@@ -187,9 +187,14 @@ public class Monster extends ActiveObj{
       return bonus.getHp();
    }
 
+   public Level getLevel() {
+      return level;
+   }
+
    public double getBonusDamage() {
       return bonus.getDamage();
    }
+
    public double getBonusSpeed() {
       return bonus.getSpeed();
    }

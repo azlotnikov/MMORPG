@@ -3,7 +3,7 @@ package MonsterQuest;
 /**
  * Created by Alexander on 5/13/14.
  */
-public class Projectiles extends ActiveObj{
+public class Projectiles extends ActiveObj {
    private final AttackMethod type;
    private final double deltaX;
    private final double deltaY;
@@ -16,15 +16,15 @@ public class Projectiles extends ActiveObj{
    private boolean mustBang;
 
    public Projectiles(AttackMethod type
-         ,Location location
-         ,double speed
-         ,double deltaX
-         ,double deltaY
-         ,double radius
-         ,double radiusBang
-         ,Monster parent
+           , Location location
+           , double speed
+           , double deltaX
+           , double deltaY
+           , double radius
+           , double radiusBang
+           , Monster parent
    ) {
-      super(Game.getNextGlobalId(), type.toString(), new Location(location, ((radius == 0) ? minRadius : radius)* 2));
+      super(Game.getNextGlobalId(), type.toString(), new Location(location, ((radius == 0) ? minRadius : radius) * 2));
       this.type = type;
       this.radius = Math.max(minRadius, radius);
       this.radiusBang = radiusBang;
@@ -36,7 +36,7 @@ public class Projectiles extends ActiveObj{
       this.mustBang = false;
    }
 
-   public void move(){
+   public void move() {
       if (mustBang) return;
       Game.unsetMonsterInLocation(parent.getLocation());
       Game.unsetProjectilesInLocation(this);
@@ -46,24 +46,24 @@ public class Projectiles extends ActiveObj{
 
    }
 
-   public void bang(){
-      for(int i = -(int)radiusBang; i <= (int)radiusBang; i++)
-         for(int j = -(int)radiusBang; j <= (int)radiusBang; j++){
-            Monster monster = Game.getActors((int)this.location.x + i, (int)this.location.y + j);
+   public void bang() {
+      for (int i = -(int) radiusBang; i <= (int) radiusBang; i++)
+         for (int j = -(int) radiusBang; j <= (int) radiusBang; j++) {
+            Monster monster = Game.getActors((int) this.location.x + i, (int) this.location.y + j);
             if (monster != null && monster != parent)
-               monster.gotHit(damage);
+               monster.gotHit(damage, parent);
          }
    }
 
-   public void setMustBang(){
+   public void setMustBang() {
       mustBang = true;
    }
 
-   public boolean mustBang(){
+   public boolean mustBang() {
       return mustBang;
    }
 
-   public AttackMethod getType(){
+   public AttackMethod getType() {
       return type;
    }
 
