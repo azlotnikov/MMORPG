@@ -112,12 +112,16 @@ public class PlayerAnnotation {
       JSONArray result = new JSONArray();
       JSONObject attack1 = new JSONObject();
       JSONObject attack2 = new JSONObject();
+      JSONObject attack3 = new JSONObject();
       attack1.put("id", "1");
       attack2.put("id", "2");
-      attack1.put("name", "fists");
+      attack3.put("id", "3");
+      attack1.put("name", "sword");
       attack2.put("name", "fireball");
+      attack3.put("name", "bow");
       result.add(attack1);
       result.add(attack2);
+      result.add(attack3);
       return result;
    }
 

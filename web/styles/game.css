@@ -73,7 +73,7 @@ textarea {
 }
 
 #stats {
-    padding: 5px;
+    padding-bottom: 10px;
     position: absolute;
     top: 0;
     left: 1024px;

@@ -6,7 +6,7 @@ function Textures() {
     this.loadTexture(22, 16, 'grass')
         .loadTexture(23, 16, 'wall')
         .loadTexture(26, 14, 'inventory')
-        .loadTexture(35, 14, 'weapon')
+        .loadTexture(59, 13, 'weapon')
         .loadTexture(10, 0, 'active')
         .loadTexture(0, 2, 'player')
         .loadTexture(5, 3, 'icky thing')
@@ -30,12 +30,11 @@ function Textures() {
         .loadTexture(1, 27, 'staff2')
         .loadTexture(3, 27, 'staff3')
         .loadTexture(13, 21, 'gloves1')
+//        .loadTexture(24, 27, 'fire')
         .loadTexture(9, 43, 'fireball')
+        .loadTexture(10, 43, 'sword')
         .loadTexture(2, 47, 'fists')
-        .loadTexture(2, 47, 'bow')
-        .loadTexture(2, 47, 'stones')
-        .loadTexture(2, 47, 'flamethrower')
-        .loadTexture(2, 47, 'claw');
+        .loadTexture(3, 43, 'bow');
 }
 
 Textures.prototype.loadTexture = function (x, y, name) {
