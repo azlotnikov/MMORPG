@@ -1,7 +1,7 @@
 requirejs.config({
     baseUrl: '/js/tests',
     paths: {
-        jquery: '../jquery'
+        jquery: '../lib/jquery'
     }
 });
 
@@ -17,6 +17,7 @@ requirejs(['jquery', 'tester', 'simple_walk', 'test_mode'], function($, tester, 
 
             mocha.run();
         };
+
         $("#urlBtn").click(StartTesting);
         $("#url").val('/json').keydown(function(e){
             if(e.which == 13){
