@@ -240,13 +240,13 @@ document.onkeydown = function (e) {
     if (code == 81) {
         game.logOut();
     }
-    if (code = 113) {
+    if (code == 113) {
         game.setActiveAttack(1);
     }
-    if (code = 114) {
+    if (code == 114) {
         game.setActiveAttack(2);
     }
-    if (code = 115) {
+    if (code == 115) {
         game.setActiveAttack(3);
     }
     game.keysDown[code] = true;
