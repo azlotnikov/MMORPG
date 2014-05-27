@@ -96,8 +96,9 @@ CREATE TABLE IF NOT EXISTS `users` (
   `sid` varchar(100) NOT NULL,
   `pos_x` double NOT NULL,
   `pos_y` double NOT NULL,
-  `hp` int(11) NOT NULL,
+  `hp` double NOT NULL,
   `exp` int(11) NOT NULL,
+  `player_class` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=21 ;
 
