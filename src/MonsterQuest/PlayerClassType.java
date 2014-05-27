@@ -15,4 +15,16 @@ public enum PlayerClassType {
             return PlayerClassType.FIGHTER;
       }
    }
+
+   public static String toString(PlayerClassType playerClassType) {
+      switch (playerClassType) {
+         case FIGHTER:
+            return "fighter";
+         case ROGUE:
+            return "rogue";
+         case WIZARD:
+            return "wizard";
+      }
+      return "";
+   }
 }

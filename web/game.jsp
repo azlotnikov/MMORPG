@@ -22,6 +22,9 @@
 <div id="examine">
 
 </div>
+<div id="examine_player">
+
+</div>
 <div id="stats">
     <div>Уровень: <span id="player_level" class="value"></span></div>
     <div>
@@ -37,11 +40,11 @@
     </div>
     <div>X: <span id="player_x" class="value"></span></div>
     <div>Y: <span id="player_y" class="value"></span></div>
-    <div>Аттака: <span id="player_damage" class="value"></span></div>
-    <div>Скорость: <span id="player_speed" class="value"></span></div>
-    <div>Задержка атаки: <span id="player_attack_delay" class="value"></span></div>
-    <div>Восстановление здоровья: <span id="player_regen_hp" class="value"></span></div>
-    <div>Восстановление маны: <span id="player_regen_mana" class="value"></span></div>
+    <div>Атака: <span id="player_damage" class="value"></span></div>
+    <div>Скорость атаки: <span id="player_attack_delay" class="value"></span></div>
+    <div>Скорость перемещения: <span id="player_speed" class="value"></span></div>
+    <div>Реген здоровья в секунду: <span id="player_regen_hp" class="value"></span></div>
+    <div>Реген маны в секунду: <span id="player_regen_mana" class="value"></span></div>
     <div>Сила: <span id="player_strength" class="value"></span></div>
     <div>Ловкость: <span id="player_agility" class="value"></span></div>
     <div>Интелект: <span id="player_intelligence" class="value"></span></div>

@@ -107,6 +107,11 @@ Game.prototype.logOut = function () {
     });
 };
 
+function toFixed(value, precision) {
+    var power = Math.pow(10, precision || 0);
+    return String(Math.round(value * power) / power);
+}
+
 Game.prototype.receiveMsg = function (msg) {
     if (msg.hasOwnProperty('tick')) {
         this.tick = msg.tick;
@@ -138,37 +143,49 @@ Game.prototype.receiveMsg = function (msg) {
             document.getElementById('exp_progress').max = msg.player.expNextLevel;
             document.getElementById('exp_progress').value = msg.player.expLevel;
             document.getElementById('player_level').innerHTML = msg.player.level;
-            document.getElementById('player_x').innerHTML = msg.x;
-            document.getElementById('player_y').innerHTML = msg.y;
-            document.getElementById('player_hp').innerHTML = msg.player.hp;
-            document.getElementById('player_max_hp').innerHTML = msg.player.maxHp;
+            document.getElementById('player_x').innerHTML = toFixed(msg.x, 4);
+            document.getElementById('player_y').innerHTML = toFixed(msg.y, 4);
+            document.getElementById('player_hp').innerHTML = toFixed(msg.player.hp, 2);
+            document.getElementById('player_max_hp').innerHTML = toFixed(msg.player.maxHp, 2);
             document.getElementById('hp_progress').max = msg.player.maxHp;
             document.getElementById('hp_progress').value = msg.player.hp;
-            document.getElementById('player_regen_hp').innerHTML = msg.player.regenHp;
-            document.getElementById('player_mana').innerHTML = msg.player.mana;
-            document.getElementById('player_max_mana').innerHTML = msg.player.maxMana;
+            document.getElementById('player_regen_hp').innerHTML = toFixed(msg.player.regenHp, 4);
+            document.getElementById('player_mana').innerHTML = toFixed(msg.player.mana, 2);
+            document.getElementById('player_max_mana').innerHTML = toFixed(msg.player.maxMana, 2);
             document.getElementById('mana_progress').max = msg.player.maxMana;
             document.getElementById('mana_progress').value = msg.player.mana;
-            document.getElementById('player_regen_mana').innerHTML = msg.player.regenMana;
-            document.getElementById('player_damage').innerHTML = msg.player.damage;
-            document.getElementById('player_speed').innerHTML = msg.player.speed;
+            document.getElementById('player_regen_mana').innerHTML = toFixed(msg.player.regenMana, 4);
+            document.getElementById('player_damage').innerHTML = toFixed(msg.player.damage, 4);
+            document.getElementById('player_speed').innerHTML = toFixed(msg.player.speed, 4);
             document.getElementById('player_strength').innerHTML = msg.player.strength;
             document.getElementById('player_agility').innerHTML = msg.player.agility;
             document.getElementById('player_intelligence').innerHTML = msg.player.intelligence;
-            document.getElementById('player_attack_delay').innerHTML = msg.player.attackDelay;
+            document.getElementById('player_attack_delay').innerHTML = toFixed(msg.player.attackDelay, 5);
             break;
         case 'examine':
             if (msg.examineType == 'monster') {
                 document.getElementById('examine').innerHTML =
                     '<div>ID: <span class="value">' + msg.id + '</span></div>' +
-                    '<div>Имя: <span class="value">' + msg.name + '</span></div>' +
-                    '<div>Тип: <span class="value">' + msg.type + '</span></div>' +
+                    '<div>X: <span class="value">' + toFixed(msg.x, 4) + '</span> Y: <span class="value">' + toFixed(msg.y, 4) + '</span></div>' +
+                    '<div>Имя: <span class="value">' + msg.name + '</span> Тип: <span class="value">' + msg.type + '</span></div>' +
                     '<div>Опасность: <span class="value red">' + msg.alertness + '</span></div>' +
-                    '<div>Скорость: <span class="value red">' + msg.speed + '</span></div>' +
-                    '<div>Аттака: <span class="value red">' + msg.damage + '</span></div>' +
-                    '<div>Здоровье: <span class="value red">' + msg.hp + '</span></div>' +
-                    '<div>X: <span class="value">' + msg.x + '</span></div>' +
-                    '<div>Y: <span class="value">' + msg.y + '</span></div>';
+                    '<div>Скорость передвижения: <span class="value red">' + toFixed(msg.speed, 4) + '</span></div>' +
+                    '<div>Атака: <span class="value red">' + toFixed(msg.damage, 4) + '</span></div>' +
+                    '<div>Здоровье: <span class="value red">' + toFixed(msg.hp, 2) + '</span> / <span class="value"></span> ' + toFixed(msg.maxHp, 2) + '</span></div>' +
+                    '<div>Реген здоровья в секунду: <span class="value red">' + toFixed(msg.regenHp, 4) + '</span></div>' +
+                    '<div>Скорость атаки: <span class="value red">' + toFixed(msg.attackDelay, 5) + '</span></div>' +
+                    '<div>Опыт за убийство: <span class="value red">' + msg.expKill + '</span></div>' +
+                    '<div>Мана: <span class="value red">' + toFixed(msg.mana, 2) + '</span> ' + toFixed(msg.maxMana, 2) + '</span></div>' +
+                    '<div>Реген маны в секунду: <span class="value red">' + toFixed(msg.regenMana, 4) + '</span></div>';
+
+                if (msg.playerClass != undefined) {
+                    document.getElementById('examine_player').innerHTML =
+                        '<div>Класс: <span class="value red">' + msg.playerClass + '</span></div>' +
+                        '<div>Сила: <span class="value red">' + msg.strength + '</span></div>' +
+                        '<div>Ловкость: <span class="value red">' + msg.agility + '</span></div>' +
+                        '<div>Интелект: <span class="value red">' + msg.intelligence + '</span></div>';
+
+                }
             }
 
             if (msg.examineType == 'item') {
@@ -177,7 +194,6 @@ Game.prototype.receiveMsg = function (msg) {
                     '<div>Имя: <span class="value">' + msg.name + '</span></div>' +
                     '<div>Тип: <span class="value">' + msg.type + '</span></div>' +
                     '<div>Описание: <span class="value">' + msg.description + '</span></div>';
-
             }
 
             break;

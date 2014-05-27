@@ -70,7 +70,7 @@ public class Player extends Monster {
       if (canAttack(aim)) {
          attack(aim);
          aim = null;
-      } else if ((aimX != 0 || aimY != 0) &&  (mana >= 50)) { //TODO - 50 - кол-во маны за фаерболл
+      } else if ((aimX != 0 || aimY != 0) && (mana >= 50)) { //TODO - 50 - кол-во маны за фаерболл
          mana -= 50;
          double a = aimX - location.x;
          double b = aimY - location.y;
@@ -120,6 +120,21 @@ public class Player extends Monster {
    }
 
    @Override
+   public JSONObject examine() {
+      JSONObject result = super.examine();
+      result.put("strength", getStrength());
+      result.put("agility", getAgility());
+      result.put("intelligence", getIntelligence());
+      result.put("playerClass", PlayerClassType.toString(playerClass.getClassType()));
+      return result;
+   }
+
+   @Override
+   public int getExpKill() {
+      return expKill * level.calcLevel();
+   }
+
+   @Override
    public void addExp(int expKill) {
       level.addExp(expKill);
       playerClass.calcClassForLevel(level.calcLevel());
@@ -156,7 +171,7 @@ public class Player extends Monster {
    }
 
    @Override
-    public double getAttackDelay() {
+   public double getAttackDelay() {
       return stat.attackDelay - (bonus.getStat().attackDelay + playerClass.getStat().attackDelay);
    }
 

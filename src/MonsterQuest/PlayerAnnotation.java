@@ -119,11 +119,11 @@ public class PlayerAnnotation {
       result.put("x", player.getLocation().x);
       result.put("y", player.getLocation().y);
       JSONObject playerData = new JSONObject();
-      playerData.put("regenHp", player.getRegenHp());
+      playerData.put("regenHp", player.getRegenHp() * Game.getTicksPerSecond());
       playerData.put("mana", player.getMana());
       playerData.put("maxMana", player.getMaxMana());
-      playerData.put("regenMana", player.getRegenMana());
-      playerData.put("speed", player.getSpeed());
+      playerData.put("regenMana", player.getRegenMana() * Game.getTicksPerSecond());
+      playerData.put("speed", player.getSpeed() * Game.getTicksPerSecond());
       playerData.put("damage", player.getDamage());
       playerData.put("attackDelay", player.getAttackDelay() / Game.getTicksPerSecond());
       playerData.put("expKill", player.getExpKill());
