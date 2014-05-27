@@ -6,16 +6,18 @@ package MonsterQuest;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 
 public class MonsterDB {
 
    private final String name;
    private final String type;
-   private final int hp;
+   private final double hp;
+   private final double mana;
+   private final double regenHp;
+   private final double regenMana;
+   private final double attackDelay;
    private final double speed;
-   private final int armor_class;
+   private final int armorClass;
    private final int alertness;
    private final int depth;
    private final int rarity;
@@ -48,7 +50,11 @@ public class MonsterDB {
       this.expKill = expKill;
       this.speed = (double)speed * 5 / 10000;
       this.hp = hit_points;
-      this.armor_class = armor_class;
+      this.mana = 500;
+      this.regenHp = 0.1;
+      this.regenMana = 0.1;
+      this.attackDelay = 13;
+      this.armorClass = armor_class;
       this.alertness = (int)alertness + 1;
       for (String b : blows.split("\\@")){
          String[] args = b.split("\\|");
@@ -101,8 +107,20 @@ public class MonsterDB {
       return name;
    }
 
-   public int getHp() {
+   public double getHp() {
       return hp;
+   }
+   public double getMana() {
+      return mana;
+   }
+   public double getRegenMana() {
+      return regenMana;
+   }
+   public double getRegenHp() {
+      return regenHp;
+   }
+   public double getAttackDelay() {
+      return attackDelay;
    }
 
    public double getSpeed() {

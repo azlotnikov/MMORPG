@@ -1,16 +1,18 @@
 package MonsterQuest;
 
 import org.json.simple.JSONObject;
+
 import java.util.ArrayList;
+
 /**
  * Created by razoriii on 29.04.14.
  */
-public class Item extends ActiveObj{
+public class Item extends ActiveObj {
    private final String type;
    private final String description;
-   private int hp = 40;
-   private double speed = 0.001;
-   private double damage = 10;
+
+   private final Stat stat = new Stat();
+
    private ArrayList<Flag> flags = new ArrayList<>();
    private boolean isEquipped = true;
 
@@ -24,6 +26,16 @@ public class Item extends ActiveObj{
       super(Game.getNextGlobalId(), itemDB.getName(), new Location(0, 0));
       this.type = itemDB.getType();
       this.description = itemDB.getDescription();
+      this.stat.maxHp = 40;
+      this.stat.maxMana = 40;
+      this.stat.speed = 0.001;
+      this.stat.damage = 10;
+      this.stat.attackDelay = 0.1;
+      this.stat.regenHp = 0.1;
+      this.stat.regenMana = 0.1;
+      this.stat.strength = 1;
+      this.stat.agility = 1;
+      this.stat.intelligence = 1;
    }
 
    public JSONObject examine() {
@@ -38,21 +50,25 @@ public class Item extends ActiveObj{
       return result;
    }
 
-   public void equip(){
+   public void equip() {
       this.isEquipped = true;
    }
 
-   public void unEquip(){
+   public void unEquip() {
       this.isEquipped = false;
    }
 
-   public boolean isEquipped(){
+   public boolean isEquipped() {
       return this.isEquipped;
    }
 
 
-   public Bonus getBonus(){
-      return new Bonus(hp, speed, damage, flags);
+   public Bonus getBonus() {
+      return new Bonus(stat, flags);
+   }
+
+   public Stat getStat() {
+      return stat;
    }
 
    public String getType() {

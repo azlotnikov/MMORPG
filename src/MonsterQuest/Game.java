@@ -20,6 +20,7 @@ public class Game {
    private static final ConcurrentHashMap<Long, Monster> monsters = new ConcurrentHashMap<>();
 
    private static final ConcurrentHashMap<Long, Projectiles> projectiles = new ConcurrentHashMap<>();
+
    private static final ArrayList<MonsterDB> monsterTypes = new ArrayList<>();
 
    private static final ArrayList<ItemDB> itemTypes = new ArrayList<>();
@@ -43,6 +44,7 @@ public class Game {
    private static Monster[][] actorsMap;
 
    private static List<List<List<Projectiles>>> projectilesMap;
+
    public static Inventory getDroppedItems() {
       return droppedItems;
    }
@@ -66,8 +68,8 @@ public class Game {
 
    public static Monster getActors(int x, int y) {
       return x > 0 && x < GameMap.getWidth()
-            && y > 0 && y < GameMap.getHeight()
-            ? actorsMap[y][x] : null;
+              && y > 0 && y < GameMap.getHeight()
+              ? actorsMap[y][x] : null;
    }
 
 
@@ -75,7 +77,7 @@ public class Game {
 
    private static void initializeProjectilesMap(int height, int width) {
       projectilesMap = new ArrayList<List<List<Projectiles>>>();
-      for (int i = 0; i < height; i++){
+      for (int i = 0; i < height; i++) {
          projectilesMap.add(new ArrayList<List<Projectiles>>());
          for (int j = 0; j < width; j++)
             projectilesMap.get(i).add(new ArrayList<Projectiles>());
@@ -88,7 +90,7 @@ public class Game {
 
    public static void unsetProjectilesInLocation(Projectiles projectiles) {
       for (Projectiles s : projectilesMap.get((int) projectiles.getLocation().y).get((int) projectiles.getLocation().x))
-         if (s.getId() == projectiles.getId()){
+         if (s.getId() == projectiles.getId()) {
             projectilesMap.get((int) projectiles.getLocation().y).get((int) projectiles.getLocation().x).remove(s);
             break;
          }
@@ -96,8 +98,8 @@ public class Game {
 
    public static List<Projectiles> getProjectiles(int x, int y) {
       return x > 0 && x < GameMap.getWidth()
-            && y > 0 && y < GameMap.getHeight()
-            ? projectilesMap.get(y).get(x) : new ArrayList<Projectiles>(0);
+              && y > 0 && y < GameMap.getHeight()
+              ? projectilesMap.get(y).get(x) : new ArrayList<Projectiles>(0);
    }
 
    public static void addProjectiles(Projectiles projectile) {
@@ -118,7 +120,7 @@ public class Game {
       JSONArray jsonAns = new JSONArray();
       for (int j = -GameMap.SIGHT_RADIUS_Y; j < GameMap.SIGHT_RADIUS_Y; j++)
          for (int i = -GameMap.SIGHT_RADIUS_X; i < GameMap.SIGHT_RADIUS_X; i++)
-            for(Projectiles projectiles : Game.getProjectiles((int) location.x - i, (int) location.y - j)){
+            for (Projectiles projectiles : Game.getProjectiles((int) location.x - i, (int) location.y - j)) {
                JSONObject jsonActor = new JSONObject();
                jsonActor.put("type", projectiles.getType().toString());
                jsonActor.put("id", projectiles.getId());
@@ -156,7 +158,10 @@ public class Game {
                       , monsterType.getName()
                       , monsterType.getType()
                       , monsterType.getHp()
-                      , monsterType.getHp()
+                      , monsterType.getMana()
+                      , monsterType.getRegenHp()
+                      , monsterType.getRegenMana()
+                      , monsterType.getAttackDelay()
                       , monsterType.getExpKill()
                       , monsterType.getAlertness()
                       , monsterType.getSpeed()
@@ -249,13 +254,18 @@ public class Game {
       }
 
       for (Player player : getPlayers()) {
+         player.decAttackDelay();
+         player.regenHpAndMana();
          player.move();
       }
 
       for (Monster monster : getMonsters()) {
-         if (monster.isLive())
+
+         if (monster.isLive()) {
+            monster.decAttackDelay();
+            monster.regenHpAndMana();
             monster.move();
-         else {
+         } else {
             monster.dropInventory();
             Game.removeMonster(monster);
          }
@@ -266,7 +276,7 @@ public class Game {
       }
 
       for (Projectiles projectiles : getProjectiles()) {
-         if (projectiles.mustBang()){
+         if (projectiles.mustBang()) {
             removeProjectiles(projectiles);
             projectiles.bang();
          }

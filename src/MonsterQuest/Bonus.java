@@ -6,45 +6,39 @@ import java.util.ArrayList;
  * Created by Alexander on 4/30/14.
  */
 public class Bonus {
-   private int hp;
-   private double speed;
-   private double damage;
+   private Stat stat = new Stat();
+
    private ArrayList<Flag> flags;
 
-   public Bonus(int hp, double speed, double damage, ArrayList<Flag> flags) {
-      this.hp = hp;
-      this.speed = speed;
-      this.damage = damage;
+   public Bonus(Stat stat, ArrayList<Flag> flags) {
+      this.stat = stat;
       this.flags = flags;
    }
 
    public Bonus() {
-      this.hp = 0;
-      this.speed = 0;
-      this.damage = 0;
       this.flags = new ArrayList<>();
    }
 
-   public void addBonus(Bonus bonus){
-      this.hp += bonus.hp;
-      this.speed += bonus.speed;
-      this.damage += bonus.damage;
+   public void addBonus(Bonus bonus) {
+      this.stat.maxHp += bonus.stat.maxHp;
+      this.stat.maxMana += bonus.stat.maxMana;
+      this.stat.speed += bonus.stat.speed;
+      this.stat.damage += bonus.stat.damage;
+      this.stat.regenHp += bonus.stat.regenHp;
+      this.stat.regenMana += bonus.stat.regenMana;
+      this.stat.attackDelay += bonus.stat.attackDelay;
+      this.stat.agility += bonus.stat.agility;
+      this.stat.strength += bonus.stat.strength;
+      this.stat.intelligence += bonus.stat.intelligence;
       this.flags.addAll(bonus.flags);
    }
 
-   public int getHp(){
-      return this.hp;
+   public Stat getStat() {
+      return this.stat;
    }
 
-   public double getSpeed(){
-      return this.speed;
-   }
 
-   public double getDamage(){
-      return this.damage;
-   }
-
-   public ArrayList<Flag> getFlags(){
+   public ArrayList<Flag> getFlags() {
       return this.flags;
    }
 }

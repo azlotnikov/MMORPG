@@ -12,7 +12,6 @@ public class UserDB {
 
    private static final double defaultPosX = 5;
    private static final double defaultPosY = 5;
-   private static final int defaultMaxHp = 1000;
 
    public static String getMD5(String md5) {
       try {
@@ -28,20 +27,20 @@ public class UserDB {
       return null;
    }
 
-   public static String doInsert(String login, String password) {
+   public static String doInsert(String login, String password, String playerClass) {
       String sid = "-1";
       try {
          Connection connector = DBInfo.createConnection();
          // TODO need to generate game_id field
-         PreparedStatement stmt = connector.prepareStatement("INSERT INTO users (login, password, sid, pos_x, pos_y, hp, exp) " +
-                 "VALUES (?,?,?,?,?,?,0)");
+         PreparedStatement stmt = connector.prepareStatement("INSERT INTO users (login, password, sid, pos_x, pos_y, hp,  exp, player_class) " +
+                 "VALUES (?,?,?,?,?,1000,0,?)");
          stmt.setString(1, login);
          stmt.setString(2, getMD5(password));
          sid = UUID.randomUUID().toString();
          stmt.setString(3, sid);
          stmt.setDouble(4, defaultPosX);
          stmt.setDouble(5, defaultPosY);
-         stmt.setDouble(6, defaultMaxHp);
+         stmt.setString(6, playerClass);
          stmt.executeUpdate();
          connector.close();
       } catch (Throwable e) {
@@ -103,7 +102,7 @@ public class UserDB {
       Player result = null;
       try {
          Connection connector = DBInfo.createConnection();
-         PreparedStatement stmt = connector.prepareStatement("SELECT login, pos_x, pos_y, hp, exp FROM users WHERE sid = ?");
+         PreparedStatement stmt = connector.prepareStatement("SELECT login, pos_x, pos_y, hp, exp, player_class FROM users WHERE sid = ?");
          stmt.setString(1, sid);
          ResultSet rs = stmt.executeQuery();
          if (rs.next()) {
@@ -111,11 +110,11 @@ public class UserDB {
                     Game.getPlayerIdBySid(sid),
                     sid,
                     rs.getString("login"),
-                    rs.getInt("hp"),
-                    defaultMaxHp,
                     rs.getInt("exp"),
+                    rs.getDouble("hp"),
                     session,
-                    new Location(rs.getDouble("pos_x"), rs.getDouble("pos_y"))
+                    new Location(rs.getDouble("pos_x"), rs.getDouble("pos_y")),
+                    rs.getString("player_class")
             );
          }
          connector.close();
@@ -128,11 +127,11 @@ public class UserDB {
    public static void saveGameData(Player player) {
       try {
          Connection connector = DBInfo.createConnection();
-         PreparedStatement stmt = connector.prepareStatement("UPDATE users SET pos_x = ?, pos_y = ?, hp = ?, exp = ? WHERE sid = ?");
+         PreparedStatement stmt = connector.prepareStatement("UPDATE users SET pos_x = ?, pos_y = ?, exp = ?, hp = ? WHERE sid = ?");
          stmt.setDouble(1, player.getLocation().x);
          stmt.setDouble(2, player.getLocation().y);
-         stmt.setInt(3, player.getHp());
-         stmt.setInt(4, player.getLevel().getExp());
+         stmt.setInt(3, player.getLevel().getExp());
+         stmt.setDouble(4, player.getHp());
          stmt.setString(5, player.getSid());
          stmt.executeUpdate();
          connector.close();

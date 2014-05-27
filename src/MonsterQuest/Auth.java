@@ -59,7 +59,8 @@ public class Auth {
       String login = (String) jsonRequest.get("login");
       String password = (String) jsonRequest.get("password");
       String action = (String) jsonRequest.get("action");
-      String logout_sid = (String) jsonRequest.get("sid");
+      String logoutSid = (String) jsonRequest.get("sid");
+      String playerClass =  (String) jsonRequest.get("player_class");
 
       JSONObject jsonResponse = new JSONObject();
 
@@ -76,7 +77,7 @@ public class Auth {
             } else if (loginExists(login)) {
                message = "loginExists";
             } else {
-               UserDB.doInsert(login, password);
+               UserDB.doInsert(login, password, playerClass);
 //               jsonResponse.put("sid", user.getSid());
 //               jsonResponse.put("webSocket", webSocketUrl);
 //               jsonResponse.put("id", user.getId());
@@ -106,7 +107,7 @@ public class Auth {
 
          case "logout": {
             jsonResponse.put("result", "badSid");
-            if (UserDB.doLogout(logout_sid)) {
+            if (UserDB.doLogout(logoutSid)) {
                jsonResponse.put("result", "ok");
             }
             break;

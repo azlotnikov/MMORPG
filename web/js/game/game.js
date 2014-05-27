@@ -144,15 +144,25 @@ Game.prototype.receiveMsg = function (msg) {
             this.view.setPlayerLocation(msg.x, msg.y);
             document.getElementById('exp_progress').max = msg.player.expNextLevel;
             document.getElementById('exp_progress').value = msg.player.expLevel;
-            document.getElementById('level').innerHTML = msg.player.level;
+            document.getElementById('player_level').innerHTML = msg.player.level;
             document.getElementById('player_x').innerHTML = msg.x;
             document.getElementById('player_y').innerHTML = msg.y;
             document.getElementById('player_hp').innerHTML = msg.player.hp;
-            document.getElementById('player_hp_bonus').innerHTML = msg.player.hpBonus;
+            document.getElementById('player_max_hp').innerHTML = msg.player.maxHp;
+            document.getElementById('hp_progress').max = msg.player.maxHp;
+            document.getElementById('hp_progress').value = msg.player.hp;
+            document.getElementById('player_regen_hp').innerHTML = msg.player.regenHp;
+            document.getElementById('player_mana').innerHTML = msg.player.mana;
+            document.getElementById('player_max_mana').innerHTML = msg.player.maxMana;
+            document.getElementById('mana_progress').max = msg.player.maxMana;
+            document.getElementById('mana_progress').value = msg.player.mana;
+            document.getElementById('player_regen_mana').innerHTML = msg.player.regenMana;
             document.getElementById('player_damage').innerHTML = msg.player.damage;
-            document.getElementById('player_damage_bonus').innerHTML = msg.player.damageBonus;
             document.getElementById('player_speed').innerHTML = msg.player.speed;
-            document.getElementById('player_speed_bonus').innerHTML = msg.player.speedBonus;
+            document.getElementById('player_strength').innerHTML = msg.player.strength;
+            document.getElementById('player_agility').innerHTML = msg.player.agility;
+            document.getElementById('player_intelligence').innerHTML = msg.player.intelligence;
+            document.getElementById('player_attack_delay').innerHTML = msg.player.attackDelay;
             break;
         case 'examine':
             if (msg.examineType == 'monster') {

@@ -32,10 +32,12 @@
         var login = $('#login').val();
         var password = $('#password').val();
         var server = $('#server').val();
+        var player_class = $('#player_class').val();
         var jsonObj = JSON.stringify({
             action: action,
             login: login,
-            password: password
+            password: password,
+            player_class: player_class
         });
         $.ajax({
             type: 'POST',
@@ -87,6 +89,13 @@
     <input id="login" value="gamer"/><br/>
     <label for="password">Пароль:</label>
     <input id="password" type="password" value="123456"/><br/>
+    <div><select id="player_class">
+        <option value="fighter">Сила</option>
+        <option value="rogue">Ловкость</option>
+        <option value="wizard">Интелект</option>
+    </select></div>
+
+
     <button class="button red" onclick="registerButtonClick();">Регистрация</button>
     <button class="button green" onclick="loginButtonClick();">Вход</button>
     <button class="button" onclick="location.assign('tests/test_1.jsp');">Тесты</button>
