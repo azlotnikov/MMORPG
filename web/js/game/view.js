@@ -2,8 +2,6 @@ var SIGHT_RADIUS_X = 12;
 var SIGHT_RADIUS_Y = 8;
 var INVENTORY_SIZE_X = 8;
 var INVENTORY_SIZE_Y = 15;
-var WEAPON_STAGE_SIZE_X = 3;
-var WEAPON_STAGE_SIZE_Y = 1;
 
 function View() {
     this.gameStage = new PIXI.Stage(0x000000, true);
@@ -11,7 +9,7 @@ function View() {
     this.weaponStage = new PIXI.Stage(0x000000, true);
     this.gameRenderer = PIXI.autoDetectRenderer(SIGHT_RADIUS_X * 2 * TILE_SIZE, SIGHT_RADIUS_Y * 2 * TILE_SIZE);
     this.inventoryRenderer = PIXI.autoDetectRenderer(TILE_SIZE * INVENTORY_SIZE_X, TILE_SIZE * INVENTORY_SIZE_Y);
-    this.weaponRenderer = PIXI.autoDetectRenderer(TILE_SIZE * WEAPON_STAGE_SIZE_X, TILE_SIZE * WEAPON_STAGE_SIZE_Y);
+    this.weaponRenderer = PIXI.autoDetectRenderer(TILE_SIZE * INVENTORY_SIZE_X, TILE_SIZE * 1);
     this.textures = new Textures();
     // todo чтобы влезал в экран
     this.map = {};
@@ -19,7 +17,10 @@ function View() {
     this.dictionary = {};
     this.items = {};
     this.inventory = {};
+    this.attackTypes = {};
     this.updateInventory = true;
+    this.updateAttackTypes = true;
+    this.activeAttack = 0;
     this.x = 0.0;
     this.y = 0.0;
 
@@ -34,8 +35,8 @@ function View() {
     this.weaponRenderer.view.style.position = "absolute";
     this.weaponRenderer.view.style.top = "0px";
     this.weaponRenderer.view.style.left = this.gameRenderer.width + "px";
-//    this.inventoryRenderer.view.onclick = inventoryRendererClick;
-//    this.inventoryRenderer.view.oncontextmenu = inventoryRendererClick;
+    this.weaponRenderer.view.onclick = weaponRendererClick;
+    this.weaponRenderer.view.oncontextmenu = weaponRendererClick;
 
     document.body.appendChild(this.inventoryRenderer.view);
     this.inventoryRenderer.view.style.position = "absolute";
@@ -138,6 +139,24 @@ function inventoryRendererClick(e) {
     }
 }
 
+function weaponRendererClick(e) {
+    e = e || window.event;
+    e.preventDefault();
+    var x;
+    var y;
+    if (e.pageX || e.pageY) {
+        x = e.pageX;
+        y = e.pageY;
+    }
+    else {
+        x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+        y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+    }
+    x -= game.view.weaponRenderer.view.offsetLeft;
+    y -= game.view.weaponRenderer.view.offsetTop;
+
+}
+
 View.prototype.drawGameTile = function (x, y, textureName) {
     var tile = new PIXI.Sprite(this.textures.data[textureName]);
     tile.anchor.x = 0.5;
@@ -154,6 +173,15 @@ View.prototype.drawInventoryTile = function (x, y, textureName) {
     tile.position.x = x;
     tile.position.y = y;
     this.inventoryStage.addChild(tile);
+};
+
+View.prototype.drawWeaponTile = function (x, y, textureName) {
+    var tile = new PIXI.Sprite(this.textures.data[textureName]);
+    tile.anchor.x = 0;
+    tile.anchor.y = 0;
+    tile.position.x = x;
+    tile.position.y = y;
+    this.weaponStage.addChild(tile);
 };
 
 View.prototype.updateView = function () {
@@ -223,6 +251,23 @@ View.prototype.updateView = function () {
         this.inventoryRenderer.render(this.inventoryStage);
         this.updateInventory = false;
     }
+    //TODO another shit
+    if (this.updateAttackTypes) {
+        var x;
+        var w = 0;
+        for (x = 0; x <= INVENTORY_SIZE_Y; x++) {
+            this.drawWeaponTile(x * TILE_SIZE, 0, 'weapon');
+        }
+        for (i in this.attackTypes) {
+            this.drawWeaponTile(w * TILE_SIZE, 0, this.attackTypes[i].name);
+            if (this.activeAttack == this.attackTypes[i].id) {
+                this.drawWeaponTile(w * TILE_SIZE, 0, 'active');
+            }
+            w++;
+        }
+        this.weaponRenderer.render(this.weaponStage);
+        this.updateAttackTypes = false;
+    }
 };
 
 View.prototype.clearStage = function (stage) {
@@ -263,4 +308,12 @@ View.prototype.setInventory = function (inventory) {
 
 View.prototype.setUpdateInventory = function () {
     this.updateInventory = true;
+};
+
+View.prototype.setAttackTypes = function (attackTypes) {
+    this.attackTypes = attackTypes;
+};
+
+View.prototype.setUpdateAttackTypes = function () {
+    this.updateAttackTypes = true;
 };

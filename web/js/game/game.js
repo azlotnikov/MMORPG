@@ -136,7 +136,11 @@ Game.prototype.receiveMsg = function (msg) {
 //                console.log(JSON.stringify(msg.inventory));
                 this.view.setInventory(msg.player.inventory);
                 this.view.setUpdateInventory();
-//                console.log('!');
+            }
+            if ((this.view.activeAttack != msg.activeAttack) || (JSON.stringify(msg.attackTypes) != JSON.stringify(this.view.attackTypes))) {
+                this.view.setAttackTypes(msg.attackTypes);
+                this.view.setUpdateAttackTypes();
+                this.view.activeAttack = msg.activeAttack;
             }
             this.view.setActors(msg.actors);
             this.view.setPlayerLocation(msg.x, msg.y);
@@ -239,7 +243,7 @@ document.onkeyup = function (e) {
 
     game.keysDown[code] = false;
     e.preventDefault();
-    
+
 };
 
 game.initGame();

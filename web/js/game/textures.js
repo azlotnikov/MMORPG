@@ -6,6 +6,8 @@ function Textures() {
     this.loadTexture(22, 16, 'grass')
         .loadTexture(23, 16, 'wall')
         .loadTexture(26, 14, 'inventory')
+        .loadTexture(35, 14, 'weapon')
+        .loadTexture(10, 0, 'active')
         .loadTexture(0, 2, 'player')
         .loadTexture(5, 3, 'icky thing')
         .loadTexture(3, 2, 'jelly')

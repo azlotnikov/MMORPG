@@ -108,10 +108,25 @@ public class PlayerAnnotation {
       return result;
    }
 
+   public JSONArray getAttackTypes() {
+      JSONArray result = new JSONArray();
+      JSONObject attack1 = new JSONObject();
+      JSONObject attack2 = new JSONObject();
+      attack1.put("id", "1");
+      attack2.put("id", "2");
+      attack1.put("name", "fists");
+      attack2.put("name", "fireball");
+      result.add(attack1);
+      result.add(attack2);
+      return result;
+   }
+
    public JSONObject getLook() {
       JSONObject result = new JSONObject();
       result.put("action", "look");
       result.put("result", "ok");
+      result.put("attackTypes", getAttackTypes());
+      result.put("activeAttack", "2");
       result.put("map", getMap((int) player.getLocation().x, (int) player.getLocation().y));
       result.put("actors", Game.getActors(player.getLocation()));
       result.put("items", Game.getDroppedItems().inventoryToJSON());
