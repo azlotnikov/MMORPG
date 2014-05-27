@@ -190,7 +190,7 @@ public class Monster extends ActiveObj {
       result.put("regenMana", getRegenMana());
       result.put("speed", getSpeed());
       result.put("damage", getDamage());
-      result.put("attackDelay", getAttackDelay());
+      result.put("attackDelay", getAttackDelay() / Game.getTicksPerSecond());
       result.put("expKill", getExpKill());
       result.put("strength", getStrength());
       result.put("agility", getAgility());

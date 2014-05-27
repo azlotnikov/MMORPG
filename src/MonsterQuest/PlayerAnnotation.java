@@ -125,7 +125,7 @@ public class PlayerAnnotation {
       playerData.put("regenMana", player.getRegenMana());
       playerData.put("speed", player.getSpeed());
       playerData.put("damage", player.getDamage());
-      playerData.put("attackDelay", player.getAttackDelay());
+      playerData.put("attackDelay", player.getAttackDelay() / Game.getTicksPerSecond());
       playerData.put("expKill", player.getExpKill());
       playerData.put("strength", player.getStrength());
       playerData.put("agility", player.getAgility());

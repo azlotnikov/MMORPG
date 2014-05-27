@@ -157,7 +157,7 @@ public class Player extends Monster {
 
    @Override
     public double getAttackDelay() {
-      return stat.attackDelay + bonus.getStat().attackDelay + playerClass.getStat().attackDelay;
+      return stat.attackDelay - (bonus.getStat().attackDelay + playerClass.getStat().attackDelay);
    }
 
    @Override
