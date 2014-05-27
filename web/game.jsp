@@ -25,6 +25,9 @@
 <div id="examine_player">
 
 </div>
+<div id="logs">
+<textarea id="logs_text" cols="65" rows="10" readonly="readonly"></textarea>
+</div>
 <div id="stats">
     <div>Уровень: <span id="player_level" class="value"></span></div>
     <div>

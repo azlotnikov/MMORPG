@@ -179,7 +179,7 @@ Game.prototype.receiveMsg = function (msg) {
                     '<div>Реген здоровья в секунду: <span class="value red">' + toFixed(msg.regenHp, 4) + '</span></div>' +
                     '<div>Скорость атаки: <span class="value red">' + toFixed(msg.attackDelay, 5) + '</span></div>' +
                     '<div>Опыт за убийство: <span class="value red">' + msg.expKill + '</span></div>' +
-                    '<div>Мана: <span class="value red">' + toFixed(msg.mana, 2) + '</span> ' + toFixed(msg.maxMana, 2) + '</span></div>' +
+                    '<div>Мана: <span class="value red">' + toFixed(msg.mana, 2) + '</span> / <span class="value">' + toFixed(msg.maxMana, 2) + '</span></div>' +
                     '<div>Реген маны в секунду: <span class="value red">' + toFixed(msg.regenMana, 4) + '</span></div>';
 
                 if (msg.playerClass != undefined) {
