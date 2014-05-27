@@ -316,7 +316,11 @@ public class Game {
       Game.loadItemTypes();
       initializeActorsMap(GameMap.getHeight(), GameMap.getWidth());
       initializeProjectilesMap(GameMap.getHeight(), GameMap.getWidth());
-      addSpawnPoint(new SpawnPoint(new Location(13, 6))); // TODO много точек с разной глубиной
+      addSpawnPoint(new SpawnPoint(new Location(13, 6), 8));
+//      addSpawnPoint(new SpawnPoint(new Location(13, 12), 8));
+//      addSpawnPoint(new SpawnPoint(new Location(13, 15), 20));
+//      addSpawnPoint(new SpawnPoint(new Location(13, 25), 20));
+//      addSpawnPoint(new SpawnPoint(new Location(20, 25), 100)); // TODO много точек с разной глубиной
       gameTimer = new Timer(Game.class.getSimpleName() + " Timer");
       gameTimer.scheduleAtFixedRate(new TimerTask() {
          @Override

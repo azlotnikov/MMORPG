@@ -146,5 +146,9 @@ public class MonsterDB {
    public int getExpKill() {
       return expKill;
    }
+
+   public int getDepth() {
+      return depth;
+   }
 }
 
