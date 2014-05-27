@@ -1,13 +1,17 @@
 var SIGHT_RADIUS_X = 12;
 var SIGHT_RADIUS_Y = 8;
 var INVENTORY_SIZE_X = 8;
-var INVENTORY_SIZE_Y = 16;
+var INVENTORY_SIZE_Y = 15;
+var WEAPON_STAGE_SIZE_X = 3;
+var WEAPON_STAGE_SIZE_Y = 1;
 
 function View() {
     this.gameStage = new PIXI.Stage(0x000000, true);
     this.inventoryStage = new PIXI.Stage(0x000000, true);
+    this.weaponStage = new PIXI.Stage(0x000000, true);
     this.gameRenderer = PIXI.autoDetectRenderer(SIGHT_RADIUS_X * 2 * TILE_SIZE, SIGHT_RADIUS_Y * 2 * TILE_SIZE);
     this.inventoryRenderer = PIXI.autoDetectRenderer(TILE_SIZE * INVENTORY_SIZE_X, TILE_SIZE * INVENTORY_SIZE_Y);
+    this.weaponRenderer = PIXI.autoDetectRenderer(TILE_SIZE * WEAPON_STAGE_SIZE_X, TILE_SIZE * WEAPON_STAGE_SIZE_Y);
     this.textures = new Textures();
     // todo чтобы влезал в экран
     this.map = {};
@@ -26,9 +30,16 @@ function View() {
     this.gameRenderer.view.onclick = gameRendererClick;
     this.gameRenderer.view.oncontextmenu = gameRendererClick;
 
+    document.body.appendChild(this.weaponRenderer.view);
+    this.weaponRenderer.view.style.position = "absolute";
+    this.weaponRenderer.view.style.top = "0px";
+    this.weaponRenderer.view.style.left = this.gameRenderer.width + "px";
+//    this.inventoryRenderer.view.onclick = inventoryRendererClick;
+//    this.inventoryRenderer.view.oncontextmenu = inventoryRendererClick;
+
     document.body.appendChild(this.inventoryRenderer.view);
     this.inventoryRenderer.view.style.position = "absolute";
-    this.inventoryRenderer.view.style.top = "0";
+    this.inventoryRenderer.view.style.top = "32px";
     this.inventoryRenderer.view.style.left = this.gameRenderer.width + "px";
     this.inventoryRenderer.view.onclick = inventoryRendererClick;
     this.inventoryRenderer.view.oncontextmenu = inventoryRendererClick;
@@ -59,17 +70,28 @@ View.prototype.getItem = function (x, y) {
 View.prototype.getInventoryItem = function (x, y) {
     x = Math.floor(x);
     y = Math.floor(y);
-    x -= SIGHT_RADIUS_X * 2;
     if (this.inventory[y * INVENTORY_SIZE_X + x]) {
         return this.inventory[y * INVENTORY_SIZE_X + x];
     }
 };
 
-function gameRendererClick (e) {
+function gameRendererClick(e) {
     e = e || window.event;
     e.preventDefault();
-    var actor = game.view.getActor(e.clientX / TILE_SIZE, e.clientY / TILE_SIZE);
-    var item = game.view.getItem(e.clientX / TILE_SIZE, e.clientY / TILE_SIZE);
+    var x;
+    var y;
+    if (e.pageX || e.pageY) {
+        x = e.pageX;
+        y = e.pageY;
+    }
+    else {
+        x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+        y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+    }
+    x -= game.view.gameRenderer.view.offsetLeft;
+    y -= game.view.gameRenderer.view.offsetTop;
+    var actor = game.view.getActor(x / TILE_SIZE, y / TILE_SIZE);
+    var item = game.view.getItem(x / TILE_SIZE, y / TILE_SIZE);
     if (actor) {
         e.preventDefault();
         if (e.which == 3) {
@@ -85,15 +107,28 @@ function gameRendererClick (e) {
         }
     } else {
         document.getElementById('examine').innerHTML = "";
-        game.attack(e.clientX / TILE_SIZE + game.view.x - SIGHT_RADIUS_X
-            , e.clientY / TILE_SIZE + game.view.y - SIGHT_RADIUS_Y);
+        document.getElementById('examine_player').innerHTML = "";
+        game.attack(x / TILE_SIZE + game.view.x - SIGHT_RADIUS_X
+            , y / TILE_SIZE + game.view.y - SIGHT_RADIUS_Y);
     }
 }
 
-function inventoryRendererClick (e) {
+function inventoryRendererClick(e) {
     e = e || window.event;
     e.preventDefault();
-    var item = game.view.getInventoryItem(e.clientX / TILE_SIZE, e.clientY / TILE_SIZE);
+    var x;
+    var y;
+    if (e.pageX || e.pageY) {
+        x = e.pageX;
+        y = e.pageY;
+    }
+    else {
+        x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+        y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+    }
+    x -= game.view.inventoryRenderer.view.offsetLeft;
+    y -= game.view.inventoryRenderer.view.offsetTop;
+    var item = game.view.getInventoryItem(x / TILE_SIZE, y / TILE_SIZE);
     if (item) {
         if (e.which == 3) {
             game.examine(item.id);
@@ -146,8 +181,8 @@ View.prototype.updateView = function () {
 
     for (t in this.projectiles) {
         this.drawGameTile(
-            (this.projectiles[t].x - this.x + SIGHT_RADIUS_X) * TILE_SIZE - TILE_SIZE / 2,
-            (this.projectiles[t].y - this.y + SIGHT_RADIUS_Y) * TILE_SIZE - TILE_SIZE / 2,
+                (this.projectiles[t].x - this.x + SIGHT_RADIUS_X) * TILE_SIZE - TILE_SIZE / 2,
+                (this.projectiles[t].y - this.y + SIGHT_RADIUS_Y) * TILE_SIZE - TILE_SIZE / 2,
             'fireball'
         );
     }
@@ -157,8 +192,8 @@ View.prototype.updateView = function () {
             this.actors[t].type = 'icky thing';
         }
         this.drawGameTile(
-            (this.actors[t].x - this.x + SIGHT_RADIUS_X) * TILE_SIZE - TILE_SIZE / 2,
-            (this.actors[t].y - this.y + SIGHT_RADIUS_Y) * TILE_SIZE - TILE_SIZE / 2,
+                (this.actors[t].x - this.x + SIGHT_RADIUS_X) * TILE_SIZE - TILE_SIZE / 2,
+                (this.actors[t].y - this.y + SIGHT_RADIUS_Y) * TILE_SIZE - TILE_SIZE / 2,
             this.actors[t].type //TODO Make a lot of textures
         );
     }
