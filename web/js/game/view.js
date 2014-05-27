@@ -76,6 +76,13 @@ View.prototype.getInventoryItem = function (x, y) {
     }
 };
 
+View.prototype.getWeaponItem = function (x) {
+    x = Math.floor(x);
+    if (this.attackTypes[x]) {
+        return this.attackTypes[x];
+    }
+};
+
 function gameRendererClick(e) {
     e = e || window.event;
     e.preventDefault();
@@ -154,6 +161,10 @@ function weaponRendererClick(e) {
     }
     x -= game.view.weaponRenderer.view.offsetLeft;
     y -= game.view.weaponRenderer.view.offsetTop;
+    var attackType = game.view.getWeaponItem(y / TILE_SIZE);
+    if (attackType) {
+        game.setActiveAttack(attackType.id);
+    }
 
 }
 

@@ -66,6 +66,14 @@ Game.prototype.examine = function (id) {
     });
 };
 
+Game.prototype.setActiveAttack = function (id) {
+    this.sendMsg({
+        action: "setActiveWeapon",
+        id: id,
+        sid: this.sid
+    });
+};
+
 Game.prototype.attack = function (x, y) {
     this.sendMsg({
         action: "attack",
@@ -231,10 +239,19 @@ document.onkeydown = function (e) {
     var code = e.keyCode;
     if (code == 81) {
         game.logOut();
-    } else {
-        game.keysDown[code] = true;
-        e.preventDefault();
     }
+    if (code = 113) {
+        game.setActiveAttack(1);
+    }
+    if (code = 114) {
+        game.setActiveAttack(2);
+    }
+    if (code = 115) {
+        game.setActiveAttack(3);
+    }
+    game.keysDown[code] = true;
+    e.preventDefault();
+
 };
 
 document.onkeyup = function (e) {
