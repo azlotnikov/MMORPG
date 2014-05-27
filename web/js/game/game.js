@@ -107,13 +107,6 @@ Game.prototype.logOut = function () {
     });
 };
 
-Game.prototype.checkKeyboard = function () {
-    if (this.keysDown[37]) this.move('west');
-    if (this.keysDown[38]) this.move('north');
-    if (this.keysDown[39]) this.move('east');
-    if (this.keysDown[40]) this.move('south');
-};
-
 Game.prototype.receiveMsg = function (msg) {
     if (msg.hasOwnProperty('tick')) {
         this.tick = msg.tick;
@@ -191,6 +184,14 @@ Game.prototype.receiveMsg = function (msg) {
     }
 };
 
+Game.prototype.checkKeyboard = function () {
+    if (this.keysDown[65]) this.move('west');
+    if (this.keysDown[87]) this.move('north');
+    if (this.keysDown[68]) this.move('east');
+    if (this.keysDown[83]) this.move('south');
+};
+
+
 game = new Game();
 
 function animate() {
@@ -204,13 +205,13 @@ function animate() {
     requestAnimFrame(animate);
 }
 
+
 document.onkeydown = function (e) {
     e = e || event;
     var code = e.keyCode;
-    if (code == 65) {
+    if (code == 81) {
         game.logOut();
-    }
-    if (code > 36 && code < 41) {
+    } else {
         game.keysDown[code] = true;
         e.preventDefault();
     }
@@ -219,10 +220,10 @@ document.onkeydown = function (e) {
 document.onkeyup = function (e) {
     e = e || event;
     var code = e.keyCode;
-    if (code > 36 && code < 41) {
-        game.keysDown[code] = false;
-        e.preventDefault();
-    }
+
+    game.keysDown[code] = false;
+    e.preventDefault();
+    
 };
 
 game.initGame();
