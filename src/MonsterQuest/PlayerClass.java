@@ -28,13 +28,15 @@ public class PlayerClass {
             break;
       }
 
-      stat.regenHp = stat.strength * 0.05;
-      stat.regenMana = stat.intelligence * 0.04;
-      stat.attackDelay = stat.agility * 0.1;
+      stat.regenHp = stat.strength * 0.05 + stat.agility * 0.01;
+      stat.regenMana = stat.intelligence * 0.04 + stat.agility * 0.01;
+      stat.attackDelay = stat.agility * 0.1 + stat.intelligence * 0.02;
 
-      stat.maxHp = stat.strength * 5;
-      stat.maxMana = stat.intelligence * 4;
-      stat.damage = stat.agility * 3;
+      stat.maxHp = stat.strength * 5 + stat.intelligence * 1.5;
+      stat.maxMana = stat.intelligence * 4 + stat.agility;
+      stat.damage = stat.agility * 2 + stat.strength + stat.intelligence * 0.5;
+
+      stat.speed = ((int)(level / 5)) * 0.01;
 
    }
 
