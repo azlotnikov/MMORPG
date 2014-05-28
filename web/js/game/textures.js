@@ -38,11 +38,15 @@ function Textures() {
         .loadTexture(1, 27, 'staff2')
         .loadTexture(3, 27, 'staff3')
         .loadTexture(13, 21, 'gloves1')
-//        .loadTexture(24, 27, 'fire')
+        .loadTexture(24, 27, 'fire')
         .loadTexture(9, 43, 'fireball')
         .loadTexture(10, 43, 'sword')
+        .loadTexture(2, 47, 'stones')
+        .loadTexture(2, 47, 'flamethrower')
+        .loadTexture(2, 47, 'claw')
         .loadTexture(2, 47, 'fists')
         .loadTexture(3, 43, 'bow');
+
 }
 
 Textures.prototype.loadTexture = function (x, y, name) {
