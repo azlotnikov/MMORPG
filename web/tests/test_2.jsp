@@ -23,7 +23,7 @@
         mocha.setup('bdd')
     </script>
     <script type="text/javascript" src="../js/lib/chai.js"></script>
-    <script data-main="/js/apps/tests_app" src="../js/lib/require.js"></script>
+    <script data-main="../js/apps/tests_app" src="../js/lib/require.js"></script>
     <script src="../js/lib/jquery.js"></script>
 </head>
 <body>
