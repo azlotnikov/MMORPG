@@ -13,6 +13,7 @@ public class Monster extends ActiveObj {
    private long inventoryId = -1;
    protected Direction direction = Dice.getDirection();
    protected Monster aim;
+   protected PlayerAttack playerAttack = new PlayerAttack();
    protected int timeToRefresh;
 
    protected final Level level = new Level();
@@ -21,6 +22,9 @@ public class Monster extends ActiveObj {
 
    protected double hp;
    protected double mana;
+
+   protected double aimX;
+   protected double aimY;
 
    protected double currentAttackDelay;
 
@@ -67,6 +71,7 @@ public class Monster extends ActiveObj {
          generateRandomInventory();
       }
       this.bonus = inventory.calcBonus();
+      this.playerAttack.setAttackId(1);
    }
 
    public void generateRandomInventory() {
@@ -109,17 +114,16 @@ public class Monster extends ActiveObj {
    }
 
    public void move() {
-      if (aim == null || !aim.isLive()) {
-         findAim();
-      }
       if (timeToRefresh == 0) {
          direction = Dice.getDirection();
          timeToRefresh = Dice.getInt(2, 250);
       }
       timeToRefresh--;
-      if (canAttack(aim)) {
-         attack(aim);
-      } else {
+      if (aim == null || !aim.isLive()) {
+         findAim();
+      }
+     if (!attack(aim)) {
+
          direction = aim == null ? direction :
                  Dice.getBool(1) ?
                          aim.location.x - location.x < 0 ? Direction.WEST : Direction.EAST :
@@ -150,9 +154,8 @@ public class Monster extends ActiveObj {
       }
    }
 
-   public void attack(Monster monster) {
-      monster.gotHit(this.getDamage(), this);
-      currentAttackDelay = getAttackDelay();
+   public boolean attack(Monster monster) {
+      return playerAttack.attack(aim, this);
    }
 
    public double getDamage() {
@@ -286,6 +289,10 @@ public class Monster extends ActiveObj {
 
    public long getInventoryId() {
       return inventoryId;
+   }
+
+   public PlayerAttack getPlayerAttack() {
+      return playerAttack;
    }
 }
 

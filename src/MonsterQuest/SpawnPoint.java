@@ -16,7 +16,7 @@ public class SpawnPoint {
       int monsterTypeIndex;
       do {
          monsterTypeIndex = Dice.getInt(Game.GetCountMonsterTypes(), 1) - 1;
-      } while (maxDepth > Game.getMonsterTypes().get(monsterTypeIndex).getDepth());
+      } while (maxDepth <= Game.getMonsterTypes().get(monsterTypeIndex).getDepth());
       Game.addMonster(Game.createMonster(Game.getMonsterTypes().get(monsterTypeIndex), new Location(location)));
    }
 

@@ -68,7 +68,7 @@ Game.prototype.examine = function (id) {
 
 Game.prototype.setActiveAttack = function (id) {
     this.sendMsg({
-        action: "setActiveWeapon",
+        action: "setActiveAttack",
         id: id,
         sid: this.sid
     });
@@ -140,16 +140,16 @@ Game.prototype.receiveMsg = function (msg) {
             this.view.setMap(msg.map);
             this.view.setItems(msg.items);
             this.view.setProjectiles(msg.projectiles);
-            if (JSON.stringify(msg.player.inventory) != JSON.stringify(this.view.inventory)) {
+//            if (JSON.stringify(msg.player.inventory) != JSON.stringify(this.view.inventory)) {
 //                console.log(JSON.stringify(msg.inventory));
                 this.view.setInventory(msg.player.inventory);
                 this.view.setUpdateInventory();
-            }
-            if ((this.view.activeAttack != msg.activeAttack) || (JSON.stringify(msg.attackTypes) != JSON.stringify(this.view.attackTypes))) {
+//            }
+//            if ((this.view.activeAttack != msg.activeAttack)) {
                 this.view.setAttackTypes(msg.attackTypes);
                 this.view.setUpdateAttackTypes();
                 this.view.activeAttack = msg.activeAttack;
-            }
+//            }
             this.view.setActors(msg.actors);
             this.view.setPlayerLocation(msg.x, msg.y);
             document.getElementById('exp_progress').max = msg.player.expNextLevel;
@@ -240,18 +240,18 @@ document.onkeydown = function (e) {
     if (code == 81) {
         game.logOut();
     }
-    if (code == 113) {
-        game.setActiveAttack(1);
+    if (code == 49) {
+        game.setActiveAttack('1');
     }
-    if (code == 114) {
-        game.setActiveAttack(2);
+    if (code == 50) {
+        game.setActiveAttack('2');
     }
-    if (code == 115) {
-        game.setActiveAttack(3);
+    if (code == 51) {
+        game.setActiveAttack('3');
     }
     game.keysDown[code] = true;
-    e.preventDefault();
 
+//    e.preventDefault();
 };
 
 document.onkeyup = function (e) {
@@ -259,7 +259,7 @@ document.onkeyup = function (e) {
     var code = e.keyCode;
 
     game.keysDown[code] = false;
-    e.preventDefault();
+//    e.preventDefault();
 
 };
 

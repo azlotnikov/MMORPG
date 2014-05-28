@@ -109,20 +109,7 @@ public class PlayerAnnotation {
    }
 
    public JSONArray getAttackTypes() {
-      JSONArray result = new JSONArray();
-      JSONObject attack1 = new JSONObject();
-      JSONObject attack2 = new JSONObject();
-      JSONObject attack3 = new JSONObject();
-      attack1.put("id", "1");
-      attack2.put("id", "2");
-      attack3.put("id", "3");
-      attack1.put("name", "sword");
-      attack2.put("name", "fireball");
-      attack3.put("name", "bow");
-      result.add(attack1);
-      result.add(attack2);
-      result.add(attack3);
-      return result;
+      return PlayerAttack.getAllAttackTypes();
    }
 
    public JSONObject getLook() {
@@ -130,7 +117,7 @@ public class PlayerAnnotation {
       result.put("action", "look");
       result.put("result", "ok");
       result.put("attackTypes", getAttackTypes());
-      result.put("activeAttack", "2");
+      result.put("activeAttack", player.getPlayerAttack().getAttackId());
       result.put("map", getMap((int) player.getLocation().x, (int) player.getLocation().y));
       result.put("actors", Game.getActors(player.getLocation()));
       result.put("items", Game.getDroppedItems().inventoryToJSON());
@@ -227,6 +214,13 @@ public class PlayerAnnotation {
          case "getDictionary": {
             jsonAns = getDictionary();
             break;
+         }
+
+         case "setActiveAttack": {
+            int id = Integer.parseInt((String)jsonMsg.get("id"));
+//            player.aim = null;
+            player.playerAttack.setAttackId(id);
+            return;
          }
 
          case "examine": {

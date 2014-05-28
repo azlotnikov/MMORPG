@@ -9,5 +9,5 @@ function getUrlVars() {
 
 function exitGame() {
     //alert('Game quit!');
-    window.close();
+//    window.close();
 }

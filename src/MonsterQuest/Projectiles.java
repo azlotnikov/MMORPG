@@ -11,7 +11,7 @@ public class Projectiles extends ActiveObj {
    private static final double minRadius = 0.001;
    private final double radius;
    private final double radiusBang;
-   private final int damage = 50;
+   private final double damage;
    private final Monster parent;
    private boolean mustBang;
 
@@ -22,6 +22,7 @@ public class Projectiles extends ActiveObj {
            , double deltaY
            , double radius
            , double radiusBang
+           , double damage
            , Monster parent
    ) {
       super(Game.getNextGlobalId(), type.toString(), new Location(location, ((radius == 0) ? minRadius : radius) * 2));
@@ -34,6 +35,7 @@ public class Projectiles extends ActiveObj {
       this.deltaX = deltaX * k;
       this.deltaY = deltaY * k;
       this.mustBang = false;
+      this.damage = damage;
    }
 
    public void move() {

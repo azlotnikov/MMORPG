@@ -14,8 +14,6 @@ public class Player extends Monster {
 
    private final String sid;
    private final Session session;
-   private double aimX;
-   private double aimY;
 
    public Player(long id, String sid, String login, int exp, double hp, Session session, Location location, String playerClass) {
       super(
@@ -67,30 +65,16 @@ public class Player extends Monster {
          pickUpInventory();
          setInventoryId(-1);
       }
-      if (canAttack(aim)) {
-         attack(aim);
-         aim = null;
-      } else if ((aimX != 0 || aimY != 0) && (mana >= 50)) { //TODO - 50 - кол-во маны за фаерболл
-         mana -= 50;
-         double a = aimX - location.x;
-         double b = aimY - location.y;
-         Game.addProjectiles(new Projectiles(AttackMethod.FIREBALL
-                 , location
-                 , 0.5
-                 , aimX - location.x
-                 , aimY - location.y
-                 , 0.2
-                 , 2.0
-                 , this
-         ));
-         aimX = 0;
-         aimY = 0;
-      } else {
+      if (!playerAttack.attack(aim, this)) {
          Game.unsetMonsterInLocation(location);
          location.move(direction, getSpeed());
          this.setDirection(Direction.NONE);
          Game.setMonsterInLocation(this);
+
+      } else {
+         aim = null;
       }
+
    }
 
 //   public synchronized void update(Collection<Player> players) {
