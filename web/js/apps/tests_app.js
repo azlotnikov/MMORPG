@@ -1,25 +1,23 @@
 requirejs.config({
     baseUrl: '/js/tests',
     paths: {
-        jquery: '../lib/jquery'
+        jquery: '../lib/jquery',
+        auth: '../tests/auth'
     }
 });
 
-requirejs(['jquery', 'tester', 'simple_walk', 'test_mode'], function($, tester, simple_walk, test_mode) {
+requirejs(
+    ['jquery', 'auth'],
+    function($, auth) {
     $(function() {
         var StartTesting = function(){
             $('#mocha').empty();
-            tester.setUrl($("#url").val());
-
             auth.Test();
-            simple_walk.Test();
-            test_mode.Test();
-
             mocha.run();
         };
 
         $("#urlBtn").click(StartTesting);
-        $("#url").val('/json').keydown(function(e){
+        $("#url").val("ws://192.168.56.1:8080/MMORPG_war_exploded/game").keydown(function(e){
             if(e.which == 13){
                 e.preventDefault();
                 StartTesting();
