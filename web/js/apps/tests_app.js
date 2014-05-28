@@ -3,18 +3,22 @@ requirejs.config({
     paths: {
         jquery: '../lib/jquery',
         auth: '../tests/auth',
-        tester: '../tests/tester'
+        tester: '../tests/tester',
+        simpleWalk: '../tests/simpleWalk'
     }
 });
 
 requirejs(
-    ['jquery', 'tester', 'auth'],
-    function($, tester, auth) {
+    ['jquery', 'tester', 'auth', 'simpleWalk'],
+    function($, tester, auth, simpleWalk) {
     $(function() {
         var StartTesting = function(){
             $('#mocha').empty();
             tester.setUrl($("#url").val());
+
             auth.Test();
+            simpleWalk.Test();
+
             mocha.run();
         };
 
