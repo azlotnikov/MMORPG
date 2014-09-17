@@ -32,7 +32,7 @@ public class PlayerClass {
       stat.regenMana = stat.intelligence * 0.01 + stat.agility * 0.004;
       stat.attackDelay = stat.agility * 0.1 + stat.intelligence * 0.02;
 
-      stat.maxHp = stat.strength * 5 + stat.intelligence * 1.5;
+      stat.maxHp = stat.strength * 5 + stat.intelligence;
       stat.maxMana = stat.intelligence * 4 + stat.agility;
       stat.damage = stat.agility * 2 + stat.strength + stat.intelligence * 0.5;
 
